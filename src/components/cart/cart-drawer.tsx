@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 import { useCart } from "@/components/cart/cart-provider";
+import { WhatsAppConsultButton } from "@/components/cart/whatsapp-consult-button";
 
 export function CartDrawer() {
   const { isOpen, closeCart, items, totalItems, updateQuantity, removeItem, clearCart } = useCart();
@@ -51,25 +52,22 @@ export function CartDrawer() {
         aria-labelledby="cart-title"
         className="absolute top-0 right-0 flex h-full w-full max-w-md flex-col bg-[#faf9f6] shadow-2xl"
       >
-        <div className="flex items-center justify-between border-b border-black/10 px-5 py-5">
+        <header className="flex items-center justify-between border-b border-black/10 px-5 py-4 sm:px-6">
           <div>
-            <p className="text-xs font-semibold tracking-[0.18em] text-neutral-400 uppercase">
+            <p className="text-xs font-semibold tracking-[0.18em] text-neutral-500 uppercase">
               Selección
             </p>
 
-            <h2
-              id="cart-title"
-              className="mt-1 text-2xl font-semibold tracking-tight text-neutral-950"
-            >
+            <h2 id="cart-title" className="mt-1 text-xl font-semibold text-neutral-950">
               Carrito de consulta
             </h2>
           </div>
 
           <button
             type="button"
-            onClick={closeCart}
             aria-label="Cerrar carrito"
-            className="flex size-10 items-center justify-center rounded-full border border-black/10 bg-white text-neutral-700 hover:border-neutral-950"
+            onClick={closeCart}
+            className="inline-flex size-10 items-center justify-center rounded-full border border-black/10 bg-white text-neutral-950 transition-colors hover:border-neutral-950"
           >
             <svg
               aria-hidden="true"
@@ -79,133 +77,141 @@ export function CartDrawer() {
               stroke="currentColor"
               strokeWidth="1.8"
             >
-              <path d="m7 7 10 10M17 7 7 17" />
+              <path d="M6 6l12 12M18 6 6 18" />
             </svg>
           </button>
-        </div>
+        </header>
 
         {items.length === 0 ? (
-          <div className="flex flex-1 items-center justify-center px-8 text-center">
-            <div>
-              <p className="text-sm font-semibold tracking-[0.16em] text-neutral-400 uppercase">
-                Vacío
-              </p>
-
-              <h3 className="mt-3 text-2xl font-semibold tracking-tight text-neutral-950">
-                Todavía no has seleccionado productos.
-              </h3>
-
-              <p className="mt-3 text-sm leading-6 text-neutral-600">
-                Explora el catálogo y agrega los productos que quieras consultar.
-              </p>
-
-              <button
-                type="button"
-                onClick={closeCart}
-                className="mt-6 min-h-11 rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white"
+          <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
+            <div className="flex size-16 items-center justify-center rounded-full bg-white text-neutral-400">
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                className="size-7"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.7"
               >
-                Seguir explorando
-              </button>
+                <path d="M6 8h12l-1 11H7L6 8Z" />
+                <path d="M9 8a3 3 0 0 1 6 0" />
+              </svg>
             </div>
+
+            <h3 className="mt-5 text-lg font-semibold text-neutral-950">Tu carrito está vacío</h3>
+
+            <p className="mt-2 max-w-xs text-sm leading-6 text-neutral-500">
+              Agrega productos desde el catálogo para preparar una consulta.
+            </p>
+
+            <button
+              type="button"
+              onClick={closeCart}
+              className="mt-6 rounded-full bg-neutral-950 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-neutral-800"
+            >
+              Seguir explorando
+            </button>
           </div>
         ) : (
           <>
-            <div className="flex-1 overflow-y-auto px-5 py-5">
-              <div className="space-y-3">
-                {items.map((item) => (
-                  <article
-                    key={`${item.productId}-${item.variantId}`}
-                    className="rounded-2xl border border-black/10 bg-white p-4"
+            <div className="flex-1 overflow-y-auto">
+              <div className="space-y-4 p-5 sm:p-6">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-neutral-500">
+                    {totalItems}{" "}
+                    {totalItems === 1 ? "unidad seleccionada" : "unidades seleccionadas"}
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={clearCart}
+                    className="text-xs font-semibold text-neutral-500 underline-offset-4 transition-colors hover:text-neutral-950 hover:underline"
                   >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0">
-                        <p className="text-xs font-semibold tracking-[0.12em] text-neutral-400 uppercase">
-                          {item.snapshot.brandName}
-                        </p>
+                    Vaciar carrito
+                  </button>
+                </div>
 
-                        <h3 className="mt-1 font-semibold tracking-tight text-neutral-950">
-                          {item.snapshot.productName}
-                        </h3>
+                <div className="space-y-3">
+                  {items.map((item) => (
+                    <article
+                      key={`${item.productId}:${item.variantId}`}
+                      className="rounded-2xl border border-black/10 bg-white p-4"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-neutral-950">
+                            {item.snapshot.productName}
+                          </p>
 
-                        <p className="mt-1 text-xs text-neutral-500">SKU {item.snapshot.sku}</p>
+                          <p className="mt-1 text-xs text-neutral-500">{item.snapshot.brandName}</p>
 
-                        <p className="mt-2 text-sm text-neutral-600">
-                          {item.snapshot.variantLabel}
-                        </p>
-                      </div>
+                          <p className="mt-2 text-sm text-neutral-700">
+                            {item.snapshot.variantLabel}
+                          </p>
 
-                      <button
-                        type="button"
-                        onClick={() => removeItem(item.productId, item.variantId)}
-                        aria-label={`Eliminar ${item.snapshot.productName}`}
-                        className="shrink-0 text-xs font-semibold text-neutral-400 hover:text-[#b31322]"
-                      >
-                        Eliminar
-                      </button>
-                    </div>
+                          <p className="mt-1 text-xs text-neutral-400">SKU: {item.snapshot.sku}</p>
+                        </div>
 
-                    <div className="mt-4 flex items-center justify-between gap-4 border-t border-black/8 pt-4">
-                      <div className="flex items-center overflow-hidden rounded-full border border-black/10 bg-neutral-50">
                         <button
                           type="button"
-                          onClick={() =>
-                            updateQuantity(item.productId, item.variantId, item.quantity - 1)
-                          }
-                          aria-label={`Reducir cantidad de ${item.snapshot.productName}`}
-                          className="flex size-9 items-center justify-center text-neutral-700 hover:bg-white"
+                          aria-label={`Eliminar ${item.snapshot.productName}`}
+                          onClick={() => removeItem(item.productId, item.variantId)}
+                          className="shrink-0 text-xs font-semibold text-neutral-400 transition-colors hover:text-[#b31322]"
                         >
-                          −
+                          Eliminar
                         </button>
+                      </div>
 
-                        <span className="min-w-8 text-center text-sm font-semibold text-neutral-950">
-                          {item.quantity}
+                      <div className="mt-4 flex items-center justify-between border-t border-black/5 pt-4">
+                        <span className="text-xs font-medium tracking-[0.12em] text-neutral-400 uppercase">
+                          Cantidad
                         </span>
 
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateQuantity(item.productId, item.variantId, item.quantity + 1)
-                          }
-                          aria-label={`Aumentar cantidad de ${item.snapshot.productName}`}
-                          className="flex size-9 items-center justify-center text-neutral-700 hover:bg-white"
-                        >
-                          +
-                        </button>
-                      </div>
+                        <div className="flex items-center rounded-full border border-black/10 bg-[#faf9f6]">
+                          <button
+                            type="button"
+                            aria-label={`Disminuir cantidad de ${item.snapshot.productName}`}
+                            onClick={() =>
+                              updateQuantity(item.productId, item.variantId, item.quantity - 1)
+                            }
+                            className="flex size-10 items-center justify-center rounded-full text-lg text-neutral-700 transition-colors hover:bg-white hover:text-neutral-950"
+                          >
+                            −
+                          </button>
 
-                      <div className="text-right">
-                        {Object.entries(item.selectedOptions).map(([name, value]) => (
-                          <p key={name} className="text-xs text-neutral-500">
-                            {name}: {value}
-                          </p>
-                        ))}
+                          <span
+                            aria-live="polite"
+                            className="min-w-9 text-center text-sm font-semibold text-neutral-950"
+                          >
+                            {item.quantity}
+                          </span>
+
+                          <button
+                            type="button"
+                            aria-label={`Aumentar cantidad de ${item.snapshot.productName}`}
+                            onClick={() =>
+                              updateQuantity(item.productId, item.variantId, item.quantity + 1)
+                            }
+                            className="flex size-10 items-center justify-center rounded-full text-lg text-neutral-700 transition-colors hover:bg-white hover:text-neutral-950"
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </article>
-                ))}
+                    </article>
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div className="border-t border-black/10 bg-white px-5 py-5">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-neutral-500">Productos seleccionados</p>
-
-                <p className="text-sm font-semibold text-neutral-950">{totalItems}</p>
-              </div>
-
-              <p className="mt-3 text-sm leading-6 text-neutral-500">
-                Los precios y la disponibilidad definitiva se confirman antes de concretar la
-                compra.
+            <footer className="border-t border-black/10 bg-[#faf9f6] p-5 sm:p-6">
+              <p className="mb-4 text-xs leading-5 text-neutral-500">
+                El carrito sirve para preparar tu solicitud. La disponibilidad, precio y condiciones
+                se confirman contigo antes de concretar la compra.
               </p>
 
-              <button
-                type="button"
-                onClick={clearCart}
-                className="mt-5 min-h-11 w-full rounded-full border border-black/10 bg-white text-sm font-semibold text-neutral-700 hover:border-neutral-950"
-              >
-                Vaciar selección
-              </button>
-            </div>
+              <WhatsAppConsultButton />
+            </footer>
           </>
         )}
       </aside>
