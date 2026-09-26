@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+
+import { SiteShell } from "@/components/layout/site-shell";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,8 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
-      <body>{children}</body>
+    <html lang="es" data-scroll-behavior="smooth">
+      <body>
+        <SiteShell>{children}</SiteShell>
+      </body>
     </html>
   );
 }
