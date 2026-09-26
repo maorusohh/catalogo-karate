@@ -136,22 +136,45 @@ const rawCatalog: Catalog = {
       variants: [
         {
           id: "demo-product-002-v1",
-          label: "Rojo",
+          label: "Rojo · S",
           options: [
             {
               name: "Color",
               value: "Rojo",
+            },
+            {
+              name: "Talla",
+              value: "S",
             },
           ],
           available: true,
         },
         {
           id: "demo-product-002-v2",
-          label: "Azul",
+          label: "Rojo · M",
+          options: [
+            {
+              name: "Color",
+              value: "Rojo",
+            },
+            {
+              name: "Talla",
+              value: "M",
+            },
+          ],
+          available: true,
+        },
+        {
+          id: "demo-product-002-v3",
+          label: "Azul · M",
           options: [
             {
               name: "Color",
               value: "Azul",
+            },
+            {
+              name: "Talla",
+              value: "M",
             },
           ],
           available: true,
