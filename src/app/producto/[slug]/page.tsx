@@ -6,8 +6,8 @@ import { ApprovalBadge } from "@/components/product/approval-badge";
 import { AvailabilityBadge } from "@/components/product/availability-badge";
 import { PriceDisplay } from "@/components/product/price-display";
 import { ProductGallery } from "@/components/product/product-gallery";
-import { VariantSelector } from "@/components/product/variant-selector";
 import { catalogRepository } from "@/lib/catalog/static-repository";
+import { ProductPurchasePanel } from "@/components/product/product-purchase-panel";
 
 type ProductPageProps = {
   params: Promise<{
@@ -102,7 +102,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
 
           <div className="mt-8">
-            <VariantSelector variants={product.variants} />
+            <ProductPurchasePanel
+              productId={product.id}
+              productName={product.name}
+              sku={product.sku}
+              brandName={brand?.name ?? "Marca"}
+              variants={product.variants}
+            />
           </div>
 
           <div className="mt-8 rounded-3xl border border-black/10 bg-neutral-950 p-6 text-white">

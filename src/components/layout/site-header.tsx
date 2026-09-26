@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CartTrigger } from "@/components/cart/cart-trigger";
 
 const navigation = [
   {
@@ -54,12 +55,16 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <Link
-          href="/catalogo"
-          className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#b31322] px-5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
-        >
-          Ver catálogo
-        </Link>
+        <div className="flex items-center gap-2">
+          <CartTrigger />
+
+          <Link
+            href="/catalogo"
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-[#b31322] px-5 text-sm font-semibold text-white transition-transform hover:-translate-y-0.5"
+          >
+            Ver catálogo
+          </Link>
+        </div>
       </div>
     </header>
   );

@@ -6,6 +6,7 @@ import type { ProductVariant } from "@/types/catalog";
 
 type VariantSelectorProps = {
   variants: ProductVariant[];
+  onVariantChange?: (variant: ProductVariant | undefined) => void;
 };
 
 type SelectedOptions = Record<string, string>;
@@ -34,24 +35,33 @@ function variantMatchesSelection(variant: ProductVariant, selection: SelectedOpt
   );
 }
 
-export function VariantSelector({ variants }: VariantSelectorProps) {
+function findSelectedVariant(
+  variants: ProductVariant[],
+  selection: SelectedOptions,
+  groupNames: string[],
+): ProductVariant | undefined {
+  const allOptionsSelected = groupNames.every((groupName) => Boolean(selection[groupName]));
+
+  if (!allOptionsSelected) {
+    return undefined;
+  }
+
+  return variants.find(
+    (variant) => variant.available && variantMatchesSelection(variant, selection),
+  );
+}
+
+export function VariantSelector({ variants, onVariantChange }: VariantSelectorProps) {
   const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({});
 
   const optionGroups = useMemo(() => getOptionGroups(variants), [variants]);
 
   const groupNames = Object.keys(optionGroups);
 
-  const selectedVariant = useMemo(() => {
-    const allOptionsSelected = groupNames.every((groupName) => selectedOptions[groupName]);
-
-    if (!allOptionsSelected) {
-      return undefined;
-    }
-
-    return variants.find(
-      (variant) => variant.available && variantMatchesSelection(variant, selectedOptions),
-    );
-  }, [groupNames, selectedOptions, variants]);
+  const selectedVariant = useMemo(
+    () => findSelectedVariant(variants, selectedOptions, groupNames),
+    [groupNames, selectedOptions, variants],
+  );
 
   function isOptionAvailable(groupName: string, value: string): boolean {
     const tentativeSelection = {
@@ -65,10 +75,15 @@ export function VariantSelector({ variants }: VariantSelectorProps) {
   }
 
   function selectOption(groupName: string, value: string): void {
-    setSelectedOptions((current) => ({
-      ...current,
+    const nextSelection = {
+      ...selectedOptions,
       [groupName]: value,
-    }));
+    };
+
+    const nextVariant = findSelectedVariant(variants, nextSelection, groupNames);
+
+    setSelectedOptions(nextSelection);
+    onVariantChange?.(nextVariant);
   }
 
   return (
@@ -84,6 +99,7 @@ export function VariantSelector({ variants }: VariantSelectorProps) {
             <div className="mt-3 flex flex-wrap gap-2">
               {values.map((value) => {
                 const selected = selectedValue === value;
+
                 const available = isOptionAvailable(groupName, value);
 
                 return (

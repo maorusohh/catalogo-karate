@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { CartDrawer } from "@/components/cart/cart-drawer";
+import { CartProvider } from "@/components/cart/cart-provider";
 import { SiteShell } from "@/components/layout/site-shell";
 
 import "./globals.css";
@@ -21,7 +23,11 @@ export default function RootLayout({
   return (
     <html lang="es" data-scroll-behavior="smooth">
       <body>
-        <SiteShell>{children}</SiteShell>
+        <CartProvider>
+          <SiteShell>{children}</SiteShell>
+
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );
