@@ -13,6 +13,25 @@ export const metadata: Metadata = {
   },
   description:
     "Catálogo de equipamiento de Karate-Do para entrenamiento y competición, con atención personalizada y envíos a nivel nacional.",
+  applicationName: "Catálogo Karate-Do",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_VE",
+    siteName: "Catálogo Karate-Do",
+    title: "Catálogo Karate-Do",
+    description:
+      "Catálogo de equipamiento de Karate-Do para entrenamiento y competición, con atención personalizada y envíos a nivel nacional.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Catálogo Karate-Do",
+    description:
+      "Catálogo de equipamiento de Karate-Do para entrenamiento y competición, con atención personalizada y envíos a nivel nacional.",
+  },
 };
 
 export default function RootLayout({
