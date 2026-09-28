@@ -6,34 +6,20 @@
 
 import type { CatalogSourceTables } from "@/lib/catalog/source/types";
 
-export const catalogSourceGoogle =
-  {
-  "meta": [
-    [
-      "key",
-      "value"
-    ],
-    [
-      "schema_version",
-      1
-    ]
+export const catalogSourceGoogle = {
+  meta: [
+    ["key", "value"],
+    ["schema_version", 1],
   ],
-  "brands": [
-    [
-      "id",
-      "slug",
-      "name",
-      "description",
-      "logo",
-      "active"
-    ],
+  brands: [
+    ["id", "slug", "name", "description", "logo", "active"],
     [
       "demo-brand-a",
       "marca-demo-a",
       "Marca Demo A",
       "Marca de demostraciÃ³n para validar la estructura del catÃ¡logo.",
       "",
-      true
+      true,
     ],
     [
       "demo-brand-b",
@@ -41,25 +27,18 @@ export const catalogSourceGoogle =
       "Marca Demo B",
       "Segunda marca de demostraciÃ³n para probar el catÃ¡logo multimarca.",
       "",
-      true
-    ]
-  ],
-  "categories": [
-    [
-      "id",
-      "slug",
-      "name",
-      "description",
-      "parent_id",
-      "active"
+      true,
     ],
+  ],
+  categories: [
+    ["id", "slug", "name", "description", "parent_id", "active"],
     [
       "karategis",
       "karategis",
       "Karategis",
       "Karategis para entrenamiento y competiciÃ³n.",
       "",
-      true
+      true,
     ],
     [
       "protecciones",
@@ -67,7 +46,7 @@ export const catalogSourceGoogle =
       "Protecciones",
       "Equipamiento de protecciÃ³n para la prÃ¡ctica del Karate-Do.",
       "",
-      true
+      true,
     ],
     [
       "guantines",
@@ -75,7 +54,7 @@ export const catalogSourceGoogle =
       "Guantines",
       "Guantines y protecciones para manos.",
       "protecciones",
-      true
+      true,
     ],
     [
       "empeineras-espinilleras",
@@ -83,7 +62,7 @@ export const catalogSourceGoogle =
       "Empeineras y espinilleras",
       "ProtecciÃ³n para pies y piernas.",
       "protecciones",
-      true
+      true,
     ],
     [
       "cinturones",
@@ -91,7 +70,7 @@ export const catalogSourceGoogle =
       "Cinturones",
       "Cinturones para la prÃ¡ctica del Karate-Do.",
       "",
-      true
+      true,
     ],
     [
       "accesorios",
@@ -99,10 +78,10 @@ export const catalogSourceGoogle =
       "Accesorios",
       "Accesorios relacionados con la prÃ¡ctica del Karate-Do.",
       "",
-      true
-    ]
+      true,
+    ],
   ],
-  "products": [
+  products: [
     [
       "id",
       "sku",
@@ -116,7 +95,7 @@ export const catalogSourceGoogle =
       "approval_note",
       "availability",
       "featured",
-      "active"
+      "active",
     ],
     [
       "demo-product-001",
@@ -131,7 +110,7 @@ export const catalogSourceGoogle =
       "La certificaciÃ³n se incorporarÃ¡ Ãºnicamente cuando exista informaciÃ³n verificable.",
       "CONSULT",
       true,
-      true
+      true,
     ],
     [
       "demo-product-002",
@@ -146,7 +125,7 @@ export const catalogSourceGoogle =
       "",
       "CONSULT",
       false,
-      true
+      true,
     ],
     [
       "demo-product-003",
@@ -161,113 +140,30 @@ export const catalogSourceGoogle =
       "",
       "CONSULT",
       false,
-      true
-    ]
+      true,
+    ],
   ],
-  "variants": [
-    [
-      "id",
-      "product_id",
-      "label",
-      "available"
-    ],
-    [
-      "demo-product-001-v1",
-      "demo-product-001",
-      "Talla de demostraciÃ³n",
-      true
-    ],
-    [
-      "demo-product-002-v1",
-      "demo-product-002",
-      "Rojo Â· S",
-      true
-    ],
-    [
-      "demo-product-002-v2",
-      "demo-product-002",
-      "Rojo Â· M",
-      true
-    ],
-    [
-      "demo-product-002-v3",
-      "demo-product-002",
-      "Azul Â· M",
-      true
-    ],
-    [
-      "demo-product-003-v1",
-      "demo-product-003",
-      "DemostraciÃ³n",
-      true
-    ]
+  variants: [
+    ["id", "product_id", "label", "available"],
+    ["demo-product-001-v1", "demo-product-001", "Talla de demostraciÃ³n", true],
+    ["demo-product-002-v1", "demo-product-002", "Rojo Â· S", true],
+    ["demo-product-002-v2", "demo-product-002", "Rojo Â· M", true],
+    ["demo-product-002-v3", "demo-product-002", "Azul Â· M", true],
+    ["demo-product-003-v1", "demo-product-003", "DemostraciÃ³n", true],
   ],
-  "variant_options": [
-    [
-      "variant_id",
-      "name",
-      "value",
-      "sort_order"
-    ],
-    [
-      "demo-product-001-v1",
-      "Talla",
-      "Demo",
-      1
-    ],
-    [
-      "demo-product-002-v1",
-      "Color",
-      "Rojo",
-      1
-    ],
-    [
-      "demo-product-002-v1",
-      "Talla",
-      "S",
-      2
-    ],
-    [
-      "demo-product-002-v2",
-      "Color",
-      "Rojo",
-      1
-    ],
-    [
-      "demo-product-002-v2",
-      "Talla",
-      "M",
-      2
-    ],
-    [
-      "demo-product-002-v3",
-      "Color",
-      "Azul",
-      1
-    ],
-    [
-      "demo-product-002-v3",
-      "Talla",
-      "M",
-      2
-    ],
-    [
-      "demo-product-003-v1",
-      "PresentaciÃ³n",
-      "Demo",
-      1
-    ]
+  variant_options: [
+    ["variant_id", "name", "value", "sort_order"],
+    ["demo-product-001-v1", "Talla", "Demo", 1],
+    ["demo-product-002-v1", "Color", "Rojo", 1],
+    ["demo-product-002-v1", "Talla", "S", 2],
+    ["demo-product-002-v2", "Color", "Rojo", 1],
+    ["demo-product-002-v2", "Talla", "M", 2],
+    ["demo-product-002-v3", "Color", "Azul", 1],
+    ["demo-product-002-v3", "Talla", "M", 2],
+    ["demo-product-003-v1", "PresentaciÃ³n", "Demo", 1],
   ],
-  "prices": [
-    [
-      "product_id",
-      "amount",
-      "currency",
-      "basis",
-      "label",
-      "note",
-      "sort_order"
-    ],
+  prices: [
+    ["product_id", "amount", "currency", "basis", "label", "note", "sort_order"],
     [
       "demo-product-001",
       "",
@@ -275,82 +171,21 @@ export const catalogSourceGoogle =
       "CONSULT",
       "Consultar precio",
       "Precio pendiente de informaciÃ³n comercial real.",
-      1
+      1,
     ],
-    [
-      "demo-product-002",
-      "",
-      "",
-      "CONSULT",
-      "Consultar precio",
-      "",
-      1
-    ],
-    [
-      "demo-product-003",
-      "",
-      "",
-      "CONSULT",
-      "Consultar precio",
-      "",
-      1
-    ]
+    ["demo-product-002", "", "", "CONSULT", "Consultar precio", "", 1],
+    ["demo-product-003", "", "", "CONSULT", "Consultar precio", "", 1],
   ],
-  "images": [
-    [
-      "product_id",
-      "src",
-      "alt",
-      "source_type",
-      "source_url",
-      "sort_order"
-    ]
+  images: [["product_id", "src", "alt", "source_type", "source_url", "sort_order"]],
+  features: [
+    ["product_id", "feature", "sort_order"],
+    ["demo-product-001", "Modelo de demostraciÃ³n", 1],
+    ["demo-product-001", "Datos preparados para variantes", 2],
+    ["demo-product-001", "Sin certificaciÃ³n comercial declarada", 3],
+    ["demo-product-002", "Modelo de demostraciÃ³n", 1],
+    ["demo-product-002", "CategorÃ­a de protecciÃ³n", 2],
+    ["demo-product-002", "Variantes preparadas para el catÃ¡logo", 3],
+    ["demo-product-003", "Modelo de demostraciÃ³n", 1],
+    ["demo-product-003", "Estructura preparada para variantes", 2],
   ],
-  "features": [
-    [
-      "product_id",
-      "feature",
-      "sort_order"
-    ],
-    [
-      "demo-product-001",
-      "Modelo de demostraciÃ³n",
-      1
-    ],
-    [
-      "demo-product-001",
-      "Datos preparados para variantes",
-      2
-    ],
-    [
-      "demo-product-001",
-      "Sin certificaciÃ³n comercial declarada",
-      3
-    ],
-    [
-      "demo-product-002",
-      "Modelo de demostraciÃ³n",
-      1
-    ],
-    [
-      "demo-product-002",
-      "CategorÃ­a de protecciÃ³n",
-      2
-    ],
-    [
-      "demo-product-002",
-      "Variantes preparadas para el catÃ¡logo",
-      3
-    ],
-    [
-      "demo-product-003",
-      "Modelo de demostraciÃ³n",
-      1
-    ],
-    [
-      "demo-product-003",
-      "Estructura preparada para variantes",
-      2
-    ]
-  ]
 } as const satisfies CatalogSourceTables;
