@@ -13,7 +13,8 @@
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "catalog:sync": "tsx scripts/sync-catalog-from-google.ts"
+    "catalog:sync": "tsx scripts/sync-catalog-from-google.ts",
+    "build:catalog": "npm run catalog:sync && next build"
   },
   "dependencies": {
     "next": "16.3.6",

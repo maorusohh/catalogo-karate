@@ -1,4 +1,4 @@
-import { catalogSourceFixture } from "@/data/catalog-source.fixture";
+import { catalogSourceGoogle } from "@/data/catalog-source.google.generated";
 import { buildCatalogFromTables } from "@/lib/catalog/source/tabular";
 
-export const catalog = buildCatalogFromTables(catalogSourceFixture);
+export const catalog = buildCatalogFromTables(catalogSourceGoogle);
