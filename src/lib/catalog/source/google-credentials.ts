@@ -90,3 +90,25 @@ export async function loadServiceAccountCredentials(
 
   return parseServiceAccountCredentials(rawCredentials);
 }
+
+export async function loadServiceAccountCredentialsFromEnvironment(
+  credentialFilePath: string | undefined,
+  credentialJson: string | undefined,
+  projectRoot: string,
+): Promise<ServiceAccountCredentials> {
+  const normalizedFilePath = credentialFilePath?.trim();
+
+  if (normalizedFilePath) {
+    return loadServiceAccountCredentials(normalizedFilePath, projectRoot);
+  }
+
+  const normalizedCredentialJson = credentialJson?.trim();
+
+  if (normalizedCredentialJson) {
+    return parseServiceAccountCredentials(normalizedCredentialJson);
+  }
+
+  throw new Error(
+    "Missing Google service account credentials. Set GOOGLE_SERVICE_ACCOUNT_JSON_FILE or GOOGLE_SERVICE_ACCOUNT_JSON.",
+  );
+}

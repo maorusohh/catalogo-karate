@@ -8,19 +8,23 @@ import {
   CATALOG_SOURCE_RANGES,
   catalogSourceTablesFromBatchGet,
 } from "../src/lib/catalog/source/google-sheets";
-import { loadServiceAccountCredentials } from "../src/lib/catalog/source/google-credentials";
+import { loadServiceAccountCredentialsFromEnvironment } from "../src/lib/catalog/source/google-credentials";
 import { buildCatalogFromTables } from "../src/lib/catalog/source/tabular";
 
 const READONLY_SCOPE = "https://www.googleapis.com/auth/spreadsheets.readonly";
 
 const OUTPUT_PATH = path.resolve(process.cwd(), "src/data/catalog-source.google.generated.ts");
 
-function loadLocalEnvironment(): void {
+async function loadLocalEnvironment(): Promise<void> {
   const envPath = path.resolve(process.cwd(), ".env.local");
 
   try {
     loadEnvFile(envPath);
   } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      return;
+    }
+
     const message = error instanceof Error ? error.message : String(error);
 
     throw new Error(`Could not load local environment file "${envPath}": ${message}`);
@@ -100,15 +104,27 @@ function getGoogleApiErrorDetails(error: unknown): {
 }
 
 async function main(): Promise<void> {
-  loadLocalEnvironment();
+  await loadLocalEnvironment();
 
   const spreadsheetId = requireEnvironmentVariable("GOOGLE_SHEETS_SPREADSHEET_ID");
 
-  const credentialFile = requireEnvironmentVariable("GOOGLE_SERVICE_ACCOUNT_JSON_FILE");
+  const credentialFile = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_FILE;
 
-  const credentials = await loadServiceAccountCredentials(credentialFile, process.cwd());
+  const credentialJson = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
+
+  const credentials = await loadServiceAccountCredentialsFromEnvironment(
+    credentialFile,
+    credentialJson,
+    process.cwd(),
+  );
+
+  const credentialSource = credentialFile?.trim()
+    ? "external credential file"
+    : "environment secret";
 
   console.log(`Using Google service account: ${credentials.client_email}`);
+
+  console.log(`Using credential source: ${credentialSource}`);
 
   console.log(`Using spreadsheet ID: ${spreadsheetId}`);
 
