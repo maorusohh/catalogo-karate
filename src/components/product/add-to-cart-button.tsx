@@ -53,19 +53,14 @@ export function AddToCartButton({
     openCart();
   }
 
+  const buttonClasses = isDisabled
+    ? "mt-6 inline-flex min-h-13 w-full cursor-not-allowed items-center justify-center rounded-full bg-neutral-200 px-6 text-sm font-semibold text-neutral-400 opacity-80"
+    : alreadyInCart
+      ? "action-secondary mt-6 w-full"
+      : "action-primary mt-6 w-full";
+
   return (
-    <button
-      type="button"
-      disabled={isDisabled}
-      onClick={handleAddToCart}
-      className={`mt-6 min-h-13 w-full rounded-full px-6 text-sm font-semibold transition-colors ${
-        isDisabled
-          ? "cursor-not-allowed bg-neutral-200 text-neutral-400"
-          : alreadyInCart
-            ? "border border-neutral-300 bg-white text-neutral-950 hover:border-neutral-950"
-            : "bg-[#b31322] text-white hover:bg-[#8d0f1b]"
-      }`}
-    >
+    <button type="button" disabled={isDisabled} onClick={handleAddToCart} className={buttonClasses}>
       {isDisabled
         ? "Selecciona una variante"
         : alreadyInCart
