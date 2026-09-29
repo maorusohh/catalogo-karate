@@ -14,11 +14,11 @@ export function getButtonClasses(
   size: ButtonSize = "md",
 ): string {
   const base =
-    "inline-flex items-center justify-center rounded-full font-semibold transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#b31322] disabled:pointer-events-none disabled:opacity-45";
+    "inline-flex items-center justify-center rounded-full font-semibold transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#b31322] disabled:pointer-events-none disabled:opacity-45";
 
   const variants: Record<ButtonVariant, string> = {
-    primary: "bg-[#b31322] text-white hover:bg-[#8d0f1b]",
-    secondary: "border border-black/10 bg-white text-neutral-950 hover:border-neutral-950",
+    primary: "action-primary",
+    secondary: "action-secondary",
     ghost: "text-neutral-700 hover:bg-black/5 hover:text-neutral-950",
   };
 

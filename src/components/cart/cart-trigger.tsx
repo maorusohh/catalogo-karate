@@ -14,7 +14,7 @@ export function CartTrigger() {
       }`}
       aria-expanded={isOpen}
       aria-controls="cart-drawer"
-      className="relative inline-flex size-11 items-center justify-center rounded-full border border-black/10 bg-white text-neutral-950 transition-colors hover:border-neutral-950"
+      className="relative inline-flex size-11 items-center justify-center rounded-full border border-white/12 bg-white/6 text-white transition-all hover:border-white/25 hover:bg-white/10"
     >
       <svg
         aria-hidden="true"
@@ -29,7 +29,7 @@ export function CartTrigger() {
       </svg>
 
       {totalItems > 0 ? (
-        <span className="absolute -top-1 -right-1 flex min-w-5 items-center justify-center rounded-full bg-[#b31322] px-1.5 text-[10px] leading-5 font-bold text-white">
+        <span className="absolute -top-1 -right-1 flex min-w-5 items-center justify-center rounded-full bg-[var(--ck-red)] px-1.5 text-[10px] leading-5 font-bold text-white ring-2 ring-[#151515]">
           {totalItems > 99 ? "99+" : totalItems}
         </span>
       ) : null}

@@ -6,13 +6,13 @@ import { Container } from "@/components/ui/container";
 const navigation = [
   { href: "/catalogo", label: "Catálogo" },
   { href: "/como-comprar", label: "Cómo comprar" },
-  { href: "/entregas", label: "Entregas" },
+  { href: "/entregas", label: "Envíos" },
   { href: "/contacto", label: "Contacto" },
 ];
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-black/5 bg-[#faf9f6]/95 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-white/8 bg-[#151515]/96 text-white shadow-[0_8px_30px_rgb(0_0_0_/_0.18)] backdrop-blur-xl">
       <Container>
         <div className="flex min-h-[76px] items-center justify-between gap-4">
           <Link
@@ -20,16 +20,17 @@ export function SiteHeader() {
             className="group flex min-w-0 items-center gap-3"
             aria-label="Catálogo Karate-Do, inicio"
           >
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-neutral-950 text-xs font-bold tracking-[0.08em] text-white transition-transform duration-200 group-hover:-rotate-2">
-              KD
+            <span className="relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-[var(--ck-red)] text-xs font-black tracking-[0.08em] text-white shadow-lg shadow-red-950/20 transition-transform duration-200 group-hover:-rotate-2">
+              <span className="absolute inset-x-0 bottom-0 h-1/2 bg-black/10" />
+              <span className="relative">KD</span>
             </span>
 
             <span className="min-w-0">
-              <span className="block truncate text-sm font-semibold tracking-tight text-neutral-950">
+              <span className="font800 block truncate text-sm font-semibold tracking-tight text-white">
                 Catálogo Karate-Do
               </span>
 
-              <span className="hidden text-[10px] font-medium tracking-[0.18em] text-neutral-400 uppercase sm:block">
+              <span className="hidden text-[10px] font-medium tracking-[0.18em] text-white/42 uppercase sm:block">
                 Equipamiento · Venezuela
               </span>
             </span>
@@ -40,7 +41,7 @@ export function SiteHeader() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-full px-4 py-2.5 text-sm font-medium text-neutral-600 transition-colors hover:bg-black/5 hover:text-neutral-950"
+                className="rounded-full px-4 py-2.5 text-sm font-medium text-white/62 transition-colors hover:bg-white/7 hover:text-white"
               >
                 {item.label}
               </Link>
@@ -50,16 +51,16 @@ export function SiteHeader() {
           <div className="flex shrink-0 items-center gap-2">
             <Link
               href="/catalogo"
-              className="hidden min-h-11 items-center justify-center rounded-full bg-[#b31322] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#8d0f1b] sm:inline-flex"
+              className="hidden min-h-11 items-center justify-center rounded-full bg-[var(--ck-red)] px-5 text-sm font-semibold text-white shadow-lg shadow-red-950/20 transition-all hover:-translate-y-px hover:bg-[var(--ck-red-dark)] sm:inline-flex"
             >
-              Ver catálogo
+              Explorar catálogo
             </Link>
 
             <CartTrigger />
 
             <details className="relative lg:hidden">
               <summary
-                className="flex size-11 cursor-pointer list-none items-center justify-center rounded-full border border-black/10 bg-white text-neutral-950 transition-colors hover:border-neutral-950 [&::-webkit-details-marker]:hidden"
+                className="flex size-11 cursor-pointer list-none items-center justify-center rounded-full border border-white/12 bg-white/6 text-white transition-colors hover:bg-white/10 [&::-webkit-details-marker]:hidden"
                 aria-label="Abrir menú"
               >
                 <svg
@@ -74,13 +75,13 @@ export function SiteHeader() {
                 </svg>
               </summary>
 
-              <div className="absolute top-[calc(100%+10px)] right-0 w-72 overflow-hidden rounded-3xl border border-black/10 bg-[#faf9f6] p-2 shadow-2xl">
-                <div className="border-b border-black/5 px-4 py-3">
-                  <p className="text-[10px] font-semibold tracking-[0.18em] text-neutral-400 uppercase">
+              <div className="absolute top-[calc(100%+10px)] right-0 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-white/10 bg-[#191919] p-2 shadow-2xl">
+                <div className="border-b border-white/8 px-4 py-3">
+                  <p className="text-[10px] font-semibold tracking-[0.18em] text-white/35 uppercase">
                     Navegación
                   </p>
 
-                  <p className="mt-1 text-sm font-medium text-neutral-950">Explora el catálogo</p>
+                  <p className="mt-1 text-sm font-medium text-white">Explora el catálogo</p>
                 </div>
 
                 <div className="py-1">
@@ -88,21 +89,21 @@ export function SiteHeader() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium text-neutral-700 transition-colors hover:bg-white hover:text-neutral-950"
+                      className="flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-medium text-white/72 transition-colors hover:bg-white/7 hover:text-white"
                     >
                       {item.label}
 
-                      <span aria-hidden="true" className="text-neutral-300">
+                      <span aria-hidden="true" className="text-white/25">
                         →
                       </span>
                     </Link>
                   ))}
                 </div>
 
-                <div className="border-t border-black/5 p-2">
+                <div className="border-t border-white/8 p-2">
                   <Link
                     href="/catalogo"
-                    className="flex min-h-11 items-center justify-center rounded-2xl bg-neutral-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-neutral-800"
+                    className="flex min-h-11 items-center justify-center rounded-2xl bg-white px-4 text-sm font-semibold text-neutral-950 transition-colors hover:bg-neutral-200"
                   >
                     Ver catálogo
                   </Link>

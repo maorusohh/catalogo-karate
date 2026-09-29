@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 :root {
   color-scheme: light;
@@ -7,7 +7,7 @@
   --ck-bg-soft: #ebe7de;
   --ck-surface: #ffffff;
   --ck-surface-soft: #f8f7f3;
-  --ck-surface-dark: #171717;
+  --ck-surface-dark: #151515;
   --ck-surface-dark-soft: #222222;
 
   --ck-text: #171717;
@@ -92,7 +92,7 @@ img {
   outline-offset: 3px;
 }
 
-/* ---------- Layout foundation ---------- */
+/* ---------- Layout ---------- */
 
 .site-container {
   width: min(100%, var(--ck-content-width));
@@ -108,7 +108,7 @@ img {
   padding-block: clamp(2rem, 4vw, 3.5rem);
 }
 
-/* ---------- Visual surfaces ---------- */
+/* ---------- Surfaces ---------- */
 
 .site-surface {
   border: 1px solid var(--ck-border);
@@ -164,6 +164,10 @@ img {
   text-wrap: balance;
 }
 
+.heading-display-on-dark {
+  color: var(--ck-text-on-dark);
+}
+
 .heading-section {
   margin: 0;
   color: var(--ck-text);
@@ -182,7 +186,11 @@ img {
   line-height: 1.7;
 }
 
-/* ---------- CTA foundation ---------- */
+.text-lead-on-dark {
+  color: var(--ck-text-on-dark-muted);
+}
+
+/* ---------- Actions ---------- */
 
 .action-primary {
   display: inline-flex;
@@ -238,6 +246,17 @@ img {
   transform: translateY(-1px);
 }
 
+.action-secondary-dark {
+  border-color: rgb(255 255 255 / 0.18);
+  background: rgb(255 255 255 / 0.04);
+  color: var(--ck-text-on-dark);
+}
+
+.action-secondary-dark:hover {
+  border-color: rgb(255 255 255 / 0.35);
+  background: rgb(255 255 255 / 0.09);
+}
+
 .action-whatsapp {
   display: inline-flex;
   min-height: 2.9rem;
@@ -268,7 +287,149 @@ img {
   transform: translateY(0);
 }
 
-/* ---------- Product/category imagery ---------- */
+/* ---------- Hero ---------- */
+
+.hero-dojo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 15% 15%, rgb(179 19 34 / 0.16), transparent 30%),
+    radial-gradient(circle at 82% 20%, rgb(255 255 255 / 0.08), transparent 24%),
+    linear-gradient(135deg, #111111 0%, #181818 52%, #101010 100%);
+}
+
+.hero-dojo::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: 0.17;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.09) 1px, transparent 1px);
+  background-size: 44px 44px;
+  content: "";
+  mask-image: linear-gradient(to bottom, black, transparent 78%);
+}
+
+.hero-dojo::after {
+  position: absolute;
+  z-index: -1;
+  right: -10rem;
+  bottom: -14rem;
+  width: 36rem;
+  height: 36rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 5rem rgb(255 255 255 / 0.025),
+    0 0 0 10rem rgb(255 255 255 / 0.018);
+  content: "";
+}
+
+.hero-stage {
+  position: relative;
+  min-height: clamp(25rem, 58vw, 43rem);
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: var(--ck-radius-xl);
+  background:
+    radial-gradient(circle at 50% 20%, rgb(255 255 255 / 0.11), transparent 25%),
+    linear-gradient(145deg, #222222 0%, #111111 58%, #0b0b0b 100%);
+  box-shadow: 0 24px 70px rgb(0 0 0 / 0.35);
+}
+
+.hero-stage-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.28;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.09) 1px, transparent 1px);
+  background-size: 30px 30px;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 45%, transparent 100%);
+}
+
+.hero-stage-floor {
+  position: absolute;
+  right: -20%;
+  bottom: -13%;
+  left: -20%;
+  height: 48%;
+  transform: perspective(500px) rotateX(55deg);
+  transform-origin: center bottom;
+  opacity: 0.45;
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.11) 1px, transparent 1px);
+  background-size: 38px 38px;
+}
+
+.hero-stage-line {
+  position: absolute;
+  top: 15%;
+  bottom: 12%;
+  left: 50%;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(179 19 34 / 0.95) 18%,
+    rgb(179 19 34 / 0.2) 82%,
+    transparent
+  );
+  box-shadow: 0 0 28px rgb(179 19 34 / 0.28);
+}
+
+.hero-stage-badge {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.05);
+  padding-inline: 0.75rem;
+  color: rgb(255 255 255 / 0.78);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+}
+
+.hero-wordmark {
+  position: absolute;
+  right: 7%;
+  bottom: 8%;
+  left: 7%;
+  color: rgb(255 255 255 / 0.075);
+  font-size: clamp(3.7rem, 11vw, 7rem);
+  font-weight: 900;
+  letter-spacing: -0.08em;
+  line-height: 0.85;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.hero-stat {
+  border-top: 1px solid rgb(255 255 255 / 0.13);
+  padding-top: 0.9rem;
+}
+
+.hero-stat-label {
+  color: rgb(255 255 255 / 0.88);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.hero-stat-copy {
+  margin-top: 0.22rem;
+  color: rgb(255 255 255 / 0.48);
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+/* ---------- Product imagery ---------- */
 
 .image-frame {
   position: relative;
@@ -289,7 +450,7 @@ img {
   object-fit: cover;
 }
 
-/* ---------- Small information tags ---------- */
+/* ---------- Badges ---------- */
 
 .status-badge {
   display: inline-flex;
@@ -329,7 +490,7 @@ img {
   }
 }
 
-/* ---------- Mobile refinements ---------- */
+/* ---------- Mobile ---------- */
 
 @media (max-width: 640px) {
   .site-section {
@@ -346,5 +507,17 @@ img {
   .action-secondary,
   .action-whatsapp {
     min-height: 3rem;
+  }
+
+  .hero-stage {
+    min-height: 28rem;
+    border-radius: var(--ck-radius-lg);
+  }
+
+  .hero-wordmark {
+    right: 6%;
+    bottom: 8%;
+    left: 6%;
+    font-size: 3.7rem;
   }
 }

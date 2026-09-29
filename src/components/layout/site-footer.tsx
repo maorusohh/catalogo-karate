@@ -1,69 +1,98 @@
 import Link from "next/link";
 
+import { Container } from "@/components/ui/container";
+
 export function SiteFooter() {
   return (
-    <footer className="border-t border-black/10 bg-neutral-950 text-white">
-      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:px-8 md:grid-cols-[1.4fr_1fr_1fr] lg:px-10">
-        <div>
-          <p className="text-lg font-semibold tracking-tight">Catálogo Karate-Do</p>
+    <footer className="border-t border-white/8 bg-[#111111] text-white">
+      <Container>
+        <div className="grid gap-10 py-14 sm:py-16 md:grid-cols-[1.5fr_1fr_1fr] lg:py-20">
+          <div>
+            <div className="flex items-center gap-3">
+              <span className="flex size-11 items-center justify-center rounded-2xl bg-[var(--ck-red)] text-xs font-black tracking-[0.08em] text-white">
+                KD
+              </span>
 
-          <p className="mt-3 max-w-md text-sm leading-6 text-white/65">
-            Equipamiento para entrenamiento y competición, con atención personalizada y envíos a
-            nivel nacional.
-          </p>
-        </div>
+              <div>
+                <p className="text-base font-semibold tracking-tight">Catálogo Karate-Do</p>
 
-        <div>
-          <p className="text-xs font-semibold tracking-[0.18em] text-white/45 uppercase">
-            Navegación
-          </p>
+                <p className="mt-0.5 text-[10px] font-semibold tracking-[0.16em] text-white/30 uppercase">
+                  Equipamiento · Venezuela
+                </p>
+              </div>
+            </div>
 
-          <div className="mt-4 grid gap-3">
+            <p className="mt-5 max-w-md text-sm leading-7 text-white/56">
+              Equipamiento para entrenamiento, kata y kumite, con atención personalizada y
+              coordinación de envíos a nivel nacional.
+            </p>
+          </div>
+
+          <div>
+            <p className="text-[10px] font-semibold tracking-[0.18em] text-white/35 uppercase">
+              Navegación
+            </p>
+
+            <div className="mt-5 grid gap-3">
+              <Link
+                href="/catalogo"
+                className="text-sm text-white/64 transition-colors hover:text-white"
+              >
+                Catálogo
+              </Link>
+
+              <Link
+                href="/como-comprar"
+                className="text-sm text-white/64 transition-colors hover:text-white"
+              >
+                Cómo comprar
+              </Link>
+
+              <Link
+                href="/entregas"
+                className="text-sm text-white/64 transition-colors hover:text-white"
+              >
+                Envíos
+              </Link>
+
+              <Link
+                href="/contacto"
+                className="text-sm text-white/64 transition-colors hover:text-white"
+              >
+                Contacto
+              </Link>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-[10px] font-semibold tracking-[0.18em] text-white/35 uppercase">
+              Atención
+            </p>
+
+            <p className="mt-5 text-sm leading-7 text-white/56">
+              Consulta disponibilidad, variantes, precios y condiciones antes de concretar tu
+              compra.
+            </p>
+
             <Link
               href="/catalogo"
-              className="text-sm text-white/75 transition-colors hover:text-white"
+              className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#25d366]"
             >
-              Catálogo
-            </Link>
-
-            <Link
-              href="/como-comprar"
-              className="text-sm text-white/75 transition-colors hover:text-white"
-            >
-              Cómo comprar
-            </Link>
-
-            <Link
-              href="/entregas"
-              className="text-sm text-white/75 transition-colors hover:text-white"
-            >
-              Entregas
-            </Link>
-
-            <Link
-              href="/contacto"
-              className="text-sm text-white/75 transition-colors hover:text-white"
-            >
-              Contacto
+              Explorar catálogo
+              <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
+      </Container>
 
-        <div>
-          <p className="text-xs font-semibold tracking-[0.18em] text-white/45 uppercase">
-            Atención
-          </p>
+      <div className="border-t border-white/8">
+        <Container>
+          <div className="flex flex-col gap-2 py-5 text-xs text-white/30 sm:flex-row sm:items-center sm:justify-between">
+            <p>© {new Date().getFullYear()} Catálogo Karate-Do.</p>
 
-          <p className="mt-4 text-sm leading-6 text-white/75">
-            Consulta disponibilidad, variantes, precios y condiciones antes de realizar tu compra.
-          </p>
-        </div>
-      </div>
-
-      <div className="border-t border-white/10">
-        <div className="mx-auto max-w-7xl px-5 py-5 text-xs text-white/45 sm:px-8 lg:px-10">
-          © {new Date().getFullYear()} Catálogo Karate-Do. Información sujeta a confirmación.
-        </div>
+            <p>Información comercial sujeta a confirmación.</p>
+          </div>
+        </Container>
       </div>
     </footer>
   );

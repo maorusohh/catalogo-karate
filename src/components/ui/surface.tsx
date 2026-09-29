@@ -8,10 +8,10 @@ type SurfaceProps = {
 
 export function Surface({ children, variant = "default", className = "" }: SurfaceProps) {
   const variants = {
-    default: "border border-black/10 bg-white",
-    soft: "border border-black/5 bg-[#f3f1ec]",
-    dark: "bg-neutral-950 text-white",
+    default: "site-surface",
+    soft: "site-surface-soft",
+    dark: "site-surface-dark",
   };
 
-  return <div className={`rounded-3xl ${variants[variant]} ${className}`}>{children}</div>;
+  return <div className={`${variants[variant]} ${className}`}>{children}</div>;
 }

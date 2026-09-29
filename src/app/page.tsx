@@ -1,64 +1,65 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { catalogRepository } from "@/lib/catalog/static-repository";
+import { buildWhatsAppUrl } from "@/lib/whatsapp/url";
 import { Container } from "@/components/ui/container";
+import { ButtonLink } from "@/components/ui/button-link";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Surface } from "@/components/ui/surface";
 
 export const metadata: Metadata = {
   title: "Equipamiento de Karate-Do en Venezuela",
   description:
-    "Catálogo de equipamiento de Karate-Do para entrenamiento y competición, con atención personalizada y envíos a nivel nacional.",
+    "Catálogo de equipamiento de Karate-Do para entrenamiento, kata y kumite, con atención personalizada y coordinación de envíos a nivel nacional.",
 };
 
-const categories = [
+const categoryHighlights = [
   {
     number: "01",
-    title: "Karategis",
-    description: "Uniformes para entrenamiento y competición.",
-    href: "/categoria/karategis",
+    title: "Entrenamiento",
+    description: "Equipamiento para la práctica diaria, preparación y desarrollo técnico.",
   },
   {
     number: "02",
-    title: "Protecciones",
-    description: "Guantines, empeineras, espinilleras y otros elementos.",
-    href: "/categoria/protecciones",
+    title: "Kumite",
+    description: "Protecciones y equipamiento pensado para combate y práctica de kumite.",
   },
   {
     number: "03",
-    title: "Cinturones",
-    description: "Opciones para diferentes niveles y necesidades.",
-    href: "/categoria/cinturones",
+    title: "Kata",
+    description: "Opciones orientadas a la práctica y preparación específica de kata.",
   },
   {
     number: "04",
     title: "Accesorios",
-    description: "Complementos para entrenamiento y práctica.",
-    href: "/categoria/accesorios",
+    description: "Cinturones, bolsos y complementos para acompañar tu práctica.",
   },
 ];
 
-const featuredProducts = [
+const trustItems = [
   {
-    eyebrow: "Karategi",
-    title: "Karategi Demo",
-    description: "Referencia preparada para la ficha de producto.",
-    href: "/producto/karategi-demo-001",
-    code: "01",
+    number: "01",
+    title: "Múltiples marcas",
+    description: "Un catálogo preparado para reunir distintas marcas y categorías de equipamiento.",
   },
   {
-    eyebrow: "Protecciones",
-    title: "Guantines Demo",
-    description: "Consulta variantes de color y talla.",
-    href: "/producto/guantines-demo-001",
-    code: "02",
+    number: "02",
+    title: "Atención personalizada",
+    description:
+      "La confirmación final se realiza contigo según producto, variante y disponibilidad.",
   },
   {
-    eyebrow: "Cinturones",
-    title: "Cinturón Demo",
-    description: "Referencia preparada para selección.",
-    href: "/producto/cinturon-demo-001",
-    code: "03",
+    number: "03",
+    title: "Consulta sin pago",
+    description:
+      "Selecciona lo que te interesa y prepara tu consulta antes de concretar la compra.",
+  },
+  {
+    number: "04",
+    title: "Envíos",
+    description: "Coordinación de envíos a nivel nacional según producto y ubicación.",
   },
 ];
 
@@ -66,158 +67,236 @@ const purchaseSteps = [
   {
     number: "01",
     title: "Explora",
-    description: "Encuentra productos por categoría, marca o búsqueda.",
+    description: "Busca por producto, marca, categoría, aprobación o disponibilidad.",
   },
   {
     number: "02",
     title: "Selecciona",
-    description: "Define las variantes y reúne todo en tu carrito.",
+    description: "Elige las variantes que necesitas y reúne todo en tu carrito de consulta.",
   },
   {
     number: "03",
     title: "Consulta",
-    description: "Envíanos la selección por WhatsApp y confirma los detalles.",
+    description: "Envía tu selección por WhatsApp y confirma precio, disponibilidad y entrega.",
   },
 ];
+
+const approvalLabels: Record<string, string> = {
+  WKF: "WKF",
+  NATIONAL: "Aprobación nacional",
+  NON_APPROVED: "No aprobado",
+  UNSPECIFIED: "Por confirmar",
+};
+
+const products = catalogRepository.getProducts();
+
+const selectedProducts = (
+  products.filter((product) => product.featured).length > 0
+    ? products.filter((product) => product.featured)
+    : products
+).slice(0, 4);
+
+const brands = catalogRepository.getBrands();
+const categories = catalogRepository.getCategories();
+
+const brandNames = Object.fromEntries(brands.map((brand) => [brand.id, brand.name]));
+const categoryNames = Object.fromEntries(
+  categories.map((category) => [category.id, category.name]),
+);
+
+const homeWhatsAppUrl = buildWhatsAppUrl(
+  "Hola, quiero consultar sobre el equipamiento de Karate-Do disponible en el catálogo.",
+);
+
+function getLocalImage(product: (typeof selectedProducts)[number]) {
+  const image = product.images.find((item) => item.src.startsWith("/"));
+
+  return image;
+}
+
+function getProductArtLabel(product: (typeof selectedProducts)[number]) {
+  const categoryName = categoryNames[product.categoryId]?.toLowerCase() ?? "";
+
+  if (categoryName.includes("prote")) {
+    return "Protección";
+  }
+
+  if (categoryName.includes("cintur")) {
+    return "Cinturón";
+  }
+
+  if (categoryName.includes("karateg")) {
+    return "Karategi";
+  }
+
+  return "Equipamiento";
+}
+
+function WhatsAppIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="size-5 shrink-0" fill="currentColor">
+      <path d="M12 2.25a9.75 9.75 0 0 0-8.42 14.67L2.5 21.5l4.74-1.04A9.75 9.75 0 1 0 12 2.25Zm0 17.77a7.98 7.98 0 0 1-4.08-1.12l-.29-.17-2.81.62.63-2.74-.19-.3A7.97 7.97 0 1 1 12 20.02Zm4.35-5.97c-.24-.12-1.42-.7-1.64-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1-.37-1.9-1.18-.7-.62-1.17-1.38-1.31-1.62-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.79-.19-.46-.39-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.69 2.58 4.1 3.62.57.25 1.02.4 1.37.51.58.18 1.11.16 1.53.1.47-.07 1.42-.58 1.62-1.15.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28Z" />
+    </svg>
+  );
+}
 
 export default function HomePage() {
   return (
     <main>
-      <section className="overflow-hidden border-b border-black/5">
+      <section className="hero-dojo">
         <Container>
-          <div className="grid min-h-[calc(100vh-76px)] items-center gap-12 py-14 sm:py-18 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:py-20">
+          <div className="grid min-h-[calc(100svh-76px)] items-center gap-12 py-14 sm:py-18 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14 lg:py-20">
             <div className="max-w-3xl">
-              <p className="text-xs font-semibold tracking-[0.2em] text-[#b31322] uppercase">
-                Karate-Do · Venezuela
-              </p>
+              <p className="eyebrow text-[#ef5a68]">Karate-Do · Venezuela</p>
 
-              <h1 className="mt-5 max-w-4xl text-5xl leading-[0.98] font-semibold tracking-[-0.04em] text-neutral-950 sm:text-6xl lg:text-7xl">
-                Equipamiento para entrenar y competir con criterio.
+              <h1 className="heading-display heading-display-on-dark mt-6 max-w-4xl">
+                Equípate para entrenar. Prepárate para competir.
               </h1>
 
-              <p className="mt-7 max-w-2xl text-base leading-7 text-neutral-600 sm:text-lg">
-                Explora un catálogo especializado de equipamiento para Karate-Do, revisa variantes y
-                prepara tu consulta antes de comprar.
+              <p className="text-lead text-lead-on-dark mt-7 max-w-2xl">
+                Encuentra equipamiento para entrenamiento, kata y kumite, revisa variantes y prepara
+                tu consulta antes de comprar.
               </p>
 
               <div className="mt-9 flex flex-wrap gap-3">
-                <Link
-                  href="/catalogo"
-                  className="inline-flex min-h-13 items-center justify-center rounded-full bg-[#b31322] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#8d0f1b]"
-                >
+                <ButtonLink href="/catalogo" size="lg">
                   Explorar catálogo
-                </Link>
+                  <span aria-hidden="true">→</span>
+                </ButtonLink>
 
-                <Link
+                <ButtonLink
                   href="/como-comprar"
-                  className="inline-flex min-h-13 items-center justify-center rounded-full border border-black/10 bg-white px-6 text-sm font-semibold text-neutral-950 transition-colors hover:border-neutral-950"
+                  variant="secondary"
+                  size="lg"
+                  className="action-secondary-dark"
                 >
                   Cómo comprar
-                </Link>
+                </ButtonLink>
               </div>
 
-              <div className="mt-10 grid max-w-xl grid-cols-3 border-t border-black/10 pt-5">
-                <div className="pr-4">
-                  <p className="text-sm font-semibold text-neutral-950">Catálogo</p>
-                  <p className="mt-1 text-xs leading-5 text-neutral-500">
-                    Varias categorías y marcas.
-                  </p>
+              <div className="mt-11 grid max-w-2xl gap-5 sm:grid-cols-3">
+                <div className="hero-stat">
+                  <p className="hero-stat-label">Catálogo</p>
+                  <p className="hero-stat-copy">Productos, marcas y categorías especializadas.</p>
                 </div>
 
-                <div className="border-l border-black/10 px-4">
-                  <p className="text-sm font-semibold text-neutral-950">Consulta</p>
-                  <p className="mt-1 text-xs leading-5 text-neutral-500">
-                    Sin pago en línea en esta versión.
-                  </p>
+                <div className="hero-stat">
+                  <p className="hero-stat-label">Consulta</p>
+                  <p className="hero-stat-copy">Selecciona y consulta sin pago en línea.</p>
                 </div>
 
-                <div className="border-l border-black/10 pl-4">
-                  <p className="text-sm font-semibold text-neutral-950">Nacional</p>
-                  <p className="mt-1 text-xs leading-5 text-neutral-500">Coordinación de envíos.</p>
+                <div className="hero-stat">
+                  <p className="hero-stat-label">Envíos</p>
+                  <p className="hero-stat-copy">Coordinación a nivel nacional.</p>
                 </div>
               </div>
             </div>
 
-            <div className="relative">
-              <Surface variant="dark" className="overflow-hidden p-6 sm:p-8 lg:p-10">
-                <div className="absolute -top-16 -right-16 size-48 rounded-full border border-white/10" />
-                <div className="absolute -bottom-20 -left-20 size-64 rounded-full border border-white/10" />
+            <div className="hero-stage">
+              <div className="hero-stage-grid" />
+              <div className="hero-stage-floor" />
+              <div className="hero-stage-line" />
 
-                <div className="relative">
-                  <div className="flex items-center justify-between border-b border-white/10 pb-5">
-                    <p className="text-[10px] font-semibold tracking-[0.2em] text-neutral-400 uppercase">
-                      Catálogo / Index
-                    </p>
+              <div className="relative z-10 flex h-full min-h-[inherit] flex-col justify-between p-6 sm:p-8 lg:p-10">
+                <div className="flex items-center justify-between gap-4">
+                  <span className="hero-stage-badge">Equipamiento especializado</span>
 
-                    <span className="text-xs text-neutral-500">2026</span>
-                  </div>
+                  <span className="text-[10px] font-semibold tracking-[0.16em] text-white/28 uppercase">
+                    2026 / INDEX
+                  </span>
+                </div>
 
-                  <div className="py-10">
-                    <p className="text-xs font-semibold tracking-[0.18em] text-neutral-500 uppercase">
-                      Equipamiento
-                    </p>
+                <div className="max-w-md py-16 sm:py-20">
+                  <p className="text-[10px] font-semibold tracking-[0.2em] text-white/36 uppercase">
+                    Selección
+                  </p>
 
-                    <p className="mt-4 max-w-sm text-3xl leading-tight font-semibold tracking-tight text-white sm:text-4xl">
-                      Lo que necesitas para la práctica empieza aquí.
-                    </p>
-                  </div>
+                  <p className="mt-5 text-3xl leading-[1.02] font-semibold tracking-[-0.035em] text-white sm:text-5xl">
+                    Disciplina, precisión y equipamiento.
+                  </p>
 
-                  <div className="space-y-3">
-                    {["Entrenamiento", "Kumite", "Competición", "Accesorios"].map((item, index) => (
+                  <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-4">
+                    {["Entrenamiento", "Kumite", "Kata", "Accesorios"].map((item, index) => (
                       <div
                         key={item}
-                        className="flex items-center justify-between border-t border-white/10 py-3"
+                        className="flex items-center gap-3 border-t border-white/10 pt-3"
                       >
-                        <span className="text-sm font-medium text-neutral-200">{item}</span>
-
-                        <span className="text-xs text-neutral-500 tabular-nums">
+                        <span className="text-[10px] font-semibold tracking-[0.12em] text-[#ef5a68] tabular-nums">
                           {String(index + 1).padStart(2, "0")}
                         </span>
+
+                        <span className="text-xs font-medium text-white/72 sm:text-sm">{item}</span>
                       </div>
                     ))}
                   </div>
-
-                  <div className="mt-8 inline-flex min-h-10 items-center rounded-full bg-[#b31322] px-4 text-xs font-semibold tracking-[0.1em] text-white uppercase">
-                    Selección especializada
-                  </div>
                 </div>
-              </Surface>
+
+                <div className="flex items-end justify-between gap-5">
+                  <div>
+                    <p className="text-[10px] font-semibold tracking-[0.18em] text-white/30 uppercase">
+                      Dirección visual
+                    </p>
+
+                    <p className="mt-2 text-xs leading-5 text-white/52">
+                      La imagen principal real se incorporará en la siguiente etapa de contenido.
+                    </p>
+                  </div>
+
+                  <span className="hidden text-xs font-semibold tracking-[0.2em] text-white/20 uppercase sm:block">
+                    KD
+                  </span>
+                </div>
+              </div>
+
+              <div className="hero-wordmark">KARATE</div>
             </div>
           </div>
         </Container>
       </section>
 
-      <section className="py-20 sm:py-24">
+      <section className="site-section">
         <Container>
           <SectionHeading
             eyebrow="Explorar"
-            title="Empieza por lo que estás buscando."
-            description="Una estructura sencilla para encontrar rápidamente el tipo de equipamiento que necesitas."
+            title="Empieza por el tipo de equipamiento que necesitas."
+            description="Cuatro caminos sencillos para comenzar tu búsqueda y llegar rápidamente al catálogo."
           />
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {categories.map((category) => (
-              <Link key={category.number} href={category.href} className="group">
-                <Surface
-                  variant="default"
-                  className="h-full p-6 transition-transform duration-200 group-hover:-translate-y-1 sm:p-7"
-                >
-                  <div className="flex items-start justify-between">
-                    <span className="text-xs font-semibold text-[#b31322]">{category.number}</span>
+            {categoryHighlights.map((category) => (
+              <Link
+                key={category.number}
+                href="/catalogo"
+                aria-label={`Explorar ${category.title} en el catálogo`}
+                className="group"
+              >
+                <Surface className="relative h-full overflow-hidden p-6 transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-[var(--ck-shadow-md)] sm:p-7">
+                  <div className="absolute top-0 right-0 h-24 w-24 rounded-full bg-[var(--ck-red)]/5 blur-2xl transition-transform duration-300 group-hover:scale-125" />
 
-                    <span
-                      aria-hidden="true"
-                      className="text-neutral-300 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-neutral-950"
-                    >
-                      ↗
-                    </span>
+                  <div className="relative">
+                    <div className="flex items-start justify-between">
+                      <span className="font800 text-xs font-semibold tracking-[0.12em] text-[var(--ck-red)]">
+                        {category.number}
+                      </span>
+
+                      <span
+                        aria-hidden="true"
+                        className="flex size-9 items-center justify-center rounded-full border border-black/8 text-neutral-400 transition-all duration-200 group-hover:border-[var(--ck-red)] group-hover:bg-[var(--ck-red)] group-hover:text-white"
+                      >
+                        ↗
+                      </span>
+                    </div>
+
+                    <div className="mt-16">
+                      <h2 className="text-xl font-semibold tracking-tight text-neutral-950">
+                        {category.title}
+                      </h2>
+
+                      <p className="mt-3 text-sm leading-6 text-neutral-500">
+                        {category.description}
+                      </p>
+                    </div>
                   </div>
-
-                  <h3 className="mt-16 text-xl font-semibold tracking-tight text-neutral-950">
-                    {category.title}
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-6 text-neutral-500">{category.description}</p>
                 </Surface>
               </Link>
             ))}
@@ -225,105 +304,225 @@ export default function HomePage() {
         </Container>
       </section>
 
-      <section className="border-y border-black/5 bg-[#f3f1ec] py-20 sm:py-24">
+      <section className="border-y border-black/6 bg-[#ebe7de]">
         <Container>
-          <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+          <div className="grid gap-px overflow-hidden bg-black/8 md:grid-cols-2 lg:grid-cols-4">
+            {trustItems.map((item) => (
+              <div key={item.number} className="bg-[#ebe7de] px-6 py-8 sm:px-7">
+                <p className="text-[10px] font-semibold tracking-[0.16em] text-[var(--ck-red)]">
+                  {item.number}
+                </p>
+
+                <h2 className="mt-5 text-base font-semibold tracking-tight text-neutral-950">
+                  {item.title}
+                </h2>
+
+                <p className="mt-2 text-sm leading-6 text-neutral-600">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="site-section">
+        <Container>
+          <div className="flex flex-col justify-between gap-7 lg:flex-row lg:items-end">
             <SectionHeading
               eyebrow="Selección"
               title="Algunas referencias del catálogo."
-              description="La estructura está preparada para crecer cuando incorporemos productos y fotografías reales."
+              description="Estas tarjetas ya consumen el catálogo real. Cuando incorporemos las fotografías, ocuparán automáticamente esta superficie."
             />
 
-            <Link
+            <ButtonLink
               href="/catalogo"
-              className="shrink-0 text-sm font-semibold text-neutral-950 underline decoration-black/20 underline-offset-4 transition-colors hover:decoration-[#b31322]"
+              variant="ghost"
+              size="md"
+              className="shrink-0 font-semibold"
             >
-              Ver todo el catálogo →
-            </Link>
+              Ver todo el catálogo
+              <span aria-hidden="true">→</span>
+            </ButtonLink>
           </div>
 
-          <div className="mt-10 grid gap-5 lg:grid-cols-3">
-            {featuredProducts.map((product) => (
-              <Link key={product.code} href={product.href} className="group">
-                <Surface className="overflow-hidden">
-                  <div className="relative aspect-[4/3] bg-[#e9e6df]">
-                    <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_49%,rgba(23,23,23,0.05)_50%,transparent_51%)]" />
+          {selectedProducts.length > 0 ? (
+            <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+              {selectedProducts.map((product, index) => {
+                const localImage = getLocalImage(product);
+                const brandName = brandNames[product.brandId] ?? "Marca";
+                const categoryName = categoryNames[product.categoryId] ?? "Equipamiento";
+                const primaryPrice = product.prices[0];
 
-                    <div className="absolute top-5 left-5 flex min-h-8 items-center rounded-full bg-white/80 px-3 text-[10px] font-semibold tracking-[0.12em] text-neutral-600 uppercase backdrop-blur-sm">
-                      {product.eyebrow}
+                return (
+                  <article
+                    key={product.id}
+                    className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-black/8 bg-white shadow-[var(--ck-shadow-sm)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[var(--ck-shadow-md)]"
+                  >
+                    <Link href={`/producto/${product.slug}`} aria-label={`Ver ${product.name}`}>
+                      <div className="relative aspect-[4/3] overflow-hidden bg-[#e8e3da]">
+                        {localImage ? (
+                          <Image
+                            src={localImage.src}
+                            alt={localImage.alt}
+                            fill
+                            sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 25vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-[1.035]"
+                          />
+                        ) : (
+                          <>
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(179,19,34,0.10),transparent_38%),linear-gradient(135deg,#f3f0e9,#ddd7cc)]" />
+
+                            <div className="absolute inset-6 rounded-[20px] border border-black/6" />
+
+                            <div className="font800 absolute top-5 left-5 rounded-full border border-black/8 bg-white/72 px-3 py-1.5 text-[10px] font-semibold tracking-[0.12em] text-neutral-600 uppercase backdrop-blur-sm">
+                              {getProductArtLabel(product)}
+                            </div>
+
+                            <div className="absolute right-5 bottom-5 flex size-12 items-center justify-center rounded-2xl bg-neutral-950 text-xs font-black tracking-[0.08em] text-white shadow-lg">
+                              {String(index + 1).padStart(2, "0")}
+                            </div>
+
+                            <div className="absolute inset-x-0 bottom-0 p-6">
+                              <p className="text-[10px] font-semibold tracking-[0.18em] text-neutral-500 uppercase">
+                                Fotografía preparada
+                              </p>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </Link>
+
+                    <div className="flex flex-1 flex-col p-5 sm:p-6">
+                      <div className="flex flex-wrap gap-2">
+                        <span className="status-badge">{categoryName}</span>
+
+                        <span className="status-badge status-badge-accent">
+                          {approvalLabels[product.approval]}
+                        </span>
+                      </div>
+
+                      <p className="mt-4 text-[10px] font-semibold tracking-[0.15em] text-neutral-400 uppercase">
+                        {brandName}
+                      </p>
+
+                      <h2 className="mt-2 text-lg leading-tight font-semibold tracking-tight text-neutral-950">
+                        <Link
+                          href={`/producto/${product.slug}`}
+                          className="transition-colors hover:text-[var(--ck-red)]"
+                        >
+                          {product.name}
+                        </Link>
+                      </h2>
+
+                      <p className="mt-2 line-clamp-2 text-sm leading-6 text-neutral-500">
+                        {product.shortDescription}
+                      </p>
+
+                      <div className="mt-auto pt-6">
+                        <div className="border-t border-black/7 pt-4">
+                          <p className="text-sm font-semibold text-neutral-950">
+                            {primaryPrice?.label ?? "Consultar precio"}
+                          </p>
+
+                          <p className="mt-1 text-xs text-neutral-400">
+                            {product.availability === "AVAILABLE"
+                              ? "Disponible"
+                              : product.availability === "OUT_OF_STOCK"
+                                ? "Agotado"
+                                : product.availability === "COMING_SOON"
+                                  ? "Próximamente"
+                                  : "Consultar disponibilidad"}
+                          </p>
+                        </div>
+
+                        <Link
+                          href={`/producto/${product.slug}`}
+                          className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-[var(--ck-red)]"
+                        >
+                          Ver producto
+                        </Link>
+                      </div>
                     </div>
+                  </article>
+                );
+              })}
+            </div>
+          ) : (
+            <Surface variant="soft" className="mt-10 p-8">
+              <p className="text-sm leading-6 text-neutral-600">
+                El catálogo está preparado. Los productos aparecerán aquí a medida que se incorporen
+                al origen de datos.
+              </p>
+            </Surface>
+          )}
+        </Container>
+      </section>
 
-                    <div className="absolute bottom-5 left-5 text-6xl font-semibold tracking-[-0.06em] text-neutral-950/10 sm:text-7xl">
-                      {product.code}
-                    </div>
+      <section className="site-section-tight bg-neutral-950 text-white">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+            <div>
+              <p className="eyebrow text-[#ef5a68]">Cómo funciona</p>
 
-                    <div className="absolute right-5 bottom-5 flex size-11 items-center justify-center rounded-full bg-neutral-950 text-white transition-transform duration-200 group-hover:-rotate-6">
-                      ↗
-                    </div>
-                  </div>
+              <h2 className="mt-5 max-w-lg text-3xl leading-tight font-semibold tracking-[-0.035em] text-white sm:text-4xl">
+                Una compra acompañada, sin complicar el proceso.
+              </h2>
 
-                  <div className="p-6">
-                    <p className="text-lg font-semibold tracking-tight text-neutral-950">
-                      {product.title}
-                    </p>
+              <p className="mt-5 max-w-xl text-sm leading-7 text-white/56 sm:text-base">
+                La web organiza la búsqueda. La confirmación final se realiza contigo antes de
+                concretar el pedido.
+              </p>
+            </div>
 
-                    <p className="mt-2 text-sm leading-6 text-neutral-500">{product.description}</p>
-                  </div>
-                </Surface>
-              </Link>
-            ))}
+            <div className="grid gap-px overflow-hidden rounded-[24px] border border-white/8 bg-white/8 md:grid-cols-3">
+              {purchaseSteps.map((step) => (
+                <div key={step.number} className="bg-[#181818] p-6 sm:p-7">
+                  <p className="text-xs font-semibold tracking-[0.14em] text-[#ef5a68]">
+                    {step.number}
+                  </p>
+
+                  <h3 className="mt-8 text-lg font-semibold tracking-tight text-white">
+                    {step.title}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-6 text-white/48">{step.description}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </Container>
       </section>
 
-      <section className="py-20 sm:py-24">
+      <section className="site-section">
         <Container>
-          <SectionHeading
-            eyebrow="Cómo funciona"
-            title="Una compra acompañada, no un proceso complicado."
-            description="El sitio organiza tu búsqueda. La confirmación final se realiza contigo."
-          />
-
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {purchaseSteps.map((step) => (
-              <Surface key={step.number} variant="soft" className="p-6 sm:p-7">
-                <p className="text-xs font-semibold text-[#b31322]">{step.number}</p>
-
-                <h3 className="mt-8 text-xl font-semibold tracking-tight text-neutral-950">
-                  {step.title}
-                </h3>
-
-                <p className="mt-3 text-sm leading-6 text-neutral-600">{step.description}</p>
-              </Surface>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      <section className="pb-20 sm:pb-24">
-        <Container>
-          <div className="overflow-hidden rounded-[2rem] bg-neutral-950 px-6 py-12 text-white sm:px-10 sm:py-14 lg:px-14">
+          <div className="overflow-hidden rounded-[32px] bg-[linear-gradient(135deg,#141414,#202020)] p-7 text-white shadow-[var(--ck-shadow-lg)] sm:p-10 lg:p-14">
             <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
               <div className="max-w-3xl">
-                <p className="text-xs font-semibold tracking-[0.2em] text-neutral-500 uppercase">
-                  Tu próxima compra
-                </p>
+                <p className="eyebrow text-[#ef5a68]">Tu próxima compra</p>
 
-                <h2 className="mt-4 text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
+                <h2 className="mt-5 text-3xl leading-tight font-semibold tracking-[-0.035em] text-white sm:text-4xl lg:text-5xl">
                   Encuentra el equipamiento que necesitas y prepara tu consulta.
                 </h2>
 
-                <p className="mt-4 max-w-2xl text-sm leading-6 text-neutral-400 sm:text-base">
+                <p className="mt-5 max-w-2xl text-sm leading-7 text-white/54 sm:text-base">
                   Revisa productos, compara variantes y reúne tu selección antes de escribirnos.
                 </p>
               </div>
 
-              <Link
-                href="/catalogo"
-                className="inline-flex min-h-13 items-center justify-center rounded-full bg-white px-6 text-sm font-semibold text-neutral-950 transition-colors hover:bg-neutral-200"
-              >
-                Ir al catálogo
-              </Link>
+              {homeWhatsAppUrl ? (
+                <a
+                  href={homeWhatsAppUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="action-whatsapp w-full sm:w-auto"
+                >
+                  <WhatsAppIcon />
+                  Consultar por WhatsApp
+                </a>
+              ) : (
+                <ButtonLink href="/contacto" variant="secondary" size="lg">
+                  Ir a contacto
+                </ButtonLink>
+              )}
             </div>
           </div>
         </Container>

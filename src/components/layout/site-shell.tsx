@@ -9,7 +9,7 @@ type SiteShellProps = {
 
 export function SiteShell({ children }: SiteShellProps) {
   return (
-    <div className="flex min-h-screen flex-col bg-[#faf9f6] text-neutral-950">
+    <div className="flex min-h-screen flex-col bg-[var(--ck-bg)] text-[var(--ck-text)]">
       <SiteHeader />
 
       <div className="flex-1">{children}</div>
