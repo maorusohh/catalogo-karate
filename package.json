@@ -13,8 +13,9 @@
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "catalog:sync": "tsx scripts/sync-catalog-from-google.ts \u0026\u0026 npx tsx scripts/validate-catalog-text.ts \u0026\u0026 npx tsx scripts/validate-catalog-images.ts \u0026\u0026 prettier --write src/data/catalog-source.google.generated.ts",
-    "build:catalog": "npm run catalog:sync \u0026\u0026 next build"
+    "catalog:sync": "tsx scripts/sync-catalog-from-google.ts && npx tsx scripts/validate-catalog-text.ts && npx tsx scripts/validate-catalog-images.ts && prettier --write src/data/catalog-source.google.generated.ts",
+    "build:catalog": "npm run catalog:sync && next build",
+    "catalog:report": "tsx scripts/catalog-readiness-report.ts"
   },
   "dependencies": {
     "next": "16.3.6",
