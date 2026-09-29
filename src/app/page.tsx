@@ -1,11 +1,14 @@
+import fs from "node:fs";
+import path from "node:path";
+
 import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 
 import { catalogRepository } from "@/lib/catalog/static-repository";
 import { buildWhatsAppUrl } from "@/lib/whatsapp/url";
-import { Container } from "@/components/ui/container";
 import { ButtonLink } from "@/components/ui/button-link";
+import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Surface } from "@/components/ui/surface";
 
@@ -100,6 +103,7 @@ const brands = catalogRepository.getBrands();
 const categories = catalogRepository.getCategories();
 
 const brandNames = Object.fromEntries(brands.map((brand) => [brand.id, brand.name]));
+
 const categoryNames = Object.fromEntries(
   categories.map((category) => [category.id, category.name]),
 );
@@ -108,10 +112,12 @@ const homeWhatsAppUrl = buildWhatsAppUrl(
   "Hola, quiero consultar sobre el equipamiento de Karate-Do disponible en el catálogo.",
 );
 
-function getLocalImage(product: (typeof selectedProducts)[number]) {
-  const image = product.images.find((item) => item.src.startsWith("/"));
+const heroImagePath = path.join(process.cwd(), "public", "images", "branding", "hero-karate.jpg");
 
-  return image;
+const hasHeroImage = fs.existsSync(heroImagePath);
+
+function getLocalImage(product: (typeof selectedProducts)[number]) {
+  return product.images.find((item) => item.src.startsWith("/"));
 }
 
 function getProductArtLabel(product: (typeof selectedProducts)[number]) {
@@ -153,28 +159,43 @@ export default function HomePage() {
                 Equípate para entrenar. Prepárate para competir.
               </h1>
 
-              <p className="text-lead text-lead-on-dark mt-7 max-w-2xl">
+              <p className="text-lead text-lead-on-dark mt-9 max-w-2xl">
                 Encuentra equipamiento para entrenamiento, kata y kumite, revisa variantes y prepara
                 tu consulta antes de comprar.
               </p>
 
-              <div className="mt-9 flex flex-wrap gap-3">
-                <ButtonLink href="/catalogo" size="lg">
-                  Explorar catálogo
-                  <span aria-hidden="true">→</span>
+              <div className="mt-10 flex flex-wrap gap-3">
+                <ButtonLink
+                  href="/catalogo"
+                  size="lg"
+                  className="group shadow-[0_12px_30px_rgb(179_19_34_/_0.25)]"
+                >
+                  Ver catálogo
+                  <span
+                    aria-hidden="true"
+                    className="flex size-7 items-center justify-center rounded-full bg-white/12 text-white transition-transform duration-200 group-hover:translate-x-0.5"
+                  >
+                    →
+                  </span>
                 </ButtonLink>
 
                 <ButtonLink
                   href="/como-comprar"
                   variant="secondary"
                   size="lg"
-                  className="action-secondary-dark"
+                  className="action-secondary-dark group bg-white/6 shadow-lg shadow-black/15 hover:bg-white/12"
                 >
                   Cómo comprar
+                  <span
+                    aria-hidden="true"
+                    className="text-white/45 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-white/75"
+                  >
+                    →
+                  </span>
                 </ButtonLink>
               </div>
 
-              <div className="mt-11 grid max-w-2xl gap-5 sm:grid-cols-3">
+              <div className="mt-12 grid max-w-2xl gap-5 sm:grid-cols-3">
                 <div className="hero-stat">
                   <p className="hero-stat-label">Catálogo</p>
                   <p className="hero-stat-copy">Productos, marcas y categorías especializadas.</p>
@@ -193,6 +214,21 @@ export default function HomePage() {
             </div>
 
             <div className="hero-stage">
+              {hasHeroImage ? (
+                <div className="hero-stage-media">
+                  <Image
+                    src="/images/branding/hero-karate.jpg"
+                    alt="Karatekas entrenando en un dojo"
+                    fill
+                    priority
+                    sizes="(max-width: 1023px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="hero-stage-placeholder" />
+              )}
+
               <div className="hero-stage-grid" />
               <div className="hero-stage-floor" />
               <div className="hero-stage-line" />
@@ -234,11 +270,11 @@ export default function HomePage() {
                 <div className="flex items-end justify-between gap-5">
                   <div>
                     <p className="text-[10px] font-semibold tracking-[0.18em] text-white/30 uppercase">
-                      Dirección visual
+                      Fotografía
                     </p>
 
-                    <p className="mt-2 text-xs leading-5 text-white/52">
-                      La imagen principal real se incorporará en la siguiente etapa de contenido.
+                    <p className="mt-2 max-w-sm text-xs leading-5 text-white/52">
+                      Espacio preparado para una imagen real del dojo y sus karatekas.
                     </p>
                   </div>
 
@@ -262,7 +298,7 @@ export default function HomePage() {
             description="Cuatro caminos sencillos para comenzar tu búsqueda y llegar rápidamente al catálogo."
           />
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-11 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {categoryHighlights.map((category) => (
               <Link
                 key={category.number}
@@ -275,7 +311,7 @@ export default function HomePage() {
 
                   <div className="relative">
                     <div className="flex items-start justify-between">
-                      <span className="font800 text-xs font-semibold tracking-[0.12em] text-[var(--ck-red)]">
+                      <span className="text-xs font-semibold tracking-[0.12em] text-[var(--ck-red)]">
                         {category.number}
                       </span>
 
@@ -317,7 +353,7 @@ export default function HomePage() {
                   {item.title}
                 </h2>
 
-                <p className="mt-2 text-sm leading-6 text-neutral-600">{item.description}</p>
+                <p className="mt-3 text-sm leading-6 text-neutral-600">{item.description}</p>
               </div>
             ))}
           </div>
@@ -373,7 +409,7 @@ export default function HomePage() {
 
                             <div className="absolute inset-6 rounded-[20px] border border-black/6" />
 
-                            <div className="font800 absolute top-5 left-5 rounded-full border border-black/8 bg-white/72 px-3 py-1.5 text-[10px] font-semibold tracking-[0.12em] text-neutral-600 uppercase backdrop-blur-sm">
+                            <div className="absolute top-5 left-5 rounded-full border border-black/8 bg-white/72 px-3 py-1.5 text-[10px] font-semibold tracking-[0.12em] text-neutral-600 uppercase backdrop-blur-sm">
                               {getProductArtLabel(product)}
                             </div>
 
@@ -436,9 +472,10 @@ export default function HomePage() {
 
                         <Link
                           href={`/producto/${product.slug}`}
-                          className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-[var(--ck-red)]"
+                          className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-[var(--ck-red)]"
                         >
                           Ver producto
+                          <span aria-hidden="true">→</span>
                         </Link>
                       </div>
                     </div>
@@ -467,7 +504,7 @@ export default function HomePage() {
                 Una compra acompañada, sin complicar el proceso.
               </h2>
 
-              <p className="mt-5 max-w-xl text-sm leading-7 text-white/56 sm:text-base">
+              <p className="mt-6 max-w-xl text-sm leading-7 text-white/56 sm:text-base">
                 La web organiza la búsqueda. La confirmación final se realiza contigo antes de
                 concretar el pedido.
               </p>
@@ -503,7 +540,7 @@ export default function HomePage() {
                   Encuentra el equipamiento que necesitas y prepara tu consulta.
                 </h2>
 
-                <p className="mt-5 max-w-2xl text-sm leading-7 text-white/54 sm:text-base">
+                <p className="mt-6 max-w-2xl text-sm leading-7 text-white/54 sm:text-base">
                   Revisa productos, compara variantes y reúne tu selección antes de escribirnos.
                 </p>
               </div>

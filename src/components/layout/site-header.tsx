@@ -26,7 +26,7 @@ export function SiteHeader() {
             </span>
 
             <span className="min-w-0">
-              <span className="font800 block truncate text-sm font-semibold tracking-tight text-white">
+              <span className="block truncate text-sm font-semibold tracking-tight text-white">
                 Catálogo Karate-Do
               </span>
 
@@ -51,9 +51,15 @@ export function SiteHeader() {
           <div className="flex shrink-0 items-center gap-2">
             <Link
               href="/catalogo"
-              className="hidden min-h-11 items-center justify-center rounded-full bg-[var(--ck-red)] px-5 text-sm font-semibold text-white shadow-lg shadow-red-950/20 transition-all hover:-translate-y-px hover:bg-[var(--ck-red-dark)] sm:inline-flex"
+              className="hidden min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--ck-red)] px-5 text-sm font-semibold text-white shadow-lg shadow-red-950/20 transition-all hover:-translate-y-px hover:bg-[var(--ck-red-dark)] sm:inline-flex"
             >
-              Explorar catálogo
+              Ver catálogo
+              <span
+                aria-hidden="true"
+                className="text-white/65 transition-transform duration-200 group-hover:translate-x-0.5"
+              >
+                →
+              </span>
             </Link>
 
             <CartTrigger />

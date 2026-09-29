@@ -19,9 +19,9 @@ export function SectionHeading({
     <div className={`max-w-2xl ${alignment} ${className}`}>
       {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
 
-      <h2 className="heading-section mt-4">{title}</h2>
+      <h2 className="heading-section mt-5">{title}</h2>
 
-      {description ? <p className="text-lead mt-5">{description}</p> : null}
+      {description ? <p className="text-lead mt-6">{description}</p> : null}
     </div>
   );
 }
