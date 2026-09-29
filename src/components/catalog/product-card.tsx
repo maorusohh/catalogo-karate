@@ -28,16 +28,16 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
   const primaryPrice = product.prices[0];
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-black/10 bg-white transition-transform hover:-translate-y-1">
+    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-black/10 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.04)] transition-transform hover:-translate-y-1">
       <Link href={`/producto/${product.slug}`} className="block" aria-label={`Ver ${product.name}`}>
-        <div className="relative aspect-[4/3] overflow-hidden bg-neutral-100">
+        <div className="relative aspect-[4/3] overflow-hidden border-b border-black/5 bg-[#f1eee7]">
           {image ? (
             <Image
               src={image.src}
-              alt={image.alt}
+              alt={image.alt || product.name}
               fill
               sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+              className="object-contain p-7 transition-transform duration-300 group-hover:scale-[1.025] sm:p-9"
             />
           ) : (
             <div className="flex h-full items-center justify-center p-6 text-center">
