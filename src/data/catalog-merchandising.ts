@@ -15,9 +15,8 @@ export interface MerchandisingGroup {
  *
  * No sustituyen las categorías técnicas.
  *
- * Las categorías antiguas permanecen temporalmente en estas
- * agrupaciones para mantener compatibilidad con los productos demo
- * mientras se realiza la migración del catálogo real.
+ * Una categoría técnica puede aparecer en más de una
+ * agrupación comercial cuando corresponda.
  */
 export const merchandisingGroups: MerchandisingGroup[] = [
   {
@@ -29,7 +28,7 @@ export const merchandisingGroups: MerchandisingGroup[] = [
       "karategis-entrenamiento",
       "cinturones-entrenamiento",
 
-      // Compatibilidad temporal con datos demo existentes.
+      // Compatibilidad temporal con el catálogo demo.
       "karategis",
       "cinturones",
     ],
@@ -46,6 +45,7 @@ export const merchandisingGroups: MerchandisingGroup[] = [
       "petos-corporales",
       "protectores-inguinales",
       "cinturones-kumite",
+      "cinturones-competicion",
       "protecciones",
       "empeineras-espinilleras",
       "cascos-deportivos",
@@ -59,8 +59,9 @@ export const merchandisingGroups: MerchandisingGroup[] = [
       "kata",
       "karategis-kata",
       "cinturones-kata",
+      "cinturones-competicion",
 
-      // Compatibilidad temporal.
+      // Compatibilidad temporal con el catálogo demo.
       "karategis",
       "cinturones",
     ],
