@@ -144,9 +144,9 @@ export function CatalogFilters({
 
               return (
                 <details
-                  key={parent.id}
+                  key={`${parent.id}:${selectedInGroup ? "selected" : "idle"}`}
                   className="overflow-hidden rounded-xl border border-black/8 bg-white"
-                  defaultOpen={selectedInGroup}
+                  open={selectedInGroup}
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
                     <span>{parent.name}</span>
