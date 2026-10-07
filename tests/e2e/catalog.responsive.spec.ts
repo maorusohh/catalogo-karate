@@ -5,7 +5,7 @@ const staticRoutes = [
   "/catalogo/",
   "/categoria/karategis/",
   "/categoria/protecciones/",
-  "/categoria/empeineras-espinilleras/",
+  "/categoria/espinilleras-empeineras/",
   "/categoria/cinturones/",
   "/categoria/guantines/",
   "/categoria/accesorios/",
