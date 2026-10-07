@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import io
 import json
+import sys
 import tempfile
 import unittest
 import zipfile
@@ -15,6 +16,7 @@ MODULE_PATH = Path(__file__).resolve().parents[1] / "extract_images.py"
 SPEC = importlib.util.spec_from_file_location("extract_images", MODULE_PATH)
 assert SPEC and SPEC.loader
 extract_images = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = extract_images
 SPEC.loader.exec_module(extract_images)
 
 
@@ -61,7 +63,7 @@ class ImageExtractorTests(unittest.TestCase):
             document = fitz.open()
             page = document.new_page(width=200, height=200)
             page.insert_image(fitz.Rect(20, 20, 120, 100), stream=image_bytes)
-            document.save(source)
+            document.save(str(source))
             document.close()
 
             rows = extract_images.run(source, output)
