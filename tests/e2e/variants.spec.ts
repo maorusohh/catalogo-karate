@@ -64,3 +64,24 @@ test("un karategi de precio fijo conserva el precio al cambiar de talla", async 
   await page.getByRole("button", { name: "Talla: 2.00 m" }).click();
   await expect(page.getByRole("button", { name: "155 USD / Divisas" })).toBeVisible();
 });
+
+test("las canilleras Best Sport exponen talla y colores Ao/Aka verificados", async ({ page }) => {
+  const response = await page.goto(
+    "/producto/best-sport-canilleras-karate-aprobadas-wkf-1128wkf/",
+    {
+      waitUntil: "domcontentloaded",
+    },
+  );
+
+  expect(response?.status()).toBe(200);
+
+  await expect(page.getByRole("button", { name: "Talla: XS" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Talla: L" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Color Ao, azul" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Color Aka, rojo" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Talla: M" }).click();
+  await page.getByRole("button", { name: "Color Aka, rojo" }).click();
+
+  await expect(page.getByText("M · Aka (Rojo)", { exact: true })).toBeVisible();
+});
