@@ -15,6 +15,14 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
 
   const selectedImage = images[selectedIndex];
 
+  function showPreviousImage() {
+    setSelectedIndex((current) => (current === 0 ? images.length - 1 : current - 1));
+  }
+
+  function showNextImage() {
+    setSelectedIndex((current) => (current === images.length - 1 ? 0 : current + 1));
+  }
+
   if (images.length === 0) {
     return (
       <div className="overflow-hidden rounded-[2rem] border border-black/10 bg-[#ebe7de]">
@@ -51,9 +59,29 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
         />
 
         {images.length > 1 ? (
-          <div className="absolute right-4 bottom-4 rounded-full bg-neutral-950/90 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">
-            {selectedIndex + 1} / {images.length}
-          </div>
+          <>
+            <button
+              type="button"
+              onClick={showPreviousImage}
+              aria-label="Ver imagen anterior"
+              className="absolute top-1/2 left-4 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-black/10 bg-white/90 text-xl text-neutral-950 shadow-lg backdrop-blur transition-transform hover:scale-105"
+            >
+              ←
+            </button>
+
+            <button
+              type="button"
+              onClick={showNextImage}
+              aria-label="Ver imagen siguiente"
+              className="absolute top-1/2 right-4 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-black/10 bg-white/90 text-xl text-neutral-950 shadow-lg backdrop-blur transition-transform hover:scale-105"
+            >
+              →
+            </button>
+
+            <div className="absolute right-4 bottom-4 rounded-full bg-neutral-950/90 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">
+              {selectedIndex + 1} / {images.length}
+            </div>
+          </>
         ) : null}
       </div>
 
