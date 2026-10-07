@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { BrandLogo } from "@/components/catalog/brand-logo";
 import type { ApprovalLevel, AvailabilityStatus, Product } from "@/types/catalog";
 
 const approvalLabels: Record<ApprovalLevel, string> = {
@@ -21,11 +20,10 @@ const availabilityLabels: Record<AvailabilityStatus, string> = {
 type ProductCardProps = {
   product: Product;
   brandName: string;
-  brandLogo?: string;
   categoryName: string;
 };
 
-export function ProductCard({ product, brandName, brandLogo, categoryName }: ProductCardProps) {
+export function ProductCard({ product, brandName, categoryName }: ProductCardProps) {
   const image = product.images[0];
   const primaryPrice = product.prices[0];
 
@@ -54,14 +52,6 @@ export function ProductCard({ product, brandName, brandLogo, categoryName }: Pro
               </div>
             </div>
           )}
-
-          <BrandLogo
-            src={brandLogo}
-            name={brandName}
-            className="absolute top-4 right-4 h-10 w-24 rounded-xl border border-black/10 shadow-sm"
-            imageClassName="p-1.5"
-            sizes="96px"
-          />
         </div>
       </Link>
 
