@@ -12,9 +12,9 @@ from pathlib import Path
 from typing import Iterable
 
 try:
-    import fitz  # PyMuPDF
+    import pymupdf
 except ImportError:  # pragma: no cover - validated by CLI dependency check
-    fitz = None
+    pymupdf = None
 
 try:
     from PIL import Image
@@ -145,13 +145,13 @@ def extract_pdf(
     output_dir: Path,
     known_hashes: dict[str, str],
 ) -> list[ManifestRow]:
-    if fitz is None:
+    if pymupdf is None:
         raise RuntimeError("PyMuPDF no está instalado. Ejecuta pip install -r tools/image-extractor/requirements.txt")
 
     rows: list[ManifestRow] = []
     ordinal = 0
 
-    with fitz.open(source) as document:
+    with pymupdf.open(source) as document:
         for page_index in range(document.page_count):
             page = document.load_page(page_index)
             images = page.get_images(full=True)
