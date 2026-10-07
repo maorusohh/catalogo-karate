@@ -54,7 +54,7 @@ El archivo generado actualmente versionado todavía representa el dataset demo a
 - 0 imágenes;
 - 8 features demo.
 
-Este snapshot no representa aún el contenido comercial actual de Google Sheets.
+Este snapshot no representa aún el contenido comercial actual de Google Sheets. No debe actualizarse hasta que los datos comerciales y los assets locales permitan superar la cadena completa de validación.
 
 ## 4. Estado comprobado de Google Sheets
 
@@ -93,70 +93,91 @@ Staging editorial presente:
 
 `images` contiene 77 referencias comerciales promovidas.
 
+`features` contiene:
+
+- 8 filas demo asociadas a productos demo inactivos;
+- 134 features comerciales promovidas;
+- 142 filas de datos canónicos en total.
+
 ### Datos todavía pendientes de promoción completa
 
 - `variants`: sin variantes comerciales canónicas.
 - `variant_options`: sin opciones comerciales canónicas.
 - `prices`: mantiene únicamente las 3 filas demo `CONSULT` en el bloque canónico.
-- `features`: mantiene únicamente 8 filas demo en el bloque canónico.
 - `catalog_intake_variants`: no contiene datos comerciales reales que promover actualmente.
-- `catalog_intake_prices`: contiene staging comercial y todavía requiere normalización/promoción controlada.
-- `catalog_intake_features`: contiene **134 filas `READY`**. Las referencias que antes impedían la promoción ya aparecen normalizadas hacia los identificadores canónicos de producto.
+- `catalog_intake_prices`: contiene staging comercial y requiere normalización/promoción controlada.
 
-## 5. Assets de imágenes
+## 5. Checkpoint de features — cerrado
 
-El Sheet ya contiene 77 referencias canónicas de imágenes, pero en la rama remota `public/images/products/` solo está versionado `.gitkeep`.
+El staging `catalog_intake_features` contiene 134 filas `READY`.
 
-Por tanto, un sync contra el Sheet comercial actual no puede considerarse publicable hasta incorporar los archivos locales correspondientes y superar `validate-catalog-images.ts`.
+Al iniciar el checkpoint se confirmó que las referencias todavía eran heterogéneas:
+
+- Best Sport ya usaba `products.id` canónico;
+- Mallems usaba SKUs como `MALLEMS-07`;
+- Adidas usaba SKUs como `ADIDAS-661_22_20`.
+
+Se normalizó `product_ref` resolviendo cada SKU contra la columna `products.sku` y sustituyéndolo por su `products.id` correspondiente.
+
+La promoción a `features` conserva toda la información editorial mediante esta transformación:
+
+```text
+feature = feature_name + ": " + feature_value
+```
+
+`feature_ref` permanece como trazabilidad de staging y no forma parte del contrato canónico.
+
+Resultado verificado:
+
+- 134/134 filas comerciales promovidas;
+- 0 referencias huérfanas;
+- 134 combinaciones `product_id + feature` únicas;
+- 134 combinaciones `product_id + sort_order` únicas;
+- `sort_order` conservado;
+- datos canónicos materializados como valores estáticos, no fórmulas;
+- las celdas temporales usadas para validar fueron limpiadas después de la comprobación.
+
+## 6. Assets de imágenes
+
+El Sheet contiene 77 referencias canónicas de imágenes con rutas locales previstas bajo `/images/...`, pero la rama remota todavía no contiene los archivos comerciales correspondientes bajo `public/`.
+
+Por tanto, un sync contra el Sheet comercial actual no puede considerarse publicable hasta incorporar los assets locales y superar `validate-catalog-images.ts`.
 
 No sustituir este pendiente con hotlinks de proveedores.
 
-## 6. Último bloqueo resuelto
-
-El checkpoint anterior se detuvo porque `catalog_intake_features.product_ref` usaba referencias heterogéneas de proveedor como `MALLEMS-07` o `ADIDAS-661_22_20`, mientras la promoción esperaba el identificador canónico del producto.
-
-La revisión actual confirma que `catalog_intake_features` ya usa referencias normalizadas, por ejemplo:
-
-```text
-best-sport-guantes-rojo-azul-aprobados-wkf-1303wkf
-ADIDAS-K200DNAKIT
-ADIDAS-K200E
-```
-
-La causa que bloqueaba la promoción de features ya no está presente en ese staging.
-
 ## 7. Próximo checkpoint técnico exacto
 
-### Checkpoint: promover features comerciales al contrato canónico
+### Checkpoint: normalizar y promover precios comerciales
 
 Objetivo inmediato:
 
-1. promover las 134 filas `READY` de `catalog_intake_features` a `features`;
-2. resolver cada `product_ref` contra un producto canónico existente;
-3. no crear relaciones huérfanas;
-4. conservar el orden editorial mediante `sort_order`;
-5. evitar duplicados producto + feature;
-6. verificar el resultado antes de continuar con precios.
+1. inspeccionar las 470 filas con contenido de `catalog_intake_prices` y separar filas reales de filas estructuralmente vacías o heredadas;
+2. resolver `product_ref` contra `products.id`, usando `products.sku` únicamente como clave de normalización cuando corresponda;
+3. transformar cada fila publicable al contrato `prices(product_id, amount, currency, basis, label, note, sort_order)`;
+4. conservar todas las modalidades comerciales válidas sin mezclar `DIRECT_USD`, `USDT`, `EURO_RATE_USD`, `BCV_RATE_USD` y `CONSULT`;
+5. asignar `sort_order` estable por producto;
+6. evitar duplicados y relaciones huérfanas;
+7. validar el resultado antes de avanzar a variantes o al sync completo.
 
 Criterio de cierre:
 
-- 134/134 filas comerciales promovibles resueltas correctamente;
+- todas las filas `READY` publicables resueltas o justificadamente descartadas;
 - 0 referencias huérfanas;
-- 0 duplicados introducidos;
-- las 8 filas demo pueden permanecer asociadas a los 3 productos demo inactivos hasta la limpieza final;
-- no avanzar a la promoción de precios si este checkpoint falla.
+- 0 combinaciones comerciales duplicadas introducidas;
+- `amount`, `currency` y `basis` cumplen el contrato;
+- `sort_order` es determinista dentro de cada producto;
+- las 3 filas demo pueden permanecer asociadas a los productos demo inactivos hasta la limpieza final.
 
 ## 8. Secuencia posterior
 
-Una vez cerrado el checkpoint de features:
+Una vez cerrado el checkpoint de precios:
 
-1. normalizar y promover `catalog_intake_prices`;
-2. definir/cargar variantes reales solo cuando exista información comercial verificable;
-3. incorporar los 77 assets de imágenes locales;
-4. ejecutar `npm run catalog:sync`;
-5. ejecutar `npm run catalog:preflight` y las validaciones del repositorio;
-6. actualizar el snapshot generado;
-7. ejecutar build y pruebas antes de integrar la rama.
+1. definir/cargar variantes reales solo cuando exista información comercial verificable;
+2. incorporar los 77 assets de imágenes locales;
+3. ejecutar `npm run catalog:sync`;
+4. ejecutar `npm run catalog:preflight` y las validaciones del repositorio;
+5. actualizar el snapshot generado;
+6. ejecutar build y pruebas antes de integrar la rama.
 
 ## 9. Regla de continuidad
 
