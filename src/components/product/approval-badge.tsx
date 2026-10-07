@@ -1,10 +1,10 @@
 import type { ApprovalLevel } from "@/types/catalog";
 
 const labels: Record<ApprovalLevel, string> = {
-  WKF: "WKF · World Karate Federation",
+  WKF: "WKF · Aprobación World Karate Federation",
   NATIONAL: "FVKD · Aprobación nacional",
   NON_APPROVED: "No aprobado",
-  UNSPECIFIED: "Sin homologación especificada",
+  UNSPECIFIED: "Sin aprobación especificada",
 };
 
 type ApprovalBadgeProps = {
