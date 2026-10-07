@@ -145,9 +145,17 @@ export function CartDrawer() {
 
                           <p className="mt-1 text-xs text-neutral-500">{item.snapshot.brandName}</p>
 
-                          <p className="mt-2 text-sm text-neutral-700">
-                            {item.snapshot.variantLabel}
-                          </p>
+                          {item.snapshot.variantLabel !== "Sin variante" ? (
+                            <p className="mt-2 text-sm text-neutral-700">
+                              {item.snapshot.variantLabel}
+                            </p>
+                          ) : null}
+
+                          {item.snapshot.paymentLabel ? (
+                            <p className="mt-2 text-xs font-semibold text-neutral-700">
+                              {item.snapshot.paymentLabel}
+                            </p>
+                          ) : null}
 
                           <p className="mt-1 text-xs text-neutral-400">SKU: {item.snapshot.sku}</p>
                         </div>
