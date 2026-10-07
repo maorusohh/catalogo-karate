@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { BrandLogo } from "@/components/catalog/brand-logo";
 import { ApprovalBadge } from "@/components/product/approval-badge";
 import { AvailabilityBadge } from "@/components/product/availability-badge";
 import { ProductGallery } from "@/components/product/product-gallery";
@@ -133,7 +134,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
 
         <div className="lg:sticky lg:top-28">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {brand?.logo ? (
+              <BrandLogo
+                src={brand.logo}
+                name={brand.name}
+                className="h-9 w-24 rounded-xl border border-black/10 shadow-sm"
+                imageClassName="p-1.5"
+                sizes="96px"
+              />
+            ) : null}
+
             {brand ? (
               <span className="inline-flex min-h-8 items-center rounded-full bg-neutral-950 px-3 text-xs font-semibold text-white">
                 {brand.name}
