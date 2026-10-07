@@ -26,12 +26,10 @@ const initialFilters: CatalogFiltersState = {
   brandId: "ALL",
   categoryId: "ALL",
   approval: "ALL",
-  availability: "ALL",
 };
 
 export function CatalogClient({ products, brands, categories }: CatalogClientProps) {
   const [filters, setFilters] = useState<CatalogFiltersState>(initialFilters);
-
   const [sort, setSort] = useState<CatalogSort>("featured");
 
   const brandNames = useMemo(
@@ -45,16 +43,15 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
   );
 
   const filteredProducts = useMemo(() => {
-    const filtered = filterProducts(products, filters, brandNames, categoryNames);
+    const filtered = filterProducts(products, filters, brandNames, categoryNames, categories);
 
     return sortProducts(filtered, sort);
-  }, [products, filters, sort, brandNames, categoryNames]);
+  }, [products, filters, sort, brandNames, categoryNames, categories]);
 
   const activeFilterCount = [
     filters.brandId !== "ALL",
     filters.categoryId !== "ALL",
     filters.approval !== "ALL",
-    filters.availability !== "ALL",
   ].filter(Boolean).length;
 
   function clearFilters() {
@@ -107,6 +104,7 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
               filters={filters}
               brands={brands}
               categories={categories}
+              products={products}
               onChange={setFilters}
               onReset={clearFilters}
             />
@@ -121,6 +119,7 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
               filters={filters}
               brands={brands}
               categories={categories}
+              products={products}
               onChange={setFilters}
               onReset={clearFilters}
             />
