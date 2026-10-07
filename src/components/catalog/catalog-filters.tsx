@@ -122,13 +122,13 @@ export function CatalogFilters({
   const selectedBrandName =
     filters.brandId === "ALL"
       ? "Todas las marcas"
-      : activeBrands.find((brand) => brand.id === filters.brandId)?.name ?? "Todas las marcas";
+      : (activeBrands.find((brand) => brand.id === filters.brandId)?.name ?? "Todas las marcas");
 
   const selectedCategoryName =
     filters.categoryId === "ALL"
       ? "Todo el equipamiento"
-      : activeCategories.find((category) => category.id === filters.categoryId)?.name ??
-        "Todo el equipamiento";
+      : (activeCategories.find((category) => category.id === filters.categoryId)?.name ??
+        "Todo el equipamiento");
 
   return (
     <div className="rounded-[1.75rem] border border-black/10 bg-white p-4 shadow-[0_12px_30px_rgba(0,0,0,0.035)]">

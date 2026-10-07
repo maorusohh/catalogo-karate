@@ -122,7 +122,7 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
             </span>
           </summary>
 
-          <div className="max-h-[70vh] overflow-y-scroll border-t border-black/10 p-4 [scrollbar-gutter:stable]">
+          <div className="max-h-[70vh] [scrollbar-gutter:stable] overflow-y-scroll border-t border-black/10 p-4">
             <CatalogFilters
               filters={filters}
               brands={activeBrands}
@@ -137,7 +137,7 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
 
       <div className="mt-7 grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="hidden lg:block">
-          <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-scroll overscroll-contain pr-2 [scrollbar-gutter:stable]">
+          <div className="sticky top-24 max-h-[calc(100vh-7rem)] [scrollbar-gutter:stable] overflow-y-scroll overscroll-contain pr-2">
             <CatalogFilters
               filters={filters}
               brands={activeBrands}

@@ -20,7 +20,7 @@ export default function CatalogoPage() {
   return (
     <main>
       <section className="relative overflow-hidden border-b border-white/8 bg-[#151515] text-white">
-        <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:linear-gradient(rgb(255_255_255_/_0.08)_1px,transparent_1px),linear-gradient(90deg,rgb(255_255_255_/_0.08)_1px,transparent_1px)] [background-size:44px_44px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]" />
+        <div className="pointer-events-none absolute inset-0 [background-image:linear-gradient(rgb(255_255_255_/_0.08)_1px,transparent_1px),linear-gradient(90deg,rgb(255_255_255_/_0.08)_1px,transparent_1px)] [mask-image:linear-gradient(to_bottom,black,transparent_90%)] [background-size:44px_44px] opacity-20" />
 
         <Container>
           <div className="relative grid gap-10 py-14 sm:py-18 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] lg:items-end lg:py-20">
