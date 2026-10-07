@@ -41,10 +41,11 @@ export function ProductPurchasePanel({
             Forma de pago
           </p>
           <h2 className="mt-1 text-base font-semibold tracking-tight text-neutral-950">
-            ¿Cómo deseas realizar tu pago?
+            Selecciona tu forma de pago preferida.
           </h2>
           <p className="mt-1 text-xs leading-5 text-neutral-500">
-            Selecciona la opción que prefieres usar al momento de confirmar la compra.
+            La opción elegida se incluirá en tu consulta y se confirmará antes de concretar la
+            compra.
           </p>
         </div>
 
