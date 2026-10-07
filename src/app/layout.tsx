@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
+import { Barlow } from "next/font/google";
 
 import { CartDrawer } from "@/components/cart/cart-drawer";
 import { CartProvider } from "@/components/cart/cart-provider";
 import { SiteShell } from "@/components/layout/site-shell";
 
 import "./globals.css";
+
+const barlow = Barlow({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -41,7 +48,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" data-scroll-behavior="smooth">
-      <body>
+      <body className={barlow.className}>
         <CartProvider>
           <SiteShell>{children}</SiteShell>
 
