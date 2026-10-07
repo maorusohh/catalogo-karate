@@ -97,7 +97,8 @@ export default function CategoriesPage() {
                   ) : null}
 
                   <p className="mt-7 border-t border-black/8 pt-5 text-xs font-semibold tracking-[0.12em] text-neutral-400 uppercase">
-                    {categoryProducts.length} {categoryProducts.length === 1 ? "producto" : "productos"}
+                    {categoryProducts.length}{" "}
+                    {categoryProducts.length === 1 ? "producto" : "productos"}
                   </p>
                 </Surface>
               );

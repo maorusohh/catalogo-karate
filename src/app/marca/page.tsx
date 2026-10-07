@@ -85,7 +85,8 @@ export default function BrandsPage() {
                       </p>
 
                       <p className="mt-auto pt-7 text-xs font-semibold tracking-[0.12em] text-neutral-400 uppercase">
-                        {brandProducts.length} {brandProducts.length === 1 ? "producto" : "productos"}
+                        {brandProducts.length}{" "}
+                        {brandProducts.length === 1 ? "producto" : "productos"}
                       </p>
                     </div>
                   </Surface>
