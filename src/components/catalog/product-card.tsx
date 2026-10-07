@@ -28,9 +28,9 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
   const primaryPrice = product.prices[0];
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-black/10 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.04)] transition-transform hover:-translate-y-1">
+    <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-black/10 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.035)] transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-1 hover:border-black/15 hover:shadow-[0_18px_40px_rgba(0,0,0,0.07)]">
       <Link href={`/producto/${product.slug}`} className="block" aria-label={`Ver ${product.name}`}>
-        <div className="relative aspect-[4/3] overflow-hidden border-b border-black/5 bg-[#f1eee7]">
+        <div className="relative aspect-[4/3] overflow-hidden border-b border-black/5 bg-[#ebe7de]">
           {image ? (
             <Image
               src={image.src}
@@ -52,28 +52,28 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
               </div>
             </div>
           )}
+
+          <div className="absolute top-4 left-4">
+            <span className="inline-flex min-h-7 items-center rounded-full border border-white/65 bg-white/88 px-2.5 text-[10px] font-semibold tracking-[0.08em] text-neutral-800 uppercase shadow-sm backdrop-blur">
+              {approvalLabels[product.approval]}
+            </span>
+          </div>
         </div>
       </Link>
 
-      <div className="flex flex-1 flex-col p-5">
-        <div className="flex flex-wrap gap-2">
-          <span className="rounded-full bg-neutral-100 px-3 py-1 text-[11px] font-semibold text-neutral-600">
-            {categoryName}
-          </span>
+      <div className="flex flex-1 flex-col p-5 sm:p-5.5">
+        <div className="flex items-center justify-between gap-3">
+          <p className="truncate text-[10px] font-semibold tracking-[0.16em] text-[var(--ck-red)] uppercase">
+            {brandName}
+          </p>
 
-          <span className="rounded-full bg-[#b31322]/10 px-3 py-1 text-[11px] font-semibold text-[#8d0f1b]">
-            {approvalLabels[product.approval]}
-          </span>
+          <p className="truncate text-[10px] font-medium text-neutral-400">{categoryName}</p>
         </div>
 
-        <p className="mt-4 text-xs font-medium tracking-[0.14em] text-neutral-400 uppercase">
-          {brandName}
-        </p>
-
-        <h2 className="mt-2 text-lg font-semibold tracking-tight text-neutral-950">
+        <h2 className="mt-3 text-lg leading-snug font-semibold tracking-tight text-neutral-950">
           <Link
             href={`/producto/${product.slug}`}
-            className="transition-colors hover:text-[#b31322]"
+            className="transition-colors hover:text-[var(--ck-red)]"
           >
             {product.name}
           </Link>
@@ -83,22 +83,25 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
           {product.shortDescription}
         </p>
 
-        <div className="mt-5 border-t border-black/8 pt-4">
-          <p className="text-sm font-semibold text-neutral-950">
-            {primaryPrice?.label ?? "Consultar precio"}
-          </p>
+        <div className="mt-auto flex items-end justify-between gap-4 border-t border-black/8 pt-5">
+          <div className="min-w-0">
+            <p className="truncate text-base font-semibold tracking-tight text-neutral-950">
+              {primaryPrice?.label ?? "Consultar precio"}
+            </p>
 
-          <p className="mt-1 text-xs text-neutral-500">
-            {availabilityLabels[product.availability]}
-          </p>
+            <p className="mt-1 text-xs text-neutral-500">
+              {availabilityLabels[product.availability]}
+            </p>
+          </div>
+
+          <Link
+            href={`/producto/${product.slug}`}
+            aria-label={`Abrir ficha de ${product.name}`}
+            className="flex size-11 shrink-0 items-center justify-center rounded-full border border-black/10 bg-neutral-950 text-white transition-all duration-200 group-hover:border-[var(--ck-red)] group-hover:bg-[var(--ck-red)]"
+          >
+            <span aria-hidden="true">→</span>
+          </Link>
         </div>
-
-        <Link
-          href={`/producto/${product.slug}`}
-          className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition-colors hover:bg-[#b31322]"
-        >
-          Ver producto
-        </Link>
       </div>
     </article>
   );
