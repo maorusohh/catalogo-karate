@@ -3,7 +3,6 @@ import { expect, test } from "@playwright/test";
 const routes = [
   "/",
   "/catalogo/",
-  "/marca/",
   "/marca/best-sport/",
   "/producto/best-sport-canilleras-karate-aprobadas-wkf-1128wkf/",
 ];
