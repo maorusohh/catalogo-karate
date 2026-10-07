@@ -10,9 +10,7 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   reactStrictMode: true,
-  experimental: {
-    adapterPath: path.resolve(process.cwd(), "build/next-static-export-adapter.cjs"),
-  },
+  adapterPath: path.resolve(process.cwd(), "build/next-static-export-adapter.cjs"),
 };
 
 export default nextConfig;
