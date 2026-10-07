@@ -27,7 +27,7 @@ export default function CatalogoPage() {
             <div className="max-w-4xl">
               <p className="eyebrow text-[#ef5a68]">Catálogo — Equipamiento</p>
 
-              <h1 className="mt-6 max-w-4xl text-4xl leading-[1.02] font-bold tracking-[-0.025em] text-white sm:text-5xl lg:text-[3.8rem]">
+              <h1 className="mt-6 max-w-4xl text-4xl leading-[1.01] font-bold tracking-[-0.025em] text-white sm:text-5xl lg:text-[4.25rem]">
                 Encuentra el equipo adecuado para tu práctica.
               </h1>
 
