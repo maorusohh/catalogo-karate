@@ -99,13 +99,25 @@ Staging editorial presente:
 - 134 features comerciales promovidas;
 - 142 filas de datos canónicos en total.
 
-### Datos todavía pendientes de promoción completa
+`prices` contiene:
+
+- 3 filas demo `CONSULT` asociadas a productos demo inactivos;
+- 123 precios comerciales promovidos;
+- 126 filas de datos canónicos en total.
+
+Los 41 productos comerciales tienen exactamente tres modalidades de precio publicables:
+
+- `DIRECT_USD`;
+- `USDT`;
+- `EURO_RATE_USD`.
+
+### Variantes
 
 - `variants`: sin variantes comerciales canónicas.
 - `variant_options`: sin opciones comerciales canónicas.
-- `prices`: mantiene únicamente las 3 filas demo `CONSULT` en el bloque canónico.
-- `catalog_intake_variants`: no contiene datos comerciales reales que promover actualmente.
-- `catalog_intake_prices`: contiene staging comercial y requiere normalización/promoción controlada.
+- `catalog_intake_variants`: no contiene datos comerciales verificables; solo filas estructuralmente vacías con `available=false`.
+
+No se deben inventar tallas, colores ni combinaciones. La carga de variantes queda diferida hasta disponer de información comercial verificable.
 
 ## 5. Checkpoint de features — cerrado
 
@@ -137,48 +149,93 @@ Resultado verificado:
 - datos canónicos materializados como valores estáticos, no fórmulas;
 - las celdas temporales usadas para validar fueron limpiadas después de la comprobación.
 
-## 6. Assets de imágenes
+## 6. Checkpoint de precios — cerrado
 
-El Sheet contiene 77 referencias canónicas de imágenes con rutas locales previstas bajo `/images/...`, pero la rama remota todavía no contiene los archivos comerciales correspondientes bajo `public/`.
+`catalog_intake_prices` mezcla un bloque histórico sin `status` con un bloque editorial publicable marcado como `READY`.
 
-Por tanto, un sync contra el Sheet comercial actual no puede considerarse publicable hasta incorporar los assets locales y superar `validate-catalog-images.ts`.
+La clasificación comprobada fue:
+
+- 127 filas con `status = READY`;
+- 123 filas `READY` completas con `product_ref` y `basis`;
+- 4 filas `READY` estructuralmente vacías usadas como separadores;
+- 0 referencias huérfanas después de normalizar los SKUs hacia `products.id`.
+
+Solo las 123 filas completas se promovieron. El histórico sin `status` quedó fuera por diseño.
+
+`sort_order` se normalizó de forma determinista:
+
+```text
+DIRECT_USD = 1
+USDT = 2
+EURO_RATE_USD = 3
+BCV_RATE_USD = 4
+CONSULT = 5
+```
+
+Antes de cerrar la promoción se eliminaron de las notas canónicas referencias internas como costos, precio de instructor y margen. Los detalles públicos de talla, composición del pack o condición provisional se conservaron cuando eran relevantes.
+
+Resultado verificado:
+
+- 123/123 precios comerciales promovidos;
+- 41 productos comerciales cubiertos;
+- 41 `DIRECT_USD`;
+- 41 `USDT`;
+- 41 `EURO_RATE_USD`;
+- 0 referencias huérfanas;
+- 0 combinaciones `product_id + basis` duplicadas;
+- 0 combinaciones `product_id + sort_order` duplicadas;
+- 0 montos no positivos;
+- 0 monedas fuera de `USD`/`USDT`;
+- 0 menciones de `Instructor`, `Costo` o `margen` en las notas canónicas;
+- datos materializados como valores estáticos, no fórmulas;
+- las celdas temporales de validación fueron limpiadas.
+
+El staging conserva material editorial e histórico no publicable. No debe copiarse de forma indiscriminada al contrato canónico.
+
+## 7. Assets de imágenes
+
+El Sheet contiene 77 referencias canónicas de imágenes con rutas locales bajo `/images/catalogo/products/...`.
+
+La rama remota todavía no contiene el directorio comercial correspondiente `public/images/catalogo/products/`.
+
+Se comprobó además que una búsqueda en el Google Drive conectado por un nombre representativo (`BESTSPORT-1303WKF__01`) no encontró el asset; solo apareció la referencia dentro del Sheet.
+
+Por tanto, el catálogo comercial todavía no puede superar `validate-catalog-images.ts` ni considerarse publicable.
 
 No sustituir este pendiente con hotlinks de proveedores.
 
-## 7. Próximo checkpoint técnico exacto
+## 8. Próximo checkpoint técnico exacto
 
-### Checkpoint: normalizar y promover precios comerciales
+### Checkpoint: incorporar y auditar los 77 assets locales de producto
 
 Objetivo inmediato:
 
-1. inspeccionar las 470 filas con contenido de `catalog_intake_prices` y separar filas reales de filas estructuralmente vacías o heredadas;
-2. resolver `product_ref` contra `products.id`, usando `products.sku` únicamente como clave de normalización cuando corresponda;
-3. transformar cada fila publicable al contrato `prices(product_id, amount, currency, basis, label, note, sort_order)`;
-4. conservar todas las modalidades comerciales válidas sin mezclar `DIRECT_USD`, `USDT`, `EURO_RATE_USD`, `BCV_RATE_USD` y `CONSULT`;
-5. asignar `sort_order` estable por producto;
-6. evitar duplicados y relaciones huérfanas;
-7. validar el resultado antes de avanzar a variantes o al sync completo.
+1. obtener los 77 archivos `.webp` que corresponden a las rutas ya registradas en `images`;
+2. ubicarlos bajo `public/images/catalogo/products/` respetando exactamente nombres y mayúsculas/minúsculas;
+3. verificar que cada `images.src` resuelva a un archivo local existente;
+4. comprobar que todos los productos con imágenes tengan una imagen principal coherente;
+5. detectar archivos huérfanos, duplicados o referencias faltantes;
+6. no modificar las URLs canónicas del Sheet salvo que exista una discrepancia real con el asset auditado.
 
 Criterio de cierre:
 
-- todas las filas `READY` publicables resueltas o justificadamente descartadas;
-- 0 referencias huérfanas;
-- 0 combinaciones comerciales duplicadas introducidas;
-- `amount`, `currency` y `basis` cumplen el contrato;
-- `sort_order` es determinista dentro de cada producto;
-- las 3 filas demo pueden permanecer asociadas a los productos demo inactivos hasta la limpieza final.
+- 77/77 referencias canónicas resuelven a archivos locales;
+- 0 rutas faltantes;
+- 0 hotlinks usados como sustituto de producción;
+- `npm run catalog:sync` puede avanzar más allá de `validate-catalog-images.ts`.
 
-## 8. Secuencia posterior
+## 9. Secuencia posterior
 
-Una vez cerrado el checkpoint de precios:
+Una vez incorporados los assets:
 
-1. definir/cargar variantes reales solo cuando exista información comercial verificable;
-2. incorporar los 77 assets de imágenes locales;
-3. ejecutar `npm run catalog:sync`;
-4. ejecutar `npm run catalog:preflight` y las validaciones del repositorio;
-5. actualizar el snapshot generado;
-6. ejecutar build y pruebas antes de integrar la rama.
+1. ejecutar `npm run catalog:sync`;
+2. ejecutar `npm run catalog:report` y `npm run catalog:preflight`;
+3. revisar el snapshot generado completo;
+4. ejecutar `npm run format:check`, `npm run lint`, `npm run test:unit` y `npm run build`;
+5. ejecutar E2E cuando el entorno lo permita;
+6. actualizar esta documentación con el resultado real;
+7. revisar la integración de `feature/profesionalizacion` hacia `main`.
 
-## 9. Regla de continuidad
+## 10. Regla de continuidad
 
-El siguiente trabajo debe comenzar por la sección **7. Próximo checkpoint técnico exacto**. No iniciar funcionalidades nuevas de interfaz mientras la normalización y promoción del catálogo comercial siga incompleta.
+El siguiente trabajo debe comenzar por la sección **8. Próximo checkpoint técnico exacto**. No iniciar funcionalidades nuevas de interfaz mientras los assets comerciales y la validación integral del catálogo sigan incompletos.
