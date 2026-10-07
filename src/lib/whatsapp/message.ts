@@ -7,16 +7,24 @@ export function buildWhatsAppCartMessage(items: CartItem[]): string {
   ];
 
   items.forEach((item, index) => {
-    lines.push(
-      `${index + 1}. ${item.snapshot.productName}`,
-      `   Variante: ${item.snapshot.variantLabel}`,
-      `   Cantidad: ${item.quantity}`,
-      `   SKU: ${item.snapshot.sku}`,
-      "",
-    );
+    lines.push(`${index + 1}. ${item.snapshot.productName}`);
+
+    if (item.snapshot.variantLabel !== "Sin variante") {
+      lines.push(`   Variante: ${item.snapshot.variantLabel}`);
+    }
+
+    if (item.snapshot.paymentLabel) {
+      lines.push(`   Forma de pago preferida: ${item.snapshot.paymentLabel}`);
+    }
+
+    lines.push(`   Cantidad: ${item.quantity}`, `   SKU: ${item.snapshot.sku}`, "");
   });
 
-  lines.push("Quisiera conocer disponibilidad, precio y opciones de entrega.", "", "Gracias.");
+  lines.push(
+    "Quisiera confirmar disponibilidad, precio final y opciones de entrega.",
+    "",
+    "Gracias.",
+  );
 
   return lines.join("\n");
 }
