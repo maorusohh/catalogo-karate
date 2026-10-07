@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { CatalogClient } from "@/components/catalog/catalog-client";
 import { catalogRepository } from "@/lib/catalog/static-repository";
@@ -28,6 +29,22 @@ export default function CatalogoPage() {
           Encuentra productos por nombre, marca, categoría o aprobación. La información comercial
           definitiva se confirma al momento de la consulta.
         </p>
+
+        <div className="mt-7 flex flex-wrap gap-2">
+          <Link
+            href="/marca"
+            className="inline-flex min-h-10 items-center rounded-full border border-black/10 bg-white px-4 text-xs font-semibold text-neutral-700 transition-colors hover:border-neutral-950 hover:text-neutral-950"
+          >
+            Ver marcas
+          </Link>
+
+          <Link
+            href="/categoria"
+            className="inline-flex min-h-10 items-center rounded-full border border-black/10 bg-white px-4 text-xs font-semibold text-neutral-700 transition-colors hover:border-neutral-950 hover:text-neutral-950"
+          >
+            Ver categorías
+          </Link>
+        </div>
       </div>
 
       <CatalogClient products={products} brands={brands} categories={categories} />
