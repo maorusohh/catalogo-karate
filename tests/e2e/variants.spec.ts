@@ -7,15 +7,13 @@ test("una variante verificada de talla y color puede seleccionarse", async ({ pa
 
   expect(response?.status()).toBe(200);
 
-  const addButton = page.getByRole("button", { name: "Agregar al carrito" });
-
-  await expect(addButton).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Selecciona una variante" })).toBeDisabled();
 
   await page.getByRole("button", { name: "Talla: XS" }).click();
   await page.getByRole("button", { name: "Color Ao, azul" }).click();
 
   await expect(page.getByText("XS · Ao (Azul)", { exact: true })).toBeVisible();
-  await expect(addButton).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Agregar al carrito" })).toBeEnabled();
 });
 
 test("un cinturón 2 Pack expone únicamente la longitud verificada", async ({ page }) => {
@@ -25,7 +23,7 @@ test("un cinturón 2 Pack expone únicamente la longitud verificada", async ({ p
 
   expect(response?.status()).toBe(200);
 
-  await expect(page.getByRole("group", { name: "Longitud" })).toBeVisible();
+  await expect(page.getByText("Longitud", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Longitud: 2.40 m" })).toBeVisible();
   await expect(page.getByRole("button", { name: /Color/ })).toHaveCount(0);
 });
