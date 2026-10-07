@@ -20,11 +20,10 @@ const availabilityLabels: Record<AvailabilityStatus, string> = {
 type ProductCardProps = {
   product: Product;
   brandName: string;
-  brandSlug?: string;
   categoryName: string;
 };
 
-export function ProductCard({ product, brandName, brandSlug, categoryName }: ProductCardProps) {
+export function ProductCard({ product, brandName, categoryName }: ProductCardProps) {
   const image = product.images[0];
   const primaryPrice = product.prices[0];
 
@@ -38,7 +37,7 @@ export function ProductCard({ product, brandName, brandSlug, categoryName }: Pro
               alt={image.alt || product.name}
               fill
               sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
-              className="object-contain p-4 transition-transform duration-300 group-hover:scale-[1.025] sm:p-5"
+              className="object-contain p-3 transition-transform duration-300 group-hover:scale-[1.025] sm:p-4"
             />
           ) : (
             <div className="flex h-full items-center justify-center p-6 text-center">
@@ -67,18 +66,9 @@ export function ProductCard({ product, brandName, brandSlug, categoryName }: Pro
           </span>
         </div>
 
-        {brandSlug ? (
-          <Link
-            href={`/marca/${brandSlug}`}
-            className="mt-4 w-fit text-xs font-medium tracking-[0.14em] text-neutral-400 uppercase transition-colors hover:text-neutral-950"
-          >
-            {brandName}
-          </Link>
-        ) : (
-          <p className="mt-4 text-xs font-medium tracking-[0.14em] text-neutral-400 uppercase">
-            {brandName}
-          </p>
-        )}
+        <p className="mt-4 text-xs font-medium tracking-[0.14em] text-neutral-400 uppercase">
+          {brandName}
+        </p>
 
         <h2 className="mt-2 text-lg font-semibold tracking-tight text-neutral-950">
           <Link
