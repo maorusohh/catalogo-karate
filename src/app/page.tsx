@@ -21,23 +21,28 @@ export const metadata: Metadata = {
 const categoryHighlights = [
   {
     number: "01",
-    title: "Entrenamiento",
-    description: "Equipamiento para la práctica diaria, preparación y desarrollo técnico.",
+    title: "Karategis",
+    href: "/categoria/karategis",
+    description: "Opciones para entrenamiento, kata y kumite, desde iniciación hasta competición.",
   },
   {
     number: "02",
-    title: "Kumite",
-    description: "Protecciones y equipamiento pensado para combate y práctica de kumite.",
+    title: "Protecciones",
+    href: "/categoria/protecciones",
+    description:
+      "Guantines, empeineras, espinilleras, petos y otras protecciones para la práctica.",
   },
   {
     number: "03",
-    title: "Kata",
-    description: "Opciones orientadas a la práctica y preparación específica de kata.",
+    title: "Cinturones",
+    href: "/categoria/cinturones",
+    description: "Cinturones de grado y competición en distintas referencias y presentaciones.",
   },
   {
     number: "04",
     title: "Accesorios",
-    description: "Cinturones, bolsos y complementos para acompañar tu práctica.",
+    href: "/categoria/accesorios",
+    description: "Bolsos y complementos para acompañar entrenamiento, competición y traslado.",
   },
 ];
 
@@ -70,12 +75,12 @@ const purchaseSteps = [
   {
     number: "01",
     title: "Explora",
-    description: "Busca por producto, marca, categoría, aprobación o disponibilidad.",
+    description: "Busca por producto, marca, categoría o aprobación.",
   },
   {
     number: "02",
     title: "Selecciona",
-    description: "Elige las variantes que necesitas y reúne todo en tu carrito de consulta.",
+    description: "Elige tus productos y las opciones disponibles para preparar la consulta.",
   },
   {
     number: "03",
@@ -86,9 +91,9 @@ const purchaseSteps = [
 
 const approvalLabels: Record<string, string> = {
   WKF: "WKF",
-  NATIONAL: "Aprobación nacional",
+  NATIONAL: "FVKD",
   NON_APPROVED: "No aprobado",
-  UNSPECIFIED: "Por confirmar",
+  UNSPECIFIED: "Sin aprobación",
 };
 
 const products = catalogRepository.getProducts();
@@ -151,7 +156,7 @@ export default function HomePage() {
     <main>
       <section className="hero-dojo">
         <Container>
-          <div className="grid min-h-[calc(100svh-76px)] items-center gap-12 py-14 sm:py-18 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14 lg:py-20">
+          <div className="grid items-center gap-12 py-12 sm:py-14 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14 lg:py-16">
             <div className="max-w-3xl">
               <p className="eyebrow text-[#ef5a68]">Karate-Do · Venezuela</p>
 
@@ -252,29 +257,33 @@ export default function HomePage() {
                   </p>
 
                   <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-4">
-                    {["Entrenamiento", "Kumite", "Kata", "Accesorios"].map((item, index) => (
-                      <div
-                        key={item}
-                        className="flex items-center gap-3 border-t border-white/10 pt-3"
-                      >
-                        <span className="text-[10px] font-semibold tracking-[0.12em] text-[#ef5a68] tabular-nums">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
+                    {["Karategis", "Protecciones", "Cinturones", "Accesorios"].map(
+                      (item, index) => (
+                        <div
+                          key={item}
+                          className="flex items-center gap-3 border-t border-white/10 pt-3"
+                        >
+                          <span className="text-[10px] font-semibold tracking-[0.12em] text-[#ef5a68] tabular-nums">
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
 
-                        <span className="text-xs font-medium text-white/72 sm:text-sm">{item}</span>
-                      </div>
-                    ))}
+                          <span className="text-xs font-medium text-white/72 sm:text-sm">
+                            {item}
+                          </span>
+                        </div>
+                      ),
+                    )}
                   </div>
                 </div>
 
                 <div className="flex items-end justify-between gap-5">
                   <div>
                     <p className="text-[10px] font-semibold tracking-[0.18em] text-white/30 uppercase">
-                      Fotografía
+                      Karate-Do · Venezuela
                     </p>
 
                     <p className="mt-2 max-w-sm text-xs leading-5 text-white/52">
-                      Espacio preparado para una imagen real del dojo y sus karatekas.
+                      Equipamiento para entrenamiento, kata y kumite.
                     </p>
                   </div>
 
@@ -302,8 +311,8 @@ export default function HomePage() {
             {categoryHighlights.map((category) => (
               <Link
                 key={category.number}
-                href="/catalogo"
-                aria-label={`Explorar ${category.title} en el catálogo`}
+                href={category.href}
+                aria-label={`Explorar ${category.title}`}
                 className="group"
               >
                 <Surface className="relative h-full overflow-hidden p-6 transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-[var(--ck-shadow-md)] sm:p-7">
@@ -541,7 +550,7 @@ export default function HomePage() {
                 </h2>
 
                 <p className="mt-6 max-w-2xl text-sm leading-7 text-white/54 sm:text-base">
-                  Revisa productos, compara variantes y reúne tu selección antes de escribirnos.
+                  Revisa productos, compara opciones y reúne tu selección antes de escribirnos.
                 </p>
               </div>
 
