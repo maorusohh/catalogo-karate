@@ -4,15 +4,39 @@ const routes = ["/", "/catalogo/", "/producto/best-sport-canilleras-karate-aprob
 
 test("las rutas principales no producen errores de runtime o hidratación", async ({ page }) => {
   const runtimeErrors: string[] = [];
+  const failedResources: string[] = [];
 
   page.on("pageerror", (error) => {
     runtimeErrors.push(`pageerror: ${error.message}`);
   });
 
   page.on("console", (message) => {
-    if (message.type() === "error") {
-      runtimeErrors.push(`console.error: ${message.text()}`);
+    if (message.type() !== "error") {
+      return;
     }
+
+    const text = message.text();
+
+    // Los 404/5xx se registran con URL exacta mediante el evento response.
+    if (text.startsWith("Failed to load resource:")) {
+      return;
+    }
+
+    runtimeErrors.push(`console.error: ${text}`);
+  });
+
+  page.on("response", (response) => {
+    if (response.status() < 400) {
+      return;
+    }
+
+    const url = new URL(response.url());
+
+    if (url.origin !== "http://127.0.0.1:3000") {
+      return;
+    }
+
+    failedResources.push(`${response.status()} ${response.request().resourceType()} ${url.pathname}`);
   });
 
   for (const route of routes) {
@@ -25,4 +49,5 @@ test("las rutas principales no producen errores de runtime o hidratación", asyn
   }
 
   expect(runtimeErrors, runtimeErrors.join("\n")).toEqual([]);
+  expect(failedResources, failedResources.join("\n")).toEqual([]);
 });
