@@ -24,13 +24,7 @@ export function BrandLogo({
       className={`relative block overflow-hidden bg-white ${className}`}
       aria-label={`Logo de ${name}`}
     >
-      <Image
-        src={src}
-        alt=""
-        fill
-        sizes={sizes}
-        className={`object-contain ${imageClassName}`}
-      />
+      <Image src={src} alt="" fill sizes={sizes} className={`object-contain ${imageClassName}`} />
     </span>
   );
 }

@@ -25,12 +25,7 @@ type ProductCardProps = {
   categoryName: string;
 };
 
-export function ProductCard({
-  product,
-  brandName,
-  brandLogo,
-  categoryName,
-}: ProductCardProps) {
+export function ProductCard({ product, brandName, brandLogo, categoryName }: ProductCardProps) {
   const image = product.images[0];
   const primaryPrice = product.prices[0];
 

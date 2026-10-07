@@ -34,7 +34,7 @@ export const catalogSourceGoogle = {
       "best-sport",
       "Best Sport",
       "Marca de equipamiento de Karate-Do incluida en el catálogo de Best Sport Venezuela.",
-      "",
+      "/images/brands/best-sport.webp",
       true,
     ],
     [
@@ -42,7 +42,7 @@ export const catalogSourceGoogle = {
       "mallems",
       "Mallems",
       "Marca de equipamiento y artículos para la práctica del Karate-Do.",
-      "",
+      "/images/brands/mallems.webp",
       true,
     ],
     [
@@ -50,7 +50,7 @@ export const catalogSourceGoogle = {
       "no-kashi",
       "No Kashi",
       "Marca de equipamiento para la práctica del Karate-Do.",
-      "",
+      "/images/brands/no-kashi.png",
       true,
     ],
     [

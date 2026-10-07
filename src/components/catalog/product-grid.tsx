@@ -9,12 +9,7 @@ type ProductGridProps = {
   categoryNames: Record<string, string>;
 };
 
-export function ProductGrid({
-  products,
-  brandNames,
-  brandLogos,
-  categoryNames,
-}: ProductGridProps) {
+export function ProductGrid({ products, brandNames, brandLogos, categoryNames }: ProductGridProps) {
   return (
     <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
       {products.map((product) => (
