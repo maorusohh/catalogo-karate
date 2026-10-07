@@ -1,8 +1,9 @@
 "use client";
 
-import type { ApprovalLevel, Brand, Category, Product } from "@/types/catalog";
+import type { ReactNode } from "react";
 
 import type { CatalogFilters as CatalogFiltersState } from "@/lib/catalog/queries";
+import type { ApprovalLevel, Brand, Category, Product } from "@/types/catalog";
 
 type CatalogFiltersProps = {
   filters: CatalogFiltersState;
@@ -57,33 +58,41 @@ function getApprovalLabel(value: ApprovalLevel | "ALL"): string {
 }
 
 function FilterSection({
+  number,
   title,
   value,
   children,
 }: {
+  number: string;
   title: string;
   value: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
-    <details className="group overflow-hidden rounded-2xl border border-black/10 bg-white">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3.5 [&::-webkit-details-marker]:hidden">
-        <div className="min-w-0">
-          <p className="text-[11px] font-semibold tracking-[0.14em] text-neutral-400 uppercase">
+    <details className="group overflow-hidden rounded-2xl border border-black/10 bg-white transition-colors open:border-neutral-300">
+      <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-4 [&::-webkit-details-marker]:hidden">
+        <span className="text-[10px] font-semibold tracking-[0.12em] text-[var(--ck-red)] tabular-nums">
+          {number}
+        </span>
+
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-semibold tracking-[0.17em] text-neutral-400 uppercase">
             {title}
           </p>
-          <p className="mt-0.5 truncate text-sm font-semibold text-neutral-950">{value}</p>
+          <p className="mt-1 truncate text-sm font-semibold tracking-tight text-neutral-950">
+            {value}
+          </p>
         </div>
 
         <span
           aria-hidden="true"
-          className="flex size-7 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-sm text-neutral-500 transition-transform group-open:rotate-45"
+          className="flex size-8 shrink-0 items-center justify-center rounded-full border border-black/8 bg-neutral-50 text-sm text-neutral-500 transition-all group-open:rotate-180 group-open:border-neutral-950 group-open:bg-neutral-950 group-open:text-white"
         >
-          +
+          ↓
         </span>
       </summary>
 
-      <div className="border-t border-black/8 p-2.5">{children}</div>
+      <div className="border-t border-black/8 bg-[#fbfaf7] p-2.5">{children}</div>
     </details>
   );
 }
@@ -122,26 +131,31 @@ export function CatalogFilters({
         "Todo el equipamiento";
 
   return (
-    <div className="rounded-3xl border border-black/10 bg-white p-4">
-      <div className="flex items-center justify-between gap-4 px-1">
+    <div className="rounded-[1.75rem] border border-black/10 bg-white p-4 shadow-[0_12px_30px_rgba(0,0,0,0.035)]">
+      <div className="flex items-start justify-between gap-4 px-1">
         <div>
-          <h2 className="text-sm font-semibold tracking-[0.14em] text-neutral-950 uppercase">
-            Filtros
-          </h2>
-          <p className="mt-1 text-xs text-neutral-400">Combina criterios para afinar tu búsqueda.</p>
+          <div className="flex items-center gap-2">
+            <span className="h-0.5 w-6 rounded-full bg-[var(--ck-red)]" />
+            <h2 className="text-xs font-semibold tracking-[0.16em] text-neutral-950 uppercase">
+              Afinar búsqueda
+            </h2>
+          </div>
+          <p className="mt-2 max-w-[13rem] text-xs leading-5 text-neutral-400">
+            Combina marca, categoría y aprobación.
+          </p>
         </div>
 
         <button
           type="button"
           onClick={onReset}
-          className="shrink-0 text-xs font-semibold text-neutral-500 transition-colors hover:text-[#b31322]"
+          className="shrink-0 rounded-full border border-black/8 px-3 py-1.5 text-[11px] font-semibold text-neutral-500 transition-colors hover:border-neutral-950 hover:text-neutral-950"
         >
           Limpiar
         </button>
       </div>
 
-      <div className="mt-4 space-y-2.5">
-        <FilterSection title="Marca" value={selectedBrandName}>
+      <div className="mt-5 space-y-2.5">
+        <FilterSection number="01" title="Marca" value={selectedBrandName}>
           <div className="space-y-2">
             <button
               type="button"
@@ -154,7 +168,7 @@ export function CatalogFilters({
               className={`w-full rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-colors ${
                 filters.brandId === "ALL"
                   ? "bg-neutral-950 text-white"
-                  : "bg-neutral-50 text-neutral-700 hover:bg-neutral-100"
+                  : "bg-white text-neutral-700 hover:bg-neutral-100"
               }`}
             >
               Todas las marcas
@@ -183,7 +197,7 @@ export function CatalogFilters({
                     <span
                       aria-hidden="true"
                       className={`size-2 rounded-full ${
-                        brandSelected ? "bg-[#b31322]" : "bg-neutral-200"
+                        brandSelected ? "bg-[var(--ck-red)]" : "bg-neutral-200"
                       }`}
                     />
                   </summary>
@@ -238,7 +252,7 @@ export function CatalogFilters({
           </div>
         </FilterSection>
 
-        <FilterSection title="Categoría" value={selectedCategoryName}>
+        <FilterSection number="02" title="Categoría" value={selectedCategoryName}>
           <div className="space-y-2">
             <button
               type="button"
@@ -251,7 +265,7 @@ export function CatalogFilters({
               className={`w-full rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-colors ${
                 filters.categoryId === "ALL"
                   ? "bg-neutral-950 text-white"
-                  : "bg-neutral-50 text-neutral-700 hover:bg-neutral-100"
+                  : "bg-white text-neutral-700 hover:bg-neutral-100"
               }`}
             >
               Todo el equipamiento
@@ -276,7 +290,7 @@ export function CatalogFilters({
                     <span
                       aria-hidden="true"
                       className={`size-2 rounded-full ${
-                        selectedInGroup ? "bg-[#b31322]" : "bg-neutral-200"
+                        selectedInGroup ? "bg-[var(--ck-red)]" : "bg-neutral-200"
                       }`}
                     />
                   </summary>
@@ -325,7 +339,7 @@ export function CatalogFilters({
           </div>
         </FilterSection>
 
-        <FilterSection title="Aprobación" value={getApprovalLabel(filters.approval)}>
+        <FilterSection number="03" title="Aprobación" value={getApprovalLabel(filters.approval)}>
           <div className="grid gap-1.5">
             {approvalOptions.map((option) => {
               const selected = filters.approval === option.value;
@@ -343,7 +357,7 @@ export function CatalogFilters({
                   className={`rounded-xl px-3 py-2.5 text-left transition-colors ${
                     selected
                       ? "bg-neutral-950 text-white"
-                      : "bg-neutral-50 text-neutral-600 hover:bg-neutral-100"
+                      : "bg-white text-neutral-600 hover:bg-neutral-100"
                   }`}
                 >
                   <span className="block text-sm font-semibold">{option.label}</span>
@@ -362,7 +376,7 @@ export function CatalogFilters({
           </div>
         </FilterSection>
 
-        <p className="rounded-2xl bg-neutral-50 px-3 py-3 text-xs leading-5 text-neutral-500">
+        <p className="rounded-2xl border border-black/6 bg-[#f6f3ed] px-3 py-3 text-xs leading-5 text-neutral-500">
           La disponibilidad se confirma al momento de la consulta por WhatsApp.
         </p>
       </div>
