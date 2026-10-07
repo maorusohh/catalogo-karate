@@ -1,14 +1,14 @@
 # Catálogo Karate-Do
 
-Catálogo público nacional de implementos de Karate-Do para Venezuela. La V1 está orientada a consulta comercial: permite explorar productos, filtrar el catálogo, revisar fichas y variantes, construir una consulta local y enviarla por WhatsApp.
+Catálogo público nacional de implementos de Karate-Do para Venezuela. La V1 está orientada a consulta comercial: permite explorar productos, filtrar el catálogo, revisar fichas y variantes disponibles, construir una consulta local y enviarla por WhatsApp.
 
 El proyecto está diseñado deliberadamente sin login, base de datos propia ni backend comercial en esta etapa.
 
 ## Estado del proyecto
 
-La rama de trabajo actual es `feature/profesionalizacion`.
+La V1 técnica está cerrada y la rama estable es `main`.
 
-El estado técnico vigente, los datos ya incorporados y el próximo checkpoint están documentados en [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md).
+El estado técnico vigente, los datos incorporados, las validaciones realizadas y los pendientes posteriores a V1 están documentados en [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md).
 
 El contexto, alcance e invariantes del proyecto están en [`docs/PROJECT_CONTEXT.md`](docs/PROJECT_CONTEXT.md).
 
@@ -57,6 +57,7 @@ npm run format:check
 npm run lint
 npm run test:unit
 npm run build
+npm run test:e2e
 ```
 
 Para sincronizar el catálogo desde Google Sheets se requieren variables de entorno de build; nunca se deben versionar credenciales.
@@ -110,6 +111,20 @@ No incluye en esta fase:
 - backend propio;
 - base de datos propia;
 - datos privados de proveedores, costos, márgenes o credenciales.
+
+## Estado de validación de V1
+
+Checkpoint final comprobado:
+
+- catálogo comercial: 41 productos activos;
+- referencias de imagen: 77/77 válidas;
+- preflight: 0 errores;
+- unit tests: 24/24;
+- build estático: 79/79 páginas;
+- rutas demo públicas: 0;
+- E2E Playwright: 72/72.
+
+Los warnings editoriales por features o imágenes todavía no suministradas no bloquean la V1 y no deben resolverse inventando información.
 
 ## Reglas de contribución
 
