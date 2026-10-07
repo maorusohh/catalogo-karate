@@ -2,7 +2,6 @@ import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 const host = "127.0.0.1";
 const port = 3000;
@@ -64,6 +63,20 @@ async function resolveFile(requestPath) {
   }
 }
 
+try {
+  const rootStat = await stat(root);
+
+  if (!rootStat.isDirectory()) {
+    throw new Error("out no es un directorio");
+  }
+} catch (error) {
+  console.error(
+    `No existe un export estático válido en ${root}. Ejecuta \"npm run build\" antes de Playwright.`,
+  );
+  console.error(error);
+  process.exit(1);
+}
+
 const server = createServer(async (request, response) => {
   const requestUrl = new URL(request.url ?? "/", `http://${host}:${port}`);
   const filePath = await resolveFile(requestUrl.pathname);
@@ -107,6 +120,6 @@ const server = createServer(async (request, response) => {
 });
 
 server.listen(port, host, () => {
-  console.log(`Serving static export from ${fileURLToPath(new URL("../out/", import.meta.url))}`);
+  console.log(`Serving static export from ${root}`);
   console.log(`http://${host}:${port}`);
 });
