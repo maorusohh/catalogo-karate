@@ -1,6 +1,10 @@
 import { expect, test } from "@playwright/test";
 
-const routes = ["/", "/catalogo/", "/producto/best-sport-canilleras-karate-aprobadas-wkf-1128wkf/"];
+const routes = [
+  "/",
+  "/catalogo/",
+  "/producto/best-sport-canilleras-karate-aprobadas-wkf-1128wkf/",
+];
 
 test("las rutas principales no producen errores de runtime o hidratación", async ({ page }) => {
   const runtimeErrors: string[] = [];
@@ -36,7 +40,9 @@ test("las rutas principales no producen errores de runtime o hidratación", asyn
       return;
     }
 
-    failedResources.push(`${response.status()} ${response.request().resourceType()} ${url.pathname}`);
+    failedResources.push(
+      `${response.status()} ${response.request().resourceType()} ${url.pathname}`,
+    );
   });
 
   for (const route of routes) {
