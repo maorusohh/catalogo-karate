@@ -36,15 +36,16 @@ export function ProductPurchasePanel({
   return (
     <div className="space-y-7">
       <section>
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs font-semibold tracking-[0.14em] text-neutral-400 uppercase">
-              Preferencia de pago
-            </p>
-            <h2 className="mt-1 text-base font-semibold tracking-tight text-neutral-950">
-              ¿Cómo prefieres consultar el precio?
-            </h2>
-          </div>
+        <div>
+          <p className="text-xs font-semibold tracking-[0.14em] text-neutral-400 uppercase">
+            Forma de pago
+          </p>
+          <h2 className="mt-1 text-base font-semibold tracking-tight text-neutral-950">
+            ¿Cómo deseas realizar tu pago?
+          </h2>
+          <p className="mt-1 text-xs leading-5 text-neutral-500">
+            Selecciona la opción que prefieres usar al momento de confirmar la compra.
+          </p>
         </div>
 
         {prices.length > 0 ? (
