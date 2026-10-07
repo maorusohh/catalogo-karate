@@ -123,20 +123,20 @@ export default function HomePage() {
     <main>
       <section className="hero-dojo">
         <Container>
-          <div className="grid items-center gap-10 py-14 sm:py-18 lg:grid-cols-[1.03fr_0.97fr] lg:gap-14 lg:py-20">
+          <div className="grid items-center gap-8 py-10 sm:py-12 lg:grid-cols-[1.03fr_0.97fr] lg:gap-12 lg:py-14">
             <div className="max-w-3xl">
               <p className="eyebrow text-[#ef5a68]">Karate-Do — Venezuela</p>
 
-              <h1 className="mt-6 max-w-4xl text-4xl leading-[1.01] font-bold tracking-[-0.025em] text-white sm:text-5xl lg:text-[3.65rem]">
+              <h1 className="mt-5 max-w-4xl text-4xl leading-[1.01] font-bold tracking-[-0.025em] text-white sm:text-5xl lg:text-[3.65rem]">
                 Equípate para entrenar. Prepárate para competir.
               </h1>
 
-              <p className="mt-8 max-w-2xl text-base leading-7 text-white/64 sm:text-lg">
+              <p className="mt-6 max-w-2xl text-base leading-7 text-white/64 sm:text-lg">
                 Encuentra equipamiento para entrenamiento, Kata y Kumite, revisa tus opciones y
                 prepara la consulta antes de comprar.
               </p>
 
-              <div className="mt-9 flex flex-wrap gap-3">
+              <div className="mt-7 flex flex-wrap gap-3">
                 <ButtonLink
                   href="/catalogo"
                   size="lg"
@@ -168,7 +168,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="relative min-h-[19rem] overflow-hidden rounded-[28px] border border-white/10 bg-[#1b1b1b] shadow-[0_24px_60px_rgb(0_0_0_/_0.30)] sm:min-h-[22rem] lg:min-h-[25rem]">
+            <div className="relative min-h-[17rem] overflow-hidden rounded-[28px] border border-white/10 bg-[#1b1b1b] shadow-[0_24px_60px_rgb(0_0_0_/_0.30)] sm:min-h-[19rem] lg:min-h-[19rem]">
               <Image
                 src={heroImageSrc}
                 alt={hasHeroImage ? "Karatekas entrenando en un dojo" : "Clase de Karate-Do en un dojo"}
@@ -181,14 +181,14 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.12)_0%,rgba(0,0,0,0.2)_42%,rgba(0,0,0,0.82)_100%)]" />
               <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.30)_0%,transparent_58%)]" />
 
-              <div className="relative z-10 flex min-h-[inherit] flex-col justify-between p-6 sm:p-8 lg:p-9">
+              <div className="relative z-10 flex min-h-[inherit] flex-col justify-between p-6 sm:p-7">
                 <span className="hero-stage-badge w-fit">Karate-Do · Equipamiento</span>
 
                 <div className="max-w-md">
                   <p className="text-[11px] font-semibold tracking-[0.16em] text-white/56 uppercase">
                     Preparación y competencia
                   </p>
-                  <p className="mt-3 text-3xl leading-[1.02] font-semibold tracking-[-0.02em] text-white sm:text-4xl">
+                  <p className="mt-3 text-2xl leading-[1.04] font-semibold tracking-[-0.02em] text-white sm:text-3xl">
                     Disciplina, precisión y equipamiento.
                   </p>
                 </div>
