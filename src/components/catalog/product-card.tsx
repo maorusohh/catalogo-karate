@@ -7,7 +7,7 @@ const approvalLabels: Record<ApprovalLevel, string> = {
   WKF: "WKF",
   NATIONAL: "FVKD",
   NON_APPROVED: "No aprobado",
-  UNSPECIFIED: "Sin homologación",
+  UNSPECIFIED: "Sin aprobación",
 };
 
 const availabilityLabels: Record<AvailabilityStatus, string> = {
