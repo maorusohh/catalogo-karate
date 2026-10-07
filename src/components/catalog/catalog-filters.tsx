@@ -57,26 +57,37 @@ function getApprovalLabel(value: ApprovalLevel | "ALL"): string {
   return approvalOptions.find((option) => option.value === value)?.label ?? "Todas";
 }
 
+function ChevronIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m7 10 5 5 5-5" />
+    </svg>
+  );
+}
+
 function FilterSection({
-  number,
   title,
   value,
   children,
 }: {
-  number: string;
   title: string;
   value: string;
   children: ReactNode;
 }) {
   return (
     <details className="group overflow-hidden rounded-2xl border border-black/10 bg-white transition-colors open:border-neutral-300">
-      <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-4 [&::-webkit-details-marker]:hidden">
-        <span className="text-[10px] font-semibold tracking-[0.12em] text-[var(--ck-red)] tabular-nums">
-          {number}
-        </span>
-
+      <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-3.5 [&::-webkit-details-marker]:hidden">
         <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-semibold tracking-[0.17em] text-neutral-400 uppercase">
+          <p className="text-[11px] font-semibold tracking-[0.15em] text-neutral-500 uppercase">
             {title}
           </p>
           <p className="mt-1 truncate text-sm font-semibold tracking-tight text-neutral-950">
@@ -84,11 +95,8 @@ function FilterSection({
           </p>
         </div>
 
-        <span
-          aria-hidden="true"
-          className="flex size-8 shrink-0 items-center justify-center rounded-full border border-black/8 bg-neutral-50 text-sm text-neutral-500 transition-all group-open:rotate-180 group-open:border-neutral-950 group-open:bg-neutral-950 group-open:text-white"
-        >
-          ↓
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-black/8 bg-neutral-50 text-neutral-500 transition-all group-open:border-neutral-950 group-open:bg-neutral-950 group-open:text-white">
+          <ChevronIcon className="size-4 transition-transform duration-200 group-open:rotate-180" />
         </span>
       </summary>
 
@@ -131,17 +139,12 @@ export function CatalogFilters({
         "Todo el equipamiento");
 
   return (
-    <div className="rounded-[1.75rem] border border-black/10 bg-white p-4 shadow-[0_12px_30px_rgba(0,0,0,0.035)]">
+    <div className="rounded-[1.5rem] border border-black/10 bg-white p-4 shadow-[0_10px_26px_rgba(0,0,0,0.03)]">
       <div className="flex items-start justify-between gap-4 px-1">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="h-0.5 w-6 rounded-full bg-[var(--ck-red)]" />
-            <h2 className="text-xs font-semibold tracking-[0.16em] text-neutral-950 uppercase">
-              Afinar búsqueda
-            </h2>
-          </div>
-          <p className="mt-2 max-w-[13rem] text-xs leading-5 text-neutral-400">
-            Combina marca, categoría y aprobación.
+          <h2 className="text-sm font-semibold tracking-tight text-neutral-950">Filtros</h2>
+          <p className="mt-1 text-xs leading-5 text-neutral-400">
+            Refina el catálogo por marca, categoría y aprobación.
           </p>
         </div>
 
@@ -154,8 +157,8 @@ export function CatalogFilters({
         </button>
       </div>
 
-      <div className="mt-5 space-y-2.5">
-        <FilterSection number="01" title="Marca" value={selectedBrandName}>
+      <div className="mt-4 space-y-2.5">
+        <FilterSection title="Marcas" value={selectedBrandName}>
           <div className="space-y-2">
             <button
               type="button"
@@ -190,14 +193,13 @@ export function CatalogFilters({
               return (
                 <details
                   key={brand.id}
-                  className="overflow-hidden rounded-xl border border-black/8 bg-white"
+                  className="group/brand overflow-hidden rounded-xl border border-black/8 bg-white"
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
                     <span>{brand.name}</span>
-                    <span
-                      aria-hidden="true"
-                      className={`size-2 rounded-full ${
-                        brandSelected ? "bg-[var(--ck-red)]" : "bg-neutral-200"
+                    <ChevronIcon
+                      className={`size-4 transition-all duration-200 group-open/brand:rotate-180 ${
+                        brandSelected ? "text-[var(--ck-red)]" : "text-neutral-400"
                       }`}
                     />
                   </summary>
@@ -252,7 +254,7 @@ export function CatalogFilters({
           </div>
         </FilterSection>
 
-        <FilterSection number="02" title="Categoría" value={selectedCategoryName}>
+        <FilterSection title="Categorías" value={selectedCategoryName}>
           <div className="space-y-2">
             <button
               type="button"
@@ -283,14 +285,13 @@ export function CatalogFilters({
               return (
                 <details
                   key={parent.id}
-                  className="overflow-hidden rounded-xl border border-black/8 bg-white"
+                  className="group/category overflow-hidden rounded-xl border border-black/8 bg-white"
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
                     <span>{parent.name}</span>
-                    <span
-                      aria-hidden="true"
-                      className={`size-2 rounded-full ${
-                        selectedInGroup ? "bg-[var(--ck-red)]" : "bg-neutral-200"
+                    <ChevronIcon
+                      className={`size-4 transition-all duration-200 group-open/category:rotate-180 ${
+                        selectedInGroup ? "text-[var(--ck-red)]" : "text-neutral-400"
                       }`}
                     />
                   </summary>
@@ -339,7 +340,7 @@ export function CatalogFilters({
           </div>
         </FilterSection>
 
-        <FilterSection number="03" title="Aprobación" value={getApprovalLabel(filters.approval)}>
+        <FilterSection title="Aprobación" value={getApprovalLabel(filters.approval)}>
           <div className="grid gap-1.5">
             {approvalOptions.map((option) => {
               const selected = filters.approval === option.value;
