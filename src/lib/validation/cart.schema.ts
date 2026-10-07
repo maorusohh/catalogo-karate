@@ -6,6 +6,7 @@ const cartItemSnapshotSchema = z
     sku: z.string().min(1).max(100),
     brandName: z.string().min(1).max(100),
     variantLabel: z.string().min(1).max(200),
+    paymentLabel: z.string().min(1).max(200).optional(),
   })
   .strict();
 
