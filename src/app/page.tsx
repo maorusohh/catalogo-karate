@@ -28,7 +28,8 @@ const categoryHighlights = [
   {
     title: "Protecciones",
     href: "/categoria/protecciones",
-    description: "Guantines, empeineras, espinilleras, petos y otras protecciones para la práctica.",
+    description:
+      "Guantines, empeineras, espinilleras, petos y otras protecciones para la práctica.",
   },
   {
     title: "Cinturones",
@@ -89,7 +90,10 @@ const products = catalogRepository.getProducts();
 const activeProducts = products.filter((product) => product.active);
 
 const featuredProducts = activeProducts.filter((product) => product.featured);
-const selectedProducts = (featuredProducts.length > 0 ? featuredProducts : activeProducts).slice(0, 4);
+const selectedProducts = (featuredProducts.length > 0 ? featuredProducts : activeProducts).slice(
+  0,
+  4,
+);
 
 const brands = catalogRepository.getBrands();
 const categories = catalogRepository.getCategories();
