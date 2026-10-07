@@ -1,3 +1,5 @@
+import path from "node:path";
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -8,6 +10,9 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   reactStrictMode: true,
+  experimental: {
+    adapterPath: path.resolve(process.cwd(), "build/next-static-export-adapter.cjs"),
+  },
 };
 
 export default nextConfig;
