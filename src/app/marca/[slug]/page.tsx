@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { BrandLogo } from "@/components/catalog/brand-logo";
 import { ScopedProductGrid } from "@/components/catalog/scoped-product-grid";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -73,7 +74,21 @@ export default async function BrandPage({ params }: BrandPageProps) {
             </Link>
 
             <div className="mt-8 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-              <SectionHeading eyebrow="Marca" title={brand.name} description={brand.description} />
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+                <BrandLogo
+                  src={brand.logo}
+                  name={brand.name}
+                  className="h-16 w-36 shrink-0 rounded-2xl border border-black/10 shadow-sm"
+                  imageClassName="p-2"
+                  sizes="144px"
+                />
+
+                <SectionHeading
+                  eyebrow="Marca"
+                  title={brand.name}
+                  description={brand.description}
+                />
+              </div>
 
               <div className="shrink-0">
                 <div className="rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-semibold text-neutral-600">
