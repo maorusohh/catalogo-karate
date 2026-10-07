@@ -37,11 +37,6 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
     [brands],
   );
 
-  const brandLogos = useMemo(
-    () => Object.fromEntries(brands.map((brand) => [brand.id, brand.logo])),
-    [brands],
-  );
-
   const categoryNames = useMemo(
     () => Object.fromEntries(categories.map((category) => [category.id, category.name])),
     [categories],
@@ -136,7 +131,6 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
             <ProductGrid
               products={filteredProducts}
               brandNames={brandNames}
-              brandLogos={brandLogos}
               categoryNames={categoryNames}
             />
           ) : (
