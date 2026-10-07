@@ -9,7 +9,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-import fitz
+import pymupdf
 from PIL import Image
 
 MODULE_PATH = Path(__file__).resolve().parents[1] / "extract_images.py"
@@ -60,9 +60,9 @@ class ImageExtractorTests(unittest.TestCase):
             output = root / "out"
             image_bytes = png_bytes((0, 0, 255), (64, 48))
 
-            document = fitz.open()
+            document = pymupdf.open()
             page = document.new_page(width=200, height=200)
-            page.insert_image(fitz.Rect(20, 20, 120, 100), stream=image_bytes)
+            page.insert_image(pymupdf.Rect(20, 20, 120, 100), stream=image_bytes)
             document.save(str(source))
             document.close()
 
