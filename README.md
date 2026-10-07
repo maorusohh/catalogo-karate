@@ -6,7 +6,15 @@ El proyecto está diseñado deliberadamente sin login, base de datos propia ni b
 
 ## Estado del proyecto
 
-La V1 técnica está cerrada y la rama estable es `main`.
+La V1 técnica está cerrada, publicada y la rama estable es `main`.
+
+Producción:
+
+```text
+https://catalogo-karate.pages.dev
+```
+
+El sitio se publica en Cloudflare Pages mediante exportación estática de Next.js desde `main`. El deployment utiliza el snapshot comercial versionado en el repositorio y no necesita credenciales de Google Sheets en producción.
 
 El estado técnico vigente, los datos incorporados, las validaciones realizadas y los pendientes posteriores a V1 están documentados en [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md).
 
@@ -42,6 +50,7 @@ El contrato de datos está definido en [`docs/catalog-data-contract.md`](docs/ca
 - Vitest
 - Playwright
 - Google Sheets API
+- Cloudflare Pages
 
 ## Desarrollo local
 
@@ -100,7 +109,8 @@ Incluye:
 - carrito de consulta local;
 - generación de consulta por WhatsApp;
 - imágenes locales auditadas;
-- Google Sheets como CMS editorial.
+- Google Sheets como CMS editorial;
+- publicación estática en Cloudflare Pages.
 
 No incluye en esta fase:
 
@@ -122,7 +132,12 @@ Checkpoint final comprobado:
 - unit tests: 24/24;
 - build estático: 79/79 páginas;
 - rutas demo públicas: 0;
-- E2E Playwright: 72/72.
+- E2E Playwright: 72/72;
+- auditoría pública básica del deployment: PASSED;
+- rutas críticas públicas: HTTP 200;
+- imagen WebP comercial: HTTP 200;
+- enlace WhatsApp público: presente;
+- contenido demo público: no detectado.
 
 Los warnings editoriales por features o imágenes todavía no suministradas no bloquean la V1 y no deben resolverse inventando información.
 
