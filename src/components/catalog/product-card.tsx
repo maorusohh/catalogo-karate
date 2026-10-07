@@ -30,7 +30,7 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-black/10 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.04)] transition-transform hover:-translate-y-1">
       <Link href={`/producto/${product.slug}`} className="block" aria-label={`Ver ${product.name}`}>
-        <div className="relative aspect-[4/3] overflow-hidden border-b border-black/5 bg-[#f1eee7]">
+        <div className="relative aspect-[4/3] overflow-hidden border-b border-black/5 bg-white">
           {image ? (
             <Image
               src={image.src}
