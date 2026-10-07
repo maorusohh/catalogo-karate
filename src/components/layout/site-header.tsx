@@ -31,7 +31,7 @@ export function SiteHeader() {
               </span>
 
               <span className="hidden text-[10px] font-medium tracking-[0.12em] text-white/46 sm:block">
-                Dojo Naha Te · Uchiage Kai de Venezuela
+                Dojo Naha Te — Uchiage Kai de Venezuela
               </span>
             </span>
           </Link>
