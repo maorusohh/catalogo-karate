@@ -26,3 +26,34 @@ test("el carrito persiste una variante real después de recargar", async ({ page
 
   await expect(page.getByRole("button", { name: "Abrir carrito, 1 producto" })).toBeVisible();
 });
+
+test("en pantalla compacta la compra aparece antes de la información secundaria", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+
+  const response = await page.goto("/producto/mallems-guantes-karate-do-07/", {
+    waitUntil: "domcontentloaded",
+  });
+
+  expect(response?.status()).toBe(200);
+
+  const productHeading = page.getByRole("heading", {
+    name: "Guantes de Karate-Do",
+    level: 1,
+  });
+  const informationHeading = page.getByRole("heading", {
+    name: "Información del producto",
+    level: 2,
+  });
+
+  await expect(productHeading).toBeVisible();
+  await expect(informationHeading).toBeVisible();
+
+  const productBox = await productHeading.boundingBox();
+  const informationBox = await informationHeading.boundingBox();
+
+  expect(productBox).not.toBeNull();
+  expect(informationBox).not.toBeNull();
+  expect(productBox!.y).toBeLessThan(informationBox!.y);
+});
