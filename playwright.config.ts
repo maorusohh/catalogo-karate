@@ -3,8 +3,6 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./tests/e2e",
 
-  // Next.js dev puede tener una carrera al resolver rutas dinámicas
-  // simultáneamente durante el primer acceso.
   fullyParallel: false,
   workers: 1,
 
@@ -13,14 +11,14 @@ export default defineConfig({
   reporter: "html",
 
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: "http://127.0.0.1:3000",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
   },
 
   webServer: {
-    command: "npm run dev",
-    url: "http://localhost:3000",
+    command: "node scripts/serve-static-export.mjs",
+    url: "http://127.0.0.1:3000",
     reuseExistingServer: false,
     timeout: 120_000,
   },
