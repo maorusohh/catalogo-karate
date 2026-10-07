@@ -74,13 +74,12 @@ export default async function BrandPage({ params }: BrandPageProps) {
             </Link>
 
             <div className="mt-8 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-              <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+              <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
                 <BrandLogo
                   src={brand.logo}
                   name={brand.name}
-                  className="h-16 w-36 shrink-0 rounded-2xl border border-black/10 shadow-sm"
-                  imageClassName="p-2"
-                  sizes="144px"
+                  className="h-24 w-52 shrink-0 rounded-3xl border border-black/10 shadow-sm sm:h-28 sm:w-60"
+                  sizes="240px"
                 />
 
                 <SectionHeading
