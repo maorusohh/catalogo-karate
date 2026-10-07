@@ -2,7 +2,7 @@
 
 Última revisión canónica: **7 de octubre de 2026**.
 
-Este documento describe el estado comprobado del repositorio, la fuente editorial y el cierre técnico de la V1.
+Este documento describe el estado comprobado del repositorio, la fuente editorial, el cierre técnico de la V1 y su publicación en producción.
 
 ## 1. Estado de ramas
 
@@ -12,7 +12,7 @@ Rama estable por defecto:
 main
 ```
 
-La rama `feature/profesionalizacion` fue integrada mediante fast-forward y queda sincronizada con `main` en el checkpoint de cierre de V1.
+La rama `feature/profesionalizacion` quedó integrada y se mantiene sincronizada con `main` al cierre de los checkpoints de V1.
 
 ## 2. Alcance V1 cerrado
 
@@ -30,7 +30,8 @@ Incluye:
 - generación de consulta por WhatsApp;
 - imágenes locales auditadas;
 - Google Sheets como CMS editorial;
-- variantes únicamente cuando existan datos comerciales verificables.
+- variantes únicamente cuando existan datos comerciales verificables;
+- publicación estática en Cloudflare Pages.
 
 No incluye:
 
@@ -53,7 +54,8 @@ Stack verificado:
 - Zod 4.6.x;
 - Vitest 5;
 - Playwright 1.63.x;
-- Google Sheets API.
+- Google Sheets API;
+- Cloudflare Pages.
 
 Arquitectura de datos:
 
@@ -68,6 +70,8 @@ Google Sheets
 ```
 
 La UI no consulta Google Sheets directamente. Las pestañas `catalog_intake*` son staging editorial y no forman parte del contrato runtime.
+
+El deployment de producción consume el snapshot comercial versionado. No requiere acceso directo a Google Sheets ni credenciales del service account durante el build público ordinario.
 
 ## 4. Estado canónico de Google Sheets
 
@@ -180,7 +184,7 @@ El snapshot contiene:
 
 El archivo es generado y no debe editarse manualmente.
 
-## 10. Validación integral de cierre
+## 10. Validación integral de cierre técnico
 
 Cadena ejecutada y aprobada:
 
@@ -216,27 +220,81 @@ Los 28 warnings no son errores de integridad. Corresponden a contenido editorial
 
 Estos pendientes no bloquean la V1 y no deben resolverse inventando datos.
 
-## 11. Integración de profesionalización — cerrada
+## 11. Integración y normalización Git — cerradas
 
-La rama `feature/profesionalizacion` llegó a estar 18 commits por delante de `main` y 0 por detrás.
+La profesionalización quedó integrada en `main` y la rama `feature/profesionalizacion` se mantiene alineada con la rama estable.
 
-La integración final se realizó por fast-forward, sin merge commit, rebase adicional ni force push sobre `main`.
+Se añadió `.gitattributes` para fijar `LF` en archivos de texto y evitar inconsistencias de checkout en Windows. La certificación final confirmó:
 
-`main` queda como línea estable de la V1.
+- working tree tracked limpio;
+- `main` local/remoto sincronizados;
+- `feature/profesionalizacion` local/remota sincronizadas;
+- sin `reset`, `force push` ni pérdida de commits.
 
-## 12. Pendientes posteriores a V1
+## 12. Deployment V1 — cerrado
 
-Los siguientes puntos quedan fuera del cierre técnico actual y solo deben abordarse cuando exista información o necesidad real:
+Proveedor:
+
+```text
+Cloudflare Pages
+```
+
+Producción:
+
+```text
+https://catalogo-karate.pages.dev
+```
+
+Configuración de publicación:
+
+- repositorio: `maorusohh/catalogo-karate`;
+- rama de producción: `main`;
+- estrategia: Next.js Static Export;
+- build: `npx next build`;
+- directorio publicado: `out`;
+- `next.config.ts`: `output: "export"`, `trailingSlash: true`, imágenes `unoptimized`;
+- variables de entorno del catálogo en producción: ninguna requerida para el deployment ordinario;
+- el sitio publica el snapshot comercial ya versionado en GitHub.
+
+Auditoría pública básica ejecutada sobre la URL de producción:
+
+- `/`: HTTP 200;
+- `/catalogo/`: HTTP 200;
+- categorías críticas: HTTP 200;
+- marcas Best Sport y Mallems: HTTP 200;
+- productos representativos Best Sport y Mallems: HTTP 200;
+- `/como-comprar/`: HTTP 200;
+- `/entregas/`: HTTP 200;
+- `/contacto/`: HTTP 200;
+- WebP comercial representativo: HTTP 200 con contenido de imagen;
+- enlace público a WhatsApp: presente;
+- enlaces a productos comerciales: presentes;
+- contenido demo público: no detectado.
+
+Resultado:
+
+```text
+AUDITORÍA PÚBLICA BÁSICA: PASSED
+```
+
+La V1 se considera **técnicamente cerrada y publicada**.
+
+Una comprobación adicional desde herramientas externas de esta sesión no pudo resolver temporalmente el subdominio `pages.dev`; por integridad documental, ese intento no se registra como una segunda auditoría aprobada. La auditoría pública realizada desde el entorno del proyecto sí respondió correctamente por HTTPS y constituye la evidencia de cierre del checkpoint.
+
+## 13. Pendientes posteriores a V1
+
+Los siguientes puntos quedan fuera del cierre de V1 y solo deben abordarse cuando exista información o necesidad real:
 
 1. completar imágenes faltantes de productos activos cuando se disponga de assets verificables;
 2. completar features editoriales faltantes cuando el proveedor suministre información confiable;
 3. incorporar variantes reales cuando existan tallas, colores o combinaciones verificadas;
 4. decidir formalmente si los logos de marca locales entran al contrato `brands.logo`;
 5. optimizar warnings de rendimiento LCP de imágenes above-the-fold;
-6. validar el deployment público y su comportamiento final en producción.
+6. repetir una auditoría externa desde otro punto de red cuando resulte útil;
+7. evaluar un dominio personalizado solo si existe necesidad comercial real.
 
-## 13. Regla de continuidad
+## 14. Regla de continuidad
 
-La V1 técnica queda cerrada. No reabrir arquitectura, backend, autenticación, pagos ni inventario para este alcance.
+La V1 queda cerrada y publicada. No reabrir arquitectura, backend, autenticación, pagos ni inventario para este alcance.
 
-Cualquier trabajo nuevo debe partir de `main`, preservar el contrato de datos existente y tratar las mejoras editoriales o de UX como checkpoints independientes.
+Cualquier trabajo nuevo debe partir de `main`, preservar el contrato de datos existente y tratar las mejoras editoriales, de rendimiento, branding, dominio o UX como checkpoints independientes.
