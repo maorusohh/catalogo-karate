@@ -49,13 +49,7 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
   );
 
   const filteredProducts = useMemo(() => {
-    const filtered = filterProducts(
-      products,
-      filters,
-      brandNames,
-      categoryNames,
-      activeCategories,
-    );
+    const filtered = filterProducts(products, filters, brandNames, categoryNames, activeCategories);
 
     return sortProducts(filtered, sort);
   }, [products, filters, sort, brandNames, categoryNames, activeCategories]);

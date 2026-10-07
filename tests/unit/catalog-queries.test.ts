@@ -55,7 +55,9 @@ const brandNames = {
   "brand-a": "Marca A",
 };
 
-const categoryNames = Object.fromEntries(categories.map((category) => [category.id, category.name]));
+const categoryNames = Object.fromEntries(
+  categories.map((category) => [category.id, category.name]),
+);
 
 const baseFilters: CatalogFilters = {
   search: "",
