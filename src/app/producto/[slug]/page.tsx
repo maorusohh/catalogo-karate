@@ -84,11 +84,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </nav>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,0.92fr)] lg:items-start lg:gap-14">
-        <div className="min-w-0">
+        <div className="contents lg:block lg:min-w-0">
           <ProductGallery images={product.images} productName={product.name} />
 
           {parsedFeatures.length > 0 || product.approvalNote ? (
-            <section className="mt-8 border-t border-black/10 pt-7">
+            <section className="order-3 border-t border-black/10 pt-7 lg:order-none lg:mt-8">
               <p className="text-xs font-semibold tracking-[0.18em] text-neutral-400 uppercase">
                 Características
               </p>
@@ -132,7 +132,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           ) : null}
         </div>
 
-        <div className="lg:sticky lg:top-28">
+        <div className="order-2 lg:order-none lg:sticky lg:top-28">
           <div className="flex flex-wrap gap-2">
             {brand ? (
               <span className="inline-flex min-h-8 items-center rounded-full bg-neutral-950 px-3 text-xs font-semibold text-white">
