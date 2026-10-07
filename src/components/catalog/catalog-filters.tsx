@@ -185,9 +185,7 @@ export function CatalogFilters({
                   <div className="space-y-1 border-t border-black/8 p-2">
                     <button
                       type="button"
-                      onClick={() =>
-                        onChange({ ...filters, brandId: brand.id, categoryId: "ALL" })
-                      }
+                      onClick={() => onChange({ ...filters, brandId: brand.id, categoryId: "ALL" })}
                       className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                         brandSelected && filters.categoryId === "ALL"
                           ? "bg-neutral-950 font-semibold text-white"
