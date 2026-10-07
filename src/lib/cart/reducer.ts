@@ -30,7 +30,16 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
         };
       }
 
-      return state;
+      return {
+        items: state.items.map((item, index) =>
+          index === existingItemIndex
+            ? {
+                ...action.payload,
+                quantity: item.quantity,
+              }
+            : item,
+        ),
+      };
     }
 
     case "UPDATE_QUANTITY": {
