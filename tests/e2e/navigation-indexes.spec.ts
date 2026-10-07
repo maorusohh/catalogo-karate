@@ -6,7 +6,7 @@ test("los índices de marcas y categorías están disponibles", async ({ page })
   });
 
   expect(response?.status()).toBe(200);
-  await expect(page.getByRole("heading", { name: "Explora por marca.", level: 1 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Explora por marca.", level: 2 })).toBeVisible();
   await expect(page.getByRole("link", { name: /Mallems/ })).toHaveAttribute(
     "href",
     "/marca/mallems",
@@ -18,7 +18,7 @@ test("los índices de marcas y categorías están disponibles", async ({ page })
 
   expect(response?.status()).toBe(200);
   await expect(
-    page.getByRole("heading", { name: "Explora por tipo de equipamiento.", level: 1 }),
+    page.getByRole("heading", { name: "Explora por tipo de equipamiento.", level: 2 }),
   ).toBeVisible();
   await expect(page.getByRole("link", { name: "Karategis", exact: true }).first()).toHaveAttribute(
     "href",
@@ -33,10 +33,10 @@ test("el catálogo enlaza a los índices de marcas y categorías", async ({ page
 
   expect(response?.status()).toBe(200);
 
-  await expect(page.getByRole("link", { name: "Ver marcas" })).toHaveAttribute("href", "/marca");
+  await expect(page.getByRole("link", { name: "Ver marcas" })).toHaveAttribute("href", "/marca/");
   await expect(page.getByRole("link", { name: "Ver categorías" })).toHaveAttribute(
     "href",
-    "/categoria",
+    "/categoria/",
   );
 });
 
