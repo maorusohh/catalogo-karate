@@ -28,7 +28,7 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
   const primaryPrice = product.prices[0];
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-black/10 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.035)] transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-1 hover:border-black/15 hover:shadow-[0_18px_40px_rgba(0,0,0,0.07)]">
+    <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-black/10 bg-white shadow-[0_12px_30px_rgba(0,0,0,0.04)] transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-1 hover:border-black/15 hover:shadow-[0_18px_40px_rgba(0,0,0,0.075)]">
       <Link href={`/producto/${product.slug}`} className="block" aria-label={`Ver ${product.name}`}>
         <div className="relative aspect-[4/3] overflow-hidden border-b border-black/5 bg-[#ebe7de]">
           {image ? (
@@ -37,7 +37,7 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
               alt={image.alt || product.name}
               fill
               sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
-              className="object-contain p-7 transition-transform duration-300 group-hover:scale-[1.025] sm:p-9"
+              className="object-contain p-5 transition-transform duration-300 group-hover:scale-[1.025] sm:p-6"
             />
           ) : (
             <div className="flex h-full items-center justify-center p-6 text-center">
@@ -46,31 +46,31 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
                   KD
                 </span>
 
-                <p className="mt-3 text-xs font-medium tracking-[0.16em] text-neutral-400 uppercase">
+                <p className="mt-3 text-xs font-medium tracking-[0.12em] text-neutral-400 uppercase">
                   Imagen pendiente
                 </p>
               </div>
             </div>
           )}
-
-          <div className="absolute top-4 left-4">
-            <span className="inline-flex min-h-7 items-center rounded-full border border-white/65 bg-white/88 px-2.5 text-[10px] font-semibold tracking-[0.08em] text-neutral-800 uppercase shadow-sm backdrop-blur">
-              {approvalLabels[product.approval]}
-            </span>
-          </div>
         </div>
       </Link>
 
-      <div className="flex flex-1 flex-col p-5 sm:p-5.5">
-        <div className="flex items-center justify-between gap-3">
-          <p className="truncate text-[10px] font-semibold tracking-[0.16em] text-[var(--ck-red)] uppercase">
-            {brandName}
-          </p>
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <div className="flex flex-wrap gap-2">
+          <span className="rounded-full bg-neutral-100 px-3 py-1 text-[11px] font-semibold text-neutral-600">
+            {categoryName}
+          </span>
 
-          <p className="truncate text-[10px] font-medium text-neutral-400">{categoryName}</p>
+          <span className="rounded-full bg-[var(--ck-red)]/10 px-3 py-1 text-[11px] font-semibold text-[var(--ck-red-dark)]">
+            {approvalLabels[product.approval]}
+          </span>
         </div>
 
-        <h2 className="mt-3 text-lg leading-snug font-semibold tracking-tight text-neutral-950">
+        <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-neutral-500 uppercase">
+          {brandName}
+        </p>
+
+        <h2 className="mt-2 text-xl leading-[1.18] font-semibold tracking-[-0.015em] text-neutral-950">
           <Link
             href={`/producto/${product.slug}`}
             className="transition-colors hover:text-[var(--ck-red)]"
@@ -79,13 +79,13 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
           </Link>
         </h2>
 
-        <p className="mt-2 line-clamp-2 text-sm leading-6 text-neutral-600">
+        <p className="mt-3 line-clamp-2 text-sm leading-6 text-neutral-600">
           {product.shortDescription}
         </p>
 
-        <div className="mt-auto flex items-end justify-between gap-4 border-t border-black/8 pt-5">
-          <div className="min-w-0">
-            <p className="truncate text-base font-semibold tracking-tight text-neutral-950">
+        <div className="mt-auto pt-6">
+          <div className="border-t border-black/8 pt-4">
+            <p className="text-base font-semibold tracking-[-0.01em] text-neutral-950">
               {primaryPrice?.label ?? "Consultar precio"}
             </p>
 
@@ -96,9 +96,9 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
 
           <Link
             href={`/producto/${product.slug}`}
-            aria-label={`Abrir ficha de ${product.name}`}
-            className="flex size-11 shrink-0 items-center justify-center rounded-full border border-black/10 bg-neutral-950 text-white transition-all duration-200 group-hover:border-[var(--ck-red)] group-hover:bg-[var(--ck-red)]"
+            className="mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[var(--ck-red)]"
           >
+            Ver producto
             <span aria-hidden="true">→</span>
           </Link>
         </div>
