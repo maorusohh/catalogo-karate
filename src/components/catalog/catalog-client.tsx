@@ -37,6 +37,7 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
     () => categories.filter((category) => category.active),
     [categories],
   );
+  const activeProducts = useMemo(() => products.filter((product) => product.active), [products]);
 
   const brandNames = useMemo(
     () => Object.fromEntries(activeBrands.map((brand) => [brand.id, brand.name])),
@@ -49,10 +50,16 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
   );
 
   const filteredProducts = useMemo(() => {
-    const filtered = filterProducts(products, filters, brandNames, categoryNames, activeCategories);
+    const filtered = filterProducts(
+      activeProducts,
+      filters,
+      brandNames,
+      categoryNames,
+      activeCategories,
+    );
 
     return sortProducts(filtered, sort);
-  }, [products, filters, sort, brandNames, categoryNames, activeCategories]);
+  }, [activeProducts, filters, sort, brandNames, categoryNames, activeCategories]);
 
   const activeFilterCount = [
     filters.brandId !== "ALL",
@@ -105,11 +112,12 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
             {activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
           </summary>
 
-          <div className="border-t border-black/10 p-4">
+          <div className="max-h-[70vh] overflow-y-scroll border-t border-black/10 p-4 [scrollbar-gutter:stable]">
             <CatalogFilters
               filters={filters}
               brands={activeBrands}
               categories={activeCategories}
+              products={activeProducts}
               onChange={setFilters}
               onReset={clearFilters}
             />
@@ -117,13 +125,14 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
         </details>
       </div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
+      <div className="mt-8 grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="hidden lg:block">
-          <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto overscroll-contain pr-1">
+          <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-scroll overscroll-contain pr-2 [scrollbar-gutter:stable]">
             <CatalogFilters
               filters={filters}
               brands={activeBrands}
               categories={activeCategories}
+              products={activeProducts}
               onChange={setFilters}
               onReset={clearFilters}
             />
