@@ -12,6 +12,7 @@ type AddToCartButtonProps = {
   brandName: string;
   variant: ProductVariant | undefined;
   requiresVariant: boolean;
+  priceReady: boolean;
   paymentLabel?: string;
 };
 
@@ -22,12 +23,14 @@ export function AddToCartButton({
   brandName,
   variant,
   requiresVariant,
+  priceReady,
   paymentLabel,
 }: AddToCartButtonProps) {
   const { items, addItem, openCart } = useCart();
 
   const variantId = variant?.id ?? DEFAULT_VARIANT_ID;
-  const isDisabled = requiresVariant && (!variant || !variant.available);
+  const variantMissing = requiresVariant && (!variant || !variant.available);
+  const isDisabled = variantMissing || !priceReady;
 
   const matchingItem = items.find(
     (item) => item.productId === productId && item.variantId === variantId,
@@ -70,13 +73,15 @@ export function AddToCartButton({
 
   return (
     <button type="button" disabled={isDisabled} onClick={handleAddToCart} className={buttonClasses}>
-      {isDisabled
+      {variantMissing
         ? "Selecciona una variante"
-        : alreadyInCart
-          ? "Ver en el carrito"
-          : matchingItem
-            ? "Actualizar selección"
-            : "Agregar al carrito"}
+        : !priceReady
+          ? "Precio por confirmar"
+          : alreadyInCart
+            ? "Ver en el carrito"
+            : matchingItem
+              ? "Actualizar selección"
+              : "Agregar al carrito"}
     </button>
   );
 }
