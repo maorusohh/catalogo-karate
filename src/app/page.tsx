@@ -28,8 +28,7 @@ const categoryHighlights = [
   {
     title: "Protecciones",
     href: "/categoria/protecciones",
-    description:
-      "Guantines, empeineras, espinilleras, petos y otras protecciones para la práctica.",
+    description: "Guantines, empeineras, espinilleras, petos y otras protecciones para la práctica.",
   },
   {
     title: "Cinturones",
@@ -90,10 +89,7 @@ const products = catalogRepository.getProducts();
 const activeProducts = products.filter((product) => product.active);
 
 const featuredProducts = activeProducts.filter((product) => product.featured);
-const selectedProducts = (featuredProducts.length > 0 ? featuredProducts : activeProducts).slice(
-  0,
-  4,
-);
+const selectedProducts = (featuredProducts.length > 0 ? featuredProducts : activeProducts).slice(0, 4);
 
 const brands = catalogRepository.getBrands();
 const categories = catalogRepository.getCategories();
@@ -110,9 +106,9 @@ const homeWhatsAppUrl = buildWhatsAppUrl(
 
 const heroImagePath = path.join(process.cwd(), "public", "images", "branding", "hero-karate.jpg");
 const hasHeroImage = fs.existsSync(heroImagePath);
-const heroFallbackImage = activeProducts
-  .flatMap((product) => product.images)
-  .find((item) => item.src.startsWith("/"));
+const heroImageSrc = hasHeroImage
+  ? "/images/branding/hero-karate.jpg"
+  : "https://images.pexels.com/photos/7045554/pexels-photo-7045554.jpeg?auto=compress&cs=tinysrgb&w=1600";
 
 function WhatsAppIcon() {
   return (
@@ -127,20 +123,20 @@ export default function HomePage() {
     <main>
       <section className="hero-dojo">
         <Container>
-          <div className="grid items-center gap-10 py-12 sm:py-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 lg:py-16">
+          <div className="grid items-center gap-10 py-14 sm:py-18 lg:grid-cols-[1.03fr_0.97fr] lg:gap-14 lg:py-20">
             <div className="max-w-3xl">
               <p className="eyebrow text-[#ef5a68]">Karate-Do — Venezuela</p>
 
-              <h1 className="mt-5 max-w-4xl text-4xl leading-[0.99] font-semibold tracking-[-0.045em] text-white sm:text-5xl lg:text-6xl xl:text-[4.25rem]">
+              <h1 className="mt-6 max-w-4xl text-4xl leading-[1.01] font-bold tracking-[-0.025em] text-white sm:text-5xl lg:text-[3.65rem]">
                 Equípate para entrenar. Prepárate para competir.
               </h1>
 
-              <p className="mt-7 max-w-2xl text-base leading-7 text-white/62 sm:text-lg">
+              <p className="mt-8 max-w-2xl text-base leading-7 text-white/64 sm:text-lg">
                 Encuentra equipamiento para entrenamiento, Kata y Kumite, revisa tus opciones y
                 prepara la consulta antes de comprar.
               </p>
 
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-9 flex flex-wrap gap-3">
                 <ButtonLink
                   href="/catalogo"
                   size="lg"
@@ -172,35 +168,28 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="hero-stage" style={{ minHeight: "clamp(22rem, 42vw, 33rem)" }}>
-              {hasHeroImage || heroFallbackImage ? (
-                <div className="hero-stage-media">
-                  <Image
-                    src={hasHeroImage ? "/images/branding/hero-karate.jpg" : heroFallbackImage!.src}
-                    alt={
-                      hasHeroImage
-                        ? "Karatekas entrenando en un dojo"
-                        : heroFallbackImage?.alt || "Equipamiento de Karate-Do del catálogo"
-                    }
-                    fill
-                    priority
-                    sizes="(max-width: 1023px) 100vw, 48vw"
-                    className={hasHeroImage ? "object-cover" : "object-contain p-8 sm:p-12"}
-                  />
-                </div>
-              ) : (
-                <div className="hero-stage-placeholder" />
-              )}
+            <div className="relative min-h-[19rem] overflow-hidden rounded-[28px] border border-white/10 bg-[#1b1b1b] shadow-[0_24px_60px_rgb(0_0_0_/_0.30)] sm:min-h-[22rem] lg:min-h-[25rem]">
+              <Image
+                src={heroImageSrc}
+                alt={hasHeroImage ? "Karatekas entrenando en un dojo" : "Clase de Karate-Do en un dojo"}
+                fill
+                priority
+                sizes="(max-width: 1023px) 100vw, 48vw"
+                className="object-cover"
+              />
 
-              <div className="relative z-10 flex h-full min-h-[inherit] flex-col justify-between p-6 sm:p-8 lg:p-9">
-                <span className="hero-stage-badge w-fit">Equipamiento especializado</span>
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.12)_0%,rgba(0,0,0,0.2)_42%,rgba(0,0,0,0.82)_100%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.30)_0%,transparent_58%)]" />
+
+              <div className="relative z-10 flex min-h-[inherit] flex-col justify-between p-6 sm:p-8 lg:p-9">
+                <span className="hero-stage-badge w-fit">Karate-Do · Equipamiento</span>
 
                 <div className="max-w-md">
-                  <p className="text-[10px] font-semibold tracking-[0.18em] text-white/42 uppercase">
-                    Selección del catálogo
+                  <p className="text-[11px] font-semibold tracking-[0.16em] text-white/56 uppercase">
+                    Preparación y competencia
                   </p>
-                  <p className="mt-3 text-2xl leading-tight font-semibold tracking-[-0.025em] text-white sm:text-3xl">
-                    Karategis, protecciones, cinturones y accesorios.
+                  <p className="mt-3 text-3xl leading-[1.02] font-semibold tracking-[-0.02em] text-white sm:text-4xl">
+                    Disciplina, precisión y equipamiento.
                   </p>
                 </div>
               </div>
@@ -239,7 +228,7 @@ export default function HomePage() {
                     </div>
 
                     <div className="mt-10">
-                      <h2 className="text-xl font-semibold tracking-tight text-neutral-950">
+                      <h2 className="text-xl font-semibold tracking-[-0.01em] text-neutral-950">
                         {category.title}
                       </h2>
 
@@ -260,11 +249,11 @@ export default function HomePage() {
           <div className="grid gap-px overflow-hidden bg-black/8 md:grid-cols-2 lg:grid-cols-4">
             {trustItems.map((item) => (
               <div key={item.number} className="bg-[#ebe7de] px-6 py-7 sm:px-7">
-                <p className="text-[10px] font-semibold tracking-[0.16em] text-[var(--ck-red)]">
+                <p className="text-[10px] font-semibold tracking-[0.14em] text-[var(--ck-red)]">
                   {item.number}
                 </p>
 
-                <h2 className="mt-4 text-base font-semibold tracking-tight text-neutral-950">
+                <h2 className="mt-4 text-base font-semibold tracking-[-0.01em] text-neutral-950">
                   {item.title}
                 </h2>
 
@@ -296,7 +285,7 @@ export default function HomePage() {
           </div>
 
           {selectedProducts.length > 0 ? (
-            <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
               {selectedProducts.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -323,7 +312,7 @@ export default function HomePage() {
             <div>
               <p className="eyebrow text-[#ef5a68]">Cómo funciona</p>
 
-              <h2 className="mt-5 max-w-lg text-3xl leading-tight font-semibold tracking-[-0.035em] text-white sm:text-4xl">
+              <h2 className="mt-5 max-w-lg text-3xl leading-tight font-semibold tracking-[-0.02em] text-white sm:text-4xl">
                 Una compra acompañada, sin complicar el proceso.
               </h2>
 
@@ -336,11 +325,11 @@ export default function HomePage() {
             <div className="grid gap-px overflow-hidden rounded-[24px] border border-white/8 bg-white/8 md:grid-cols-3">
               {purchaseSteps.map((step) => (
                 <div key={step.number} className="bg-[#181818] p-6 sm:p-7">
-                  <p className="text-xs font-semibold tracking-[0.14em] text-[#ef5a68]">
+                  <p className="text-xs font-semibold tracking-[0.12em] text-[#ef5a68]">
                     {step.number}
                   </p>
 
-                  <h3 className="mt-8 text-lg font-semibold tracking-tight text-white">
+                  <h3 className="mt-8 text-lg font-semibold tracking-[-0.01em] text-white">
                     {step.title}
                   </h3>
 
@@ -359,7 +348,7 @@ export default function HomePage() {
               <div className="max-w-3xl">
                 <p className="eyebrow text-[#ef5a68]">Tu próxima compra</p>
 
-                <h2 className="mt-5 text-3xl leading-tight font-semibold tracking-[-0.035em] text-white sm:text-4xl lg:text-5xl">
+                <h2 className="mt-5 text-3xl leading-tight font-semibold tracking-[-0.02em] text-white sm:text-4xl lg:text-5xl">
                   Encuentra el equipamiento que necesitas y prepara tu consulta.
                 </h2>
 
