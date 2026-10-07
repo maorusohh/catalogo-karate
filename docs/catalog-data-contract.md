@@ -1,4 +1,4 @@
-# Catálogo Karate-Do — Contrato de datos comerciales
+# Catálogo Karate-Do — contrato de datos comerciales
 
 ## 1. Objetivo
 
@@ -6,13 +6,13 @@ Este documento define el contrato que debe cumplir cualquier fuente de datos del
 
 La interfaz no depende directamente de Google Sheets, CSV, JSON, API o base de datos.
 
-Toda fuente debe transformarse al modelo Catalog antes de llegar al CatalogRepository.
+Toda fuente debe transformarse al modelo `Catalog` antes de llegar al `CatalogRepository`.
 
-Flujo:
-
+```text
 Source -> Adapter -> Validation -> Catalog -> Repository -> Frontend
+```
 
-Un error de estructura, validación o integridad debe impedir la publicación.
+Un error de estructura o integridad debe impedir la publicación.
 
 ## 2. Datos públicos e internos
 
@@ -21,7 +21,7 @@ La fuente pública solo contiene información que puede mostrarse al cliente.
 No debe contener:
 
 - costos de adquisición;
-- proveedores internos;
+- proveedores internos o condiciones privadas;
 - márgenes;
 - comisiones;
 - negociaciones;
@@ -32,32 +32,36 @@ No debe contener:
 
 Los datos internos pertenecen a sistemas separados.
 
-## 3. Fuente tabular prevista
+## 3. Pestañas canónicas
 
-Google Sheets utilizará estas pestañas:
+Google Sheets utiliza estas pestañas como contrato publicable:
 
-- meta
-- brands
-- categories
-- products
-- variants
-- variant_options
-- prices
-- images
-- features
+- `meta`
+- `brands`
+- `categories`
+- `products`
+- `variants`
+- `variant_options`
+- `prices`
+- `images`
+- `features`
 
-Los nombres de las pestañas forman parte del contrato.
+Los nombres y columnas de estas pestañas forman parte del contrato.
+
+Las pestañas `catalog_intake*` son staging editorial y no son consumidas por el adapter del sitio.
 
 ## 4. meta
 
 Columnas:
 
-- key
-- value
+- `key`
+- `value`
 
-Versión inicial:
+Versión actual:
 
+```text
 schema_version = 1
+```
 
 El adapter debe rechazar versiones incompatibles.
 
@@ -65,148 +69,148 @@ El adapter debe rechazar versiones incompatibles.
 
 Columnas:
 
-- id
-- slug
-- name
-- description
-- logo
-- active
+- `id`
+- `slug`
+- `name`
+- `description`
+- `logo`
+- `active`
 
 Reglas:
 
-- id único y estable;
-- slug único y estable;
-- name obligatorio;
-- logo opcional;
-- active controla publicación.
+- `id` único y estable;
+- `slug` único y estable;
+- `name` obligatorio;
+- `logo` opcional;
+- `active` controla publicación.
 
 ## 6. categories
 
 Columnas:
 
-- id
-- slug
-- name
-- description
-- parent_id
-- active
+- `id`
+- `slug`
+- `name`
+- `description`
+- `parent_id`
+- `active`
 
 Reglas:
 
-- id único y estable;
-- slug único y estable;
-- parent_id puede estar vacío;
-- si existe parent_id debe referenciar una categoría válida;
-- active controla publicación.
+- `id` único y estable;
+- `slug` único y estable;
+- `parent_id` puede estar vacío;
+- si existe `parent_id`, debe referenciar una categoría válida;
+- `active` controla publicación.
 
 ## 7. products
 
 Columnas:
 
-- id
-- sku
-- slug
-- name
-- brand_id
-- category_id
-- short_description
-- description
-- approval
-- approval_note
-- availability
-- featured
-- active
+- `id`
+- `sku`
+- `slug`
+- `name`
+- `brand_id`
+- `category_id`
+- `short_description`
+- `description`
+- `approval`
+- `approval_note`
+- `availability`
+- `featured`
+- `active`
 
-Approval permitido:
+`approval` permitido:
 
-WKF
-NATIONAL
-NON_APPROVED
-UNSPECIFIED
+- `WKF`
+- `NATIONAL`
+- `NON_APPROVED`
+- `UNSPECIFIED`
 
-Availability permitido:
+`availability` permitido:
 
-AVAILABLE
-CONSULT
-OUT_OF_STOCK
-COMING_SOON
+- `AVAILABLE`
+- `CONSULT`
+- `OUT_OF_STOCK`
+- `COMING_SOON`
 
 Reglas:
 
-- id, sku y slug deben ser únicos;
-- brand_id debe existir;
-- category_id debe existir;
-- slug debe ser estable;
-- active=false impide publicación.
+- `id`, `sku` y `slug` deben ser únicos;
+- `brand_id` debe existir;
+- `category_id` debe existir;
+- `slug` debe ser estable;
+- `active=false` impide publicación.
 
 ## 8. variants
 
 Columnas:
 
-- id
-- product_id
-- label
-- available
+- `id`
+- `product_id`
+- `label`
+- `available`
 
 Reglas:
 
-- product_id debe existir;
-- id debe identificar de forma única la variante;
-- available=false impide selección;
+- `product_id` debe existir;
+- `id` identifica de forma única la variante;
+- `available=false` impide selección;
 - una variante no puede existir sin producto.
 
 ## 9. variant_options
 
 Columnas:
 
-- variant_id
-- name
-- value
-- sort_order
+- `variant_id`
+- `name`
+- `value`
+- `sort_order`
 
 Reglas:
 
-- variant_id debe existir;
-- name y value son obligatorios;
-- sort_order determina el orden visual;
-- las combinaciones válidas pertenecen a la variante.
+- `variant_id` debe existir;
+- `name` y `value` son obligatorios;
+- `sort_order` determina el orden visual;
+- las combinaciones válidas pertenecen a una variante existente.
 
 ## 10. prices
 
 Columnas:
 
-- product_id
-- amount
-- currency
-- basis
-- label
-- note
-- sort_order
+- `product_id`
+- `amount`
+- `currency`
+- `basis`
+- `label`
+- `note`
+- `sort_order`
 
-Basis permitido:
+`basis` permitido:
 
-DIRECT_USD
-BCV_RATE_USD
-EURO_RATE_USD
-USDT
-CONSULT
+- `DIRECT_USD`
+- `BCV_RATE_USD`
+- `EURO_RATE_USD`
+- `USDT`
+- `CONSULT`
 
-Currency permitido:
+`currency` permitida:
 
-USD
-USDT
+- `USD`
+- `USDT`
 
-Para CONSULT:
+Para `CONSULT`:
 
-amount vacío
-currency vacío
-basis = CONSULT
+- `amount` vacío;
+- `currency` vacía;
+- `basis = CONSULT`.
 
 Para cualquier precio monetario:
 
-amount > 0
-currency válida
-basis distinta de CONSULT
+- `amount > 0`;
+- `currency` válida;
+- `basis` distinta de `CONSULT`.
 
 No almacenar costos internos ni márgenes.
 
@@ -214,40 +218,43 @@ No almacenar costos internos ni márgenes.
 
 Columnas:
 
-- product_id
-- src
-- alt
-- source_type
-- source_url
-- sort_order
+- `product_id`
+- `src`
+- `alt`
+- `source_type`
+- `source_url`
+- `sort_order`
 
-Source_type permitido:
+`source_type` permitido:
 
-OWN
-MANUFACTURER
-PROVIDER
-OTHER
+- `OWN`
+- `MANUFACTURER`
+- `PROVIDER`
+- `OTHER`
 
 Reglas:
 
-- product_id debe existir;
-- src y alt son obligatorios;
-- sort_order controla la galería;
+- `product_id` debe existir;
+- `src` y `alt` son obligatorios;
+- `src` debe apuntar al asset local publicable;
+- `sort_order` controla la galería;
+- `source_url` conserva trazabilidad editorial cuando aplica;
 - no publicar rutas privadas ni credenciales.
 
 ## 12. features
 
 Columnas:
 
-- product_id
-- feature
-- sort_order
+- `product_id`
+- `feature`
+- `sort_order`
 
 Reglas:
 
-- product_id debe existir;
-- feature obligatorio;
-- sort_order controla el orden.
+- `product_id` debe existir;
+- `feature` obligatorio;
+- `sort_order` controla el orden;
+- no introducir duplicados equivalentes para el mismo producto.
 
 ## 13. Identificadores
 
@@ -257,21 +264,20 @@ No deben depender de:
 
 - número de fila;
 - posición del registro;
-- nombre comercial;
-- slug.
+- nombre comercial mutable.
 
-Las relaciones deben usar:
+Las relaciones usan:
 
-brand_id
-category_id
-product_id
-variant_id
+- `brand_id`
+- `category_id`
+- `product_id`
+- `variant_id`
+
+Los slugs son identificadores públicos de URL y no sustituyen el contrato de relaciones internas salvo cuando el propio `id` canónico se haya definido explícitamente con el mismo valor.
 
 ## 14. Slugs
 
-Los slugs son identificadores públicos para URL.
-
-Deben ser:
+Los slugs deben ser:
 
 - únicos;
 - legibles;
@@ -284,40 +290,27 @@ Cambiar un slug publicado puede romper URLs existentes.
 
 Un campo opcional vacío representa ausencia.
 
-No utilizar como sustitutos artificiales:
+No utilizar sustitutos artificiales como:
 
-N/A
--
+- `N/A`
+- `-`
+- `NULL`
+- `sin información`
 
-NULL
-sin información
-consultar
-
-El adapter debe convertir correctamente los valores vacíos al modelo interno.
+El adapter convierte los valores vacíos al modelo interno correspondiente.
 
 ## 16. Booleanos y números
 
-Los booleanos deben usar únicamente:
+Los booleanos de la fuente deben representar únicamente verdadero o falso.
 
-TRUE
-FALSE
-
-Los números deben ser valores numéricos reales.
-
-No almacenar precios como:
-
-$15
-15 USD
-15,00
-
-La presentación del precio corresponde a la interfaz.
+Los números deben ser valores numéricos reales. La presentación monetaria pertenece a la interfaz o a los campos editoriales `label`/`note`, no al campo `amount`.
 
 ## 17. Modelo interno
 
-La fuente tabular debe convertirse a:
+La fuente tabular se convierte a:
 
+```text
 Catalog
-
 - brands[]
 - categories[]
 - products[]
@@ -326,27 +319,25 @@ Catalog
   - prices[]
   - images[]
   - features[]
+```
 
-La UI nunca debe conocer la estructura de las pestañas.
+La UI nunca conoce la estructura de las pestañas.
 
-## 18. Orden de transformación
+## 18. Orden lógico de transformación
 
-El adapter procesa lógicamente:
+El adapter procesa:
 
-meta
-brands
-categories
-products
-variants
-variant_options
-prices
-images
-features
+1. `meta`
+2. `brands`
+3. `categories`
+4. `products`
+5. `variants`
+6. `variant_options`
+7. `prices`
+8. `images`
+9. `features`
 
-Después ejecuta:
-
-catalogSchema
-validateCatalogIntegrity
+Después aplica validación de esquema e integridad del dominio.
 
 ## 19. Validación
 
@@ -354,9 +345,9 @@ Debe existir validación en dos niveles.
 
 Nivel fuente:
 
-- columnas;
+- encabezados y columnas;
 - tipos;
-- valores;
+- valores permitidos;
 - duplicados;
 - referencias;
 - filas incompletas;
@@ -364,63 +355,70 @@ Nivel fuente:
 
 Nivel dominio:
 
-- catalogSchema;
-- validateCatalogIntegrity.
+- esquema Zod;
+- integridad relacional y reglas de publicación.
 
-Cualquier error debe detener el proceso.
+Cualquier error bloqueante debe detener el proceso.
 
 ## 20. Publicación
 
 Solo llegan al sitio los registros que:
 
 - tienen estructura válida;
-- pasan Zod;
+- pasan el adapter y Zod;
 - pasan integridad;
-- son publicables.
+- cumplen las reglas de publicación.
 
 Los registros inactivos pueden permanecer en la fuente sin aparecer en el sitio.
 
-## 21. Fuente actual
+## 21. Fuente actual y snapshot reproducible
 
-La fuente actual es:
+La fuente editorial actual es Google Sheets.
 
-src/data/catalog.ts
+El script:
 
-Se mantendrá durante la transición.
+```text
+scripts/sync-catalog-from-google.ts
+```
 
-## 22. Fuente futura
+lee las nueve pestañas canónicas y genera:
 
-La siguiente fuente será Google Sheets.
+```text
+src/data/catalog-source.google.generated.ts
+```
 
-Google Sheets será consultado durante el build.
+El navegador nunca consulta Google Sheets directamente.
 
-El navegador nunca consultará Google Sheets directamente.
+El archivo generado se versiona como snapshot reproducible, pero no se edita manualmente.
 
-La UI continuará utilizando CatalogRepository.
+## 22. Staging editorial
+
+Las pestañas `catalog_intake` y `catalog_intake_*` pueden contener datos importados, normalizados o pendientes de revisión.
+
+No forman parte del runtime contract.
+
+Una fila solo puede llegar al sitio después de ser promovida a la pestaña canónica correspondiente y superar las validaciones.
 
 ## 23. Seguridad
 
-Las credenciales de la fuente no pertenecen al código público ni al bundle del navegador.
+Las credenciales de Google Sheets no pertenecen al código público ni al bundle del navegador.
 
-Las credenciales solo deben existir en el entorno de build.
+Solo deben existir en el entorno de build o CI.
+
+Nunca versionar service-account JSON, private keys, tokens o secretos.
 
 ## 24. Evolución
 
-El mismo contrato debe permitir sustituir Google Sheets posteriormente por:
+El mismo límite `Source -> Adapter -> Catalog` debe permitir sustituir Google Sheets en el futuro por otra fuente —por ejemplo una API, PostgreSQL o MAORUSO CORE— sin reescribir la interfaz pública.
 
-- REST API;
-- GraphQL;
-- PostgreSQL;
-- MAORUSO CORE.
-
-La interfaz pública no debe cambiar por sustituir la fuente.
+Esa migración no forma parte de la V1 actual.
 
 ## 25. Criterio de éxito
 
-La integración será válida cuando una nueva fuente pueda producir el mismo Catalog válido que la fuente actual y todas las pruebas existentes continúen pasando sin modificar los componentes de presentación.
+La integración es válida cuando la fuente produce un `Catalog` íntegro, reproducible y publicable, y las pruebas y el build continúan pasando sin acoplar los componentes de presentación a la fuente tabular.
 
 ## 26. Estado
 
-Este documento define la versión inicial del contrato comercial público.
+Este documento describe el contrato comercial público vigente (`schema_version = 1`).
 
-La integración técnica de Google Sheets debe cumplir este contrato antes de considerarse completa.
+Cualquier cambio incompatible exige actualizar la versión del esquema y la documentación canónica antes de modificar consumidores.
