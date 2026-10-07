@@ -26,35 +26,44 @@ const initialFilters: CatalogFiltersState = {
   brandId: "ALL",
   categoryId: "ALL",
   approval: "ALL",
-  availability: "ALL",
 };
 
 export function CatalogClient({ products, brands, categories }: CatalogClientProps) {
   const [filters, setFilters] = useState<CatalogFiltersState>(initialFilters);
-
   const [sort, setSort] = useState<CatalogSort>("featured");
 
-  const brandNames = useMemo(
-    () => Object.fromEntries(brands.map((brand) => [brand.id, brand.name])),
-    [brands],
-  );
-
-  const categoryNames = useMemo(
-    () => Object.fromEntries(categories.map((category) => [category.id, category.name])),
+  const activeBrands = useMemo(() => brands.filter((brand) => brand.active), [brands]);
+  const activeCategories = useMemo(
+    () => categories.filter((category) => category.active),
     [categories],
   );
 
+  const brandNames = useMemo(
+    () => Object.fromEntries(activeBrands.map((brand) => [brand.id, brand.name])),
+    [activeBrands],
+  );
+
+  const categoryNames = useMemo(
+    () => Object.fromEntries(activeCategories.map((category) => [category.id, category.name])),
+    [activeCategories],
+  );
+
   const filteredProducts = useMemo(() => {
-    const filtered = filterProducts(products, filters, brandNames, categoryNames);
+    const filtered = filterProducts(
+      products,
+      filters,
+      brandNames,
+      categoryNames,
+      activeCategories,
+    );
 
     return sortProducts(filtered, sort);
-  }, [products, filters, sort, brandNames, categoryNames]);
+  }, [products, filters, sort, brandNames, categoryNames, activeCategories]);
 
   const activeFilterCount = [
     filters.brandId !== "ALL",
     filters.categoryId !== "ALL",
     filters.approval !== "ALL",
-    filters.availability !== "ALL",
   ].filter(Boolean).length;
 
   function clearFilters() {
@@ -105,8 +114,8 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
           <div className="border-t border-black/10 p-4">
             <CatalogFilters
               filters={filters}
-              brands={brands}
-              categories={categories}
+              brands={activeBrands}
+              categories={activeCategories}
               onChange={setFilters}
               onReset={clearFilters}
             />
@@ -114,13 +123,13 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
         </details>
       </div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)]">
+      <div className="mt-8 grid gap-8 lg:grid-cols-[260px_minmax(0,1fr)]">
         <aside className="hidden lg:block">
-          <div className="sticky top-24">
+          <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto overscroll-contain pr-1">
             <CatalogFilters
               filters={filters}
-              brands={brands}
-              categories={categories}
+              brands={activeBrands}
+              categories={activeCategories}
               onChange={setFilters}
               onReset={clearFilters}
             />

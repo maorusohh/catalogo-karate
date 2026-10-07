@@ -1,4 +1,5 @@
-import type { ApprovalLevel, AvailabilityStatus, Product } from "@/types/catalog";
+import { getCategoryTreeIds } from "@/lib/catalog/scoped";
+import type { ApprovalLevel, Category, Product } from "@/types/catalog";
 
 export type CatalogSort = "featured" | "name-asc" | "name-desc" | "price-asc" | "price-desc";
 
@@ -7,7 +8,6 @@ export type CatalogFilters = {
   brandId: string;
   categoryId: string;
   approval: ApprovalLevel | "ALL";
-  availability: AvailabilityStatus | "ALL";
 };
 
 type CatalogReferenceMap = Record<string, string>;
@@ -25,8 +25,18 @@ export function filterProducts(
   filters: CatalogFilters,
   brandNames: CatalogReferenceMap,
   categoryNames: CatalogReferenceMap,
+  categories: Category[],
 ): Product[] {
   const normalizedSearch = normalize(filters.search);
+  const selectedCategoryIds =
+    filters.categoryId === "ALL"
+      ? null
+      : new Set(
+          getCategoryTreeIds(
+            filters.categoryId,
+            categories.filter((category) => category.active),
+          ),
+        );
 
   return products.filter((product) => {
     if (!product.active) {
@@ -37,15 +47,11 @@ export function filterProducts(
       return false;
     }
 
-    if (filters.categoryId !== "ALL" && product.categoryId !== filters.categoryId) {
+    if (selectedCategoryIds && !selectedCategoryIds.has(product.categoryId)) {
       return false;
     }
 
     if (filters.approval !== "ALL" && product.approval !== filters.approval) {
-      return false;
-    }
-
-    if (filters.availability !== "ALL" && product.availability !== filters.availability) {
       return false;
     }
 

@@ -6,7 +6,7 @@ import { catalogRepository } from "@/lib/catalog/static-repository";
 export const metadata: Metadata = {
   title: "Catálogo",
   description:
-    "Explora equipamiento de Karate-Do por producto, marca, categoría, aprobación y disponibilidad.",
+    "Explora equipamiento de Karate-Do por producto, marca, categoría y homologación.",
 };
 
 export default function CatalogoPage() {
@@ -21,13 +21,13 @@ export default function CatalogoPage() {
           Equipamiento
         </p>
 
-        <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-neutral-950 sm:text-5xl">
+        <h1 className="mt-3 text-4xl leading-[1.05] font-semibold tracking-[-0.02em] text-neutral-950 sm:text-5xl">
           Explora el catálogo.
         </h1>
 
         <p className="mt-5 text-base leading-7 text-neutral-600 sm:text-lg">
-          Encuentra productos por nombre, marca, categoría, aprobación o disponibilidad. La
-          información comercial definitiva se confirma al momento de la consulta.
+          Encuentra productos por nombre, marca, categoría u homologación. La disponibilidad y los
+          detalles finales se confirman al momento de la consulta.
         </p>
       </div>
 

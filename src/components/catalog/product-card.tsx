@@ -5,9 +5,9 @@ import type { ApprovalLevel, AvailabilityStatus, Product } from "@/types/catalog
 
 const approvalLabels: Record<ApprovalLevel, string> = {
   WKF: "WKF",
-  NATIONAL: "Aprobación nacional",
+  NATIONAL: "FVKD",
   NON_APPROVED: "No aprobado",
-  UNSPECIFIED: "Por confirmar",
+  UNSPECIFIED: "Sin homologación",
 };
 
 const availabilityLabels: Record<AvailabilityStatus, string> = {
