@@ -66,6 +66,7 @@ const fixedPriceSchema = z
     basis: z.enum(["DIRECT_USD", "BCV_RATE_USD", "EURO_RATE_USD", "USDT"]),
     label: z.string().min(1),
     note: z.string().min(1).optional(),
+    variantId: z.string().min(1).optional(),
   })
   .strict();
 
@@ -76,6 +77,7 @@ const consultPriceSchema = z
     basis: z.literal("CONSULT"),
     label: z.string().min(1),
     note: z.string().min(1).optional(),
+    variantId: z.string().min(1).optional(),
   })
   .strict();
 
