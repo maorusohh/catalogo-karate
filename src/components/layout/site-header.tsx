@@ -30,8 +30,8 @@ export function SiteHeader() {
                 Catálogo Karate-Do
               </span>
 
-              <span className="hidden text-[10px] font-medium tracking-[0.18em] text-white/42 uppercase sm:block">
-                Equipamiento · Venezuela
+              <span className="hidden text-[10px] font-medium tracking-[0.14em] text-white/42 uppercase sm:block">
+                Dojo Naha Te · Uchiage Kai de Venezuela
               </span>
             </span>
           </Link>
