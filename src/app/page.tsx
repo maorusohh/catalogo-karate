@@ -28,7 +28,8 @@ const categoryHighlights = [
   {
     title: "Protecciones",
     href: "/categoria/protecciones",
-    description: "Guantines, empeineras, espinilleras, petos y otras protecciones para la práctica.",
+    description:
+      "Guantines, empeineras, espinilleras, petos y otras protecciones para la práctica.",
   },
   {
     title: "Cinturones",
@@ -89,7 +90,10 @@ const products = catalogRepository.getProducts();
 const activeProducts = products.filter((product) => product.active);
 
 const featuredProducts = activeProducts.filter((product) => product.featured);
-const selectedProducts = (featuredProducts.length > 0 ? featuredProducts : activeProducts).slice(0, 4);
+const selectedProducts = (featuredProducts.length > 0 ? featuredProducts : activeProducts).slice(
+  0,
+  4,
+);
 
 const brands = catalogRepository.getBrands();
 const categories = catalogRepository.getCategories();
@@ -171,7 +175,9 @@ export default function HomePage() {
             <div className="relative min-h-[17rem] overflow-hidden rounded-[28px] border border-white/10 bg-[#1b1b1b] shadow-[0_24px_60px_rgb(0_0_0_/_0.30)] sm:min-h-[19rem] lg:min-h-[19rem]">
               <Image
                 src={heroImageSrc}
-                alt={hasHeroImage ? "Karatekas entrenando en un dojo" : "Clase de Karate-Do en un dojo"}
+                alt={
+                  hasHeroImage ? "Karatekas entrenando en un dojo" : "Clase de Karate-Do en un dojo"
+                }
                 fill
                 priority
                 sizes="(max-width: 1023px) 100vw, 48vw"

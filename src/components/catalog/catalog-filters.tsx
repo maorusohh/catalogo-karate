@@ -87,7 +87,9 @@ function FilterSection({
     <details className="group overflow-hidden rounded-2xl border border-black/10 bg-white transition-colors open:border-neutral-300">
       <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-3.5 [&::-webkit-details-marker]:hidden">
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold tracking-[0.06em] text-neutral-500 uppercase">{title}</p>
+          <p className="text-xs font-semibold tracking-[0.06em] text-neutral-500 uppercase">
+            {title}
+          </p>
           <p className="mt-1 truncate text-sm font-semibold tracking-[-0.01em] text-neutral-950">
             {value}
           </p>
