@@ -3,12 +3,16 @@
 import { useCart } from "@/components/cart/cart-provider";
 import type { ProductVariant } from "@/types/catalog";
 
+const DEFAULT_VARIANT_ID = "__default__";
+
 type AddToCartButtonProps = {
   productId: string;
   productName: string;
   sku: string;
   brandName: string;
   variant: ProductVariant | undefined;
+  requiresVariant: boolean;
+  paymentLabel?: string;
 };
 
 export function AddToCartButton({
@@ -17,38 +21,43 @@ export function AddToCartButton({
   sku,
   brandName,
   variant,
+  requiresVariant,
+  paymentLabel,
 }: AddToCartButtonProps) {
   const { items, addItem, openCart } = useCart();
 
-  const isDisabled = !variant || !variant.available;
+  const variantId = variant?.id ?? DEFAULT_VARIANT_ID;
+  const isDisabled = requiresVariant && (!variant || !variant.available);
 
-  const alreadyInCart = variant
-    ? items.some((item) => item.productId === productId && item.variantId === variant.id)
-    : false;
+  const matchingItem = items.find(
+    (item) => item.productId === productId && item.variantId === variantId,
+  );
+
+  const alreadyInCart =
+    Boolean(matchingItem) && matchingItem?.snapshot.paymentLabel === paymentLabel;
 
   function handleAddToCart() {
-    if (!variant || !variant.available) {
+    if (isDisabled) {
       return;
     }
 
-    if (!alreadyInCart) {
-      const selectedOptions = Object.fromEntries(
-        variant.options.map((option) => [option.name, option.value]),
-      );
+    const selectedOptions = variant
+      ? Object.fromEntries(variant.options.map((option) => [option.name, option.value]))
+      : {};
 
-      addItem({
-        productId,
-        variantId: variant.id,
-        quantity: 1,
-        selectedOptions,
-        snapshot: {
-          productName,
-          sku,
-          brandName,
-          variantLabel: variant.label,
-        },
-      });
-    }
+    addItem({
+      productId,
+      variantId,
+      quantity: matchingItem?.quantity ?? 1,
+      selectedOptions,
+      snapshot: {
+        productName,
+        sku,
+        brandName,
+        variantLabel: variant?.label ?? "Sin variante",
+        paymentLabel,
+      },
+    });
 
     openCart();
   }
@@ -65,7 +74,9 @@ export function AddToCartButton({
         ? "Selecciona una variante"
         : alreadyInCart
           ? "Ver en el carrito"
-          : "Agregar al carrito"}
+          : matchingItem
+            ? "Actualizar selección"
+            : "Agregar al carrito"}
     </button>
   );
 }
