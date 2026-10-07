@@ -2,7 +2,7 @@
 
 Última revisión canónica: **7 de octubre de 2026**.
 
-Este documento describe el estado comprobado del repositorio, la fuente editorial, el cierre técnico de la V1 y su publicación en producción.
+Este documento describe el estado comprobado del repositorio, la fuente editorial, el cierre técnico de la V1 y los checkpoints posteriores ya integrados en `main`.
 
 ## 1. Estado de ramas
 
@@ -12,7 +12,13 @@ Rama estable por defecto:
 main
 ```
 
-La rama `feature/profesionalizacion` quedó integrada y se mantiene sincronizada con `main` al cierre de los checkpoints de V1.
+`main` contiene el checkpoint de imágenes publicado en el commit:
+
+```text
+3343f73 feat: complete catalog product images checkpoint
+```
+
+La rama `feature/catalog-ux-main-rebuild` permanece separada. Al cierre de esta revisión contiene 7 commits propios y está 1 commit por detrás de `main`. No debe fusionarse automáticamente: sus cambios de índices de navegación deben revisarse como checkpoint independiente.
 
 ## 2. Alcance V1 cerrado
 
@@ -26,11 +32,11 @@ Incluye:
 - ficha de producto;
 - aprobación WKF, nacional, no aprobada o no especificada;
 - precios y notas de tasa según contrato comercial;
+- variantes y precios por variante cuando existen datos verificados;
 - carrito de consulta local;
 - generación de consulta por WhatsApp;
 - imágenes locales auditadas;
 - Google Sheets como CMS editorial;
-- variantes únicamente cuando existan datos comerciales verificables;
 - publicación estática en Cloudflare Pages.
 
 No incluye:
@@ -73,7 +79,7 @@ La UI no consulta Google Sheets directamente. Las pestañas `catalog_intake*` so
 
 El deployment de producción consume el snapshot comercial versionado. No requiere acceso directo a Google Sheets ni credenciales del service account durante el build público ordinario.
 
-## 4. Estado canónico de Google Sheets
+## 4. Estado canónico de Google Sheets y snapshot
 
 Fuente editorial:
 
@@ -101,96 +107,90 @@ Staging editorial:
 - `catalog_intake_images`
 - `catalog_intake_features`
 
-Estado comprobado:
+Estado comprobado por el preflight actual:
 
 - 7 marcas registradas;
 - 5 marcas activas;
-- 25 categorías activas;
+- 25 categorías;
 - 44 productos totales;
 - 41 productos comerciales activos;
 - 3 productos demo inactivos;
-- 77 referencias canónicas de imágenes;
-- 123 precios comerciales;
-- 126 precios totales incluyendo 3 filas demo `CONSULT`;
-- 134 features comerciales;
-- 142 features totales incluyendo 8 filas demo;
-- 0 variantes comerciales canónicas.
+- 158 variantes;
+- 105 referencias canónicas de imágenes;
+- 177 precios.
 
-Las dos marcas demo permanecen como datos históricos pero están inactivas. Los tres productos demo también están inactivos y no generan rutas públicas.
+El snapshot generado `src/data/catalog-source.google.generated.ts` representa este estado y no debe editarse manualmente.
 
-## 5. Checkpoint de features — cerrado
+## 5. Variantes y precios — checkpoint integrado
 
-Resultado verificado:
+La etapa anterior que mantenía variantes diferidas ya fue superada con datos comerciales verificados.
 
-- 134/134 filas comerciales promovidas;
-- 0 referencias huérfanas;
-- 134 combinaciones `product_id + feature` únicas;
-- 134 combinaciones `product_id + sort_order` únicas;
-- `sort_order` conservado;
-- datos canónicos materializados como valores estáticos.
+El catálogo actual soporta:
 
-## 6. Checkpoint de precios — cerrado
+- 158 variantes en el estado validado;
+- precios a nivel de producto;
+- precios específicos por variante cuando corresponda;
+- resolución de precio según la variante seleccionada;
+- bloqueo de adición al carrito cuando no existe un precio resoluble;
+- tarjetas de catálogo conservando el resumen de precio a nivel de producto.
 
-Resultado verificado:
+Los commits de `main` incluyen cobertura unitaria y E2E para tallaje, protecciones, precios dependientes de talla y referencias de precio por variante.
 
-- 123/123 precios comerciales promovidos;
-- 41 productos comerciales cubiertos;
-- 41 `DIRECT_USD`;
-- 41 `USDT`;
-- 41 `EURO_RATE_USD`;
-- 0 referencias huérfanas;
-- 0 combinaciones `product_id + basis` duplicadas;
-- 0 combinaciones `product_id + sort_order` duplicadas;
-- 0 montos no positivos;
-- 0 monedas fuera de `USD`/`USDT`;
-- 0 menciones internas de costo, instructor o margen en las notas canónicas.
+La regla de dominio se mantiene: no inventar tallas, colores, combinaciones ni precios que no estén respaldados por información comercial verificable.
 
-## 7. Variantes — diferidas correctamente
+## 6. Assets de producto — checkpoint actualizado
 
-`variants` y `variant_options` no contienen datos comerciales reales.
+El catálogo dispone actualmente de **105 referencias canónicas de imágenes**.
 
-No se inventaron tallas, colores ni combinaciones. La carga de variantes queda diferida hasta disponer de información comercial verificable.
-
-## 8. Assets de producto — checkpoint cerrado
-
-Se incorporaron y versionaron exactamente **77 archivos WebP comerciales** bajo:
+El checkpoint más reciente incorporó exactamente **28 nuevos archivos WebP** bajo:
 
 ```text
 public/images/catalogo/products/
 ```
 
-Resultado verificado:
-
-- 77/77 referencias de `images.src` resuelven a archivos locales;
-- 0 rutas faltantes;
-- 0 errores de casing;
-- 0 hotlinks usados como sustituto de producción;
-- los assets de logos locales permanecen fuera del contrato runtime porque `brands.logo` continúa vacío;
-- `recursos/` permanece fuera del repositorio por diseño.
-
-## 9. Snapshot comercial — cerrado
-
-`src/data/catalog-source.google.generated.ts` fue regenerado desde Google Sheets y ya representa el catálogo comercial vigente.
-
-El snapshot contiene:
-
-- 7 marcas registradas;
-- 25 categorías;
-- 44 productos;
-- 41 productos activos;
-- 77 imágenes;
-- 126 precios totales;
-- 0 variantes comerciales.
-
-El archivo es generado y no debe editarse manualmente.
-
-## 10. Validación integral de cierre técnico
-
-Cadena ejecutada y aprobada:
+La validación ejecutada después del sync confirmó:
 
 ```text
-npm run catalog:sync
-npm run catalog:report
+Catalog image validation passed. References checked: 105.
+```
+
+Quedan exactamente 3 productos activos sin imagen:
+
+- `mallems-cinturones-grado-bordado-17`;
+- `generica-cinturon-blanco-principiantes-20`;
+- `adidas-k200dnakit`.
+
+El caso `adidas-k200dnakit` está bloqueado deliberadamente: las fotografías suministradas muestran identificación **K220 DNA / K220DNAKIT**, mientras el producto canónico actual es **K200 DNA / ADIDAS-K200DNAKIT**. No se deben publicar esas fotografías bajo K200 hasta confirmar o corregir la identidad comercial del producto.
+
+La fotografía Mallems no identificada que se separó durante el intake permanece descartada y sin asignar.
+
+## 7. Features — pendiente editorial mínimo
+
+El preflight actual solo detecta un producto activo sin características:
+
+```text
+mallems-maleta-viajera-28
+```
+
+No debe completarse con información inventada. Se cerrará cuando exista una fuente comercial confiable para sus características.
+
+## 8. Logos de marca
+
+El contrato runtime ya enlaza logos locales para:
+
+- Best Sport -> `/images/brands/best-sport.webp`;
+- Mallems -> `/images/brands/mallems.webp`;
+- No Kashi -> `/images/brands/no-kashi.png`.
+
+`Generica` y `Adidas` continúan con `brands.logo` vacío.
+
+La carpeta local no rastreada `public/images/catalogo/brands/` no forma parte del contrato runtime actual y no debe agregarse al repositorio sin una auditoría específica de su contenido.
+
+## 9. Validación integral del estado actual
+
+Cadena ejecutada y aprobada sobre `main`:
+
+```text
 npm run catalog:preflight
 npm run format:check
 npm run lint
@@ -199,39 +199,50 @@ npm run build
 npm run test:e2e
 ```
 
-Resultados finales comprobados:
+Resultados comprobados:
 
-- validación textual: PASSED;
-- validación de imágenes: 77/77;
 - preflight: 0 errores;
-- warnings editoriales: 28;
+- warnings editoriales: 4;
+- imágenes: 105 referencias;
+- variantes: 158;
+- precios: 177;
 - Prettier: PASSED;
 - ESLint: PASSED;
-- unit tests: 24/24;
+- unit tests: 31/31;
 - production build: PASSED;
-- páginas estáticas generadas: 79/79;
-- rutas demo exportadas: 0;
-- E2E Playwright: 72/72.
+- páginas estáticas generadas: 69/69;
+- E2E Playwright: 99/99.
 
-Los 28 warnings no son errores de integridad. Corresponden a contenido editorial todavía no suministrado:
+Los 4 warnings actuales son:
 
-- 11 productos activos sin features completas;
-- 17 productos activos sin imágenes verificadas.
+1. imagen faltante: `mallems-cinturones-grado-bordado-17`;
+2. imagen faltante: `generica-cinturon-blanco-principiantes-20`;
+3. features faltantes: `mallems-maleta-viajera-28`;
+4. imagen faltante: `adidas-k200dnakit`.
 
-Estos pendientes no bloquean la V1 y no deben resolverse inventando datos.
+No son errores de integridad y no deben resolverse inventando datos.
 
-## 11. Integración y normalización Git — cerradas
+## 10. Integración Git
 
-La profesionalización quedó integrada en `main` y la rama `feature/profesionalizacion` se mantiene alineada con la rama estable.
+El checkpoint de imágenes quedó publicado en `main` como fast-forward desde el estado anterior:
 
-Se añadió `.gitattributes` para fijar `LF` en archivos de texto y evitar inconsistencias de checkout en Windows. La certificación final confirmó:
+```text
+436cca7 -> 3343f73
+```
 
-- working tree tracked limpio;
-- `main` local/remoto sincronizados;
-- `feature/profesionalizacion` local/remota sincronizadas;
-- sin `reset`, `force push` ni pérdida de commits.
+El push HTTPS devolvió errores internos de GitHub incluso con un commit vacío de diagnóstico. El mismo commit se publicó correctamente por SSH.
 
-## 12. Deployment V1 — cerrado
+La configuración local del proyecto puede usar:
+
+```text
+git@github.com:maorusohh/catalogo-karate.git
+```
+
+como URL de `origin` para fetch y push.
+
+La rama temporal local `push-diagnostic` fue eliminada después de la prueba.
+
+## 11. Deployment
 
 Proveedor:
 
@@ -253,48 +264,43 @@ Configuración de publicación:
 - build: `npx next build`;
 - directorio publicado: `out`;
 - `next.config.ts`: `output: "export"`, `trailingSlash: true`, imágenes `unoptimized`;
-- variables de entorno del catálogo en producción: ninguna requerida para el deployment ordinario;
-- el sitio publica el snapshot comercial ya versionado en GitHub.
+- variables de entorno del catálogo en producción: ninguna requerida para el deployment ordinario.
 
-Auditoría pública básica ejecutada sobre la URL de producción:
+La V1 ya estaba publicada y auditada antes del último checkpoint. Tras el commit `3343f73`, el push a `main` quedó confirmado; corresponde realizar un smoke check de producción para verificar que Cloudflare haya desplegado también las nuevas imágenes.
 
-- `/`: HTTP 200;
-- `/catalogo/`: HTTP 200;
-- categorías críticas: HTTP 200;
-- marcas Best Sport y Mallems: HTTP 200;
-- productos representativos Best Sport y Mallems: HTTP 200;
-- `/como-comprar/`: HTTP 200;
-- `/entregas/`: HTTP 200;
-- `/contacto/`: HTTP 200;
-- WebP comercial representativo: HTTP 200 con contenido de imagen;
-- enlace público a WhatsApp: presente;
-- enlaces a productos comerciales: presentes;
-- contenido demo público: no detectado.
+La herramienta web externa usada en esta sesión no puede resolver temporalmente el subdominio `pages.dev`, por lo que esa comprobación debe hacerse desde el entorno local o desde el panel de Cloudflare.
 
-Resultado:
+## 12. Backlog editorial y de assets
 
-```text
-AUDITORÍA PÚBLICA BÁSICA: PASSED
-```
+Además de los 4 warnings activos, existe material que no debe mezclarse con el catálogo vigente sin una decisión explícita:
 
-La V1 se considera **técnicamente cerrada y publicada**.
+- fotografías K220 bloqueadas hasta resolver K200/K220;
+- fotografías de productos Adidas y Senshi que actualmente no corresponden a productos canónicos activos;
+- la fotografía Mallems no identificada descartada;
+- assets locales dentro de `recursos/`, que permanecen fuera del repositorio por diseño;
+- `public/images/catalogo/brands/`, carpeta local no rastreada pendiente de auditoría antes de cualquier posible uso.
 
-Una comprobación adicional desde herramientas externas de esta sesión no pudo resolver temporalmente el subdominio `pages.dev`; por integridad documental, ese intento no se registra como una segunda auditoría aprobada. La auditoría pública realizada desde el entorno del proyecto sí respondió correctamente por HTTPS y constituye la evidencia de cierre del checkpoint.
+## 13. Pendientes posteriores a V1 — orden recomendado
 
-## 13. Pendientes posteriores a V1
+Prioridad operativa:
 
-Los siguientes puntos quedan fuera del cierre de V1 y solo deben abordarse cuando exista información o necesidad real:
-
-1. completar imágenes faltantes de productos activos cuando se disponga de assets verificables;
-2. completar features editoriales faltantes cuando el proveedor suministre información confiable;
-3. incorporar variantes reales cuando existan tallas, colores o combinaciones verificadas;
-4. decidir formalmente si los logos de marca locales entran al contrato `brands.logo`;
-5. optimizar warnings de rendimiento LCP de imágenes above-the-fold;
-6. repetir una auditoría externa desde otro punto de red cuando resulte útil;
-7. evaluar un dominio personalizado solo si existe necesidad comercial real.
+1. ejecutar smoke check del deployment posterior a `3343f73`;
+2. cerrar la documentación canónica con este estado actualizado;
+3. conseguir o verificar imágenes para `mallems-cinturones-grado-bordado-17`;
+4. conseguir o verificar imagen para `generica-cinturon-blanco-principiantes-20`;
+5. resolver comercialmente la discrepancia Adidas K200/K220 antes de publicar fotografías;
+6. completar features de `mallems-maleta-viajera-28` cuando exista información confiable;
+7. decidir si Adidas y/o Generica requieren logo propio en `brands.logo`;
+8. auditar y decidir el destino de `public/images/catalogo/brands/` y del material futuro en `recursos/`;
+9. revisar por separado los 7 commits de `feature/catalog-ux-main-rebuild` y decidir si se integran, se rehacen sobre `main` o se archivan;
+10. optimizar warnings de rendimiento LCP de imágenes above-the-fold si siguen presentes en mediciones actuales;
+11. repetir una auditoría externa desde otro punto de red cuando resulte útil;
+12. evaluar un dominio personalizado solo si existe necesidad comercial real.
 
 ## 14. Regla de continuidad
 
-La V1 queda cerrada y publicada. No reabrir arquitectura, backend, autenticación, pagos ni inventario para este alcance.
+La V1 permanece cerrada y publicada. No reabrir arquitectura, backend, autenticación, pagos ni inventario para este alcance.
 
-Cualquier trabajo nuevo debe partir de `main`, preservar el contrato de datos existente y tratar las mejoras editoriales, de rendimiento, branding, dominio o UX como checkpoints independientes.
+Todo trabajo nuevo debe partir de `main`, preservar el contrato de datos existente y tratar cada mejora editorial, de assets, UX, rendimiento, branding o dominio como un checkpoint independiente.
+
+Cuando un dato comercial no sea verificable, debe permanecer pendiente antes que ser completado por suposición.
