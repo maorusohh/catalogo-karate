@@ -90,7 +90,8 @@ const server = createServer(async (request, response) => {
     return;
   }
 
-  const contentType = contentTypes.get(path.extname(filePath).toLowerCase()) ?? "application/octet-stream";
+  const contentType =
+    contentTypes.get(path.extname(filePath).toLowerCase()) ?? "application/octet-stream";
 
   response.writeHead(200, {
     "Cache-Control": "no-store",
