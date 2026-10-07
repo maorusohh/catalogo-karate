@@ -135,12 +135,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className="lg:sticky lg:top-28">
           <div className="flex flex-wrap gap-2">
             {brand ? (
-              <Link
-                href={`/marca/${brand.slug}`}
-                className="inline-flex min-h-8 items-center rounded-full bg-neutral-950 px-3 text-xs font-semibold text-white transition-colors hover:bg-[#b31322]"
-              >
+              <span className="inline-flex min-h-8 items-center rounded-full bg-neutral-950 px-3 text-xs font-semibold text-white">
                 {brand.name}
-              </Link>
+              </span>
             ) : null}
 
             {category ? (
