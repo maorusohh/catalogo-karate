@@ -146,7 +146,7 @@ export function CatalogFilters({
                 <details
                   key={parent.id}
                   className="overflow-hidden rounded-xl border border-black/8 bg-white"
-                  open={selectedInGroup || undefined}
+                  defaultOpen={selectedInGroup}
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
                     <span>{parent.name}</span>
@@ -226,7 +226,11 @@ export function CatalogFilters({
                 >
                   <span className="block text-sm font-semibold">{option.label}</span>
                   {option.detail ? (
-                    <span className={`mt-0.5 block text-[11px] ${selected ? "text-white/60" : "text-neutral-400"}`}>
+                    <span
+                      className={`mt-0.5 block text-[11px] ${
+                        selected ? "text-white/60" : "text-neutral-400"
+                      }`}
+                    >
                       {option.detail}
                     </span>
                   ) : null}
