@@ -2045,7 +2045,7 @@ export const catalogSourceGoogle = {
     ],
     [
       "mallems-kata-gi-22",
-      "/images/catalogo/products/MALLEMS-22__01.webp",
+      "/images/catalogo/products/MALLEMS-22__02.webp",
       "Kata Gi",
       "PROVIDER",
       "https://www.mallems.com/",
@@ -2053,7 +2053,7 @@ export const catalogSourceGoogle = {
     ],
     [
       "mallems-kata-gi-22",
-      "/images/catalogo/products/MALLEMS-22__02.webp",
+      "/images/catalogo/products/MALLEMS-22__01.webp",
       "Kata Gi",
       "PROVIDER",
       "https://www.mallems.com/",
