@@ -9,7 +9,7 @@ test("los índices de marcas y categorías están disponibles", async ({ page })
   await expect(page.getByRole("heading", { name: "Explora por marca.", level: 2 })).toBeVisible();
   await expect(page.getByRole("link", { name: /Mallems/ })).toHaveAttribute(
     "href",
-    "/marca/mallems",
+    "/marca/mallems/",
   );
 
   response = await page.goto("/categoria/", {
@@ -22,7 +22,7 @@ test("los índices de marcas y categorías están disponibles", async ({ page })
   ).toBeVisible();
   await expect(page.getByRole("link", { name: "Karategis", exact: true }).first()).toHaveAttribute(
     "href",
-    "/categoria/karategis",
+    "/categoria/karategis/",
   );
 });
 
