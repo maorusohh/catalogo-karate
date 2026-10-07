@@ -126,7 +126,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <p className="text-xs font-semibold tracking-[0.08em] text-neutral-500 uppercase">
                     Información de aprobación
                   </p>
-                  <p className="mt-1.5 text-sm leading-6 text-neutral-600">{product.approvalNote}</p>
+                  <p className="mt-1.5 text-sm leading-6 text-neutral-600">
+                    {product.approvalNote}
+                  </p>
                 </div>
               ) : null}
             </section>
