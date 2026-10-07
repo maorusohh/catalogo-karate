@@ -44,6 +44,7 @@ export interface ProductPrice {
   basis: PriceBasis;
   label: string;
   note?: string;
+  variantId?: string;
 }
 
 export interface ProductImage {
