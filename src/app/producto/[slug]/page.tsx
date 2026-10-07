@@ -132,7 +132,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           ) : null}
         </div>
 
-        <div className="order-2 lg:order-none lg:sticky lg:top-28">
+        <div className="order-2 lg:sticky lg:top-28 lg:order-none">
           <div className="flex flex-wrap gap-2">
             {brand ? (
               <span className="inline-flex min-h-8 items-center rounded-full bg-neutral-950 px-3 text-xs font-semibold text-white">

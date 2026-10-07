@@ -28,7 +28,9 @@ test("un cinturón 2 Pack expone únicamente la longitud verificada", async ({ p
   await expect(page.getByRole("button", { name: /Color/ })).toHaveCount(0);
 });
 
-test("un karategi con precio por talla actualiza el precio al cambiar la talla", async ({ page }) => {
+test("un karategi con precio por talla actualiza el precio al cambiar la talla", async ({
+  page,
+}) => {
   const response = await page.goto("/producto/mallems-karategi-liviano-entrenamiento-21/", {
     waitUntil: "domcontentloaded",
   });

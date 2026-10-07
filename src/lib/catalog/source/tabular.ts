@@ -522,6 +522,24 @@ export function buildCatalogFromTables(source: CatalogSourceTables): Catalog {
       );
     }
 
+    const variantId = optionalText(record, "variant_id");
+
+    if (variantId) {
+      if (!variantById.has(variantId)) {
+        throw new Error(
+          `${formatContext(context)}: prices references unknown variant "${variantId}".`,
+        );
+      }
+
+      const product = productById.get(productId);
+
+      if (!product?.variants.some((variant) => variant.id === variantId)) {
+        throw new Error(
+          `${formatContext(context)}: variant "${variantId}" does not belong to product "${productId}".`,
+        );
+      }
+    }
+
     const basis = parseEnum<PriceBasis>(
       record,
       "basis",
@@ -552,6 +570,7 @@ export function buildCatalogFromTables(source: CatalogSourceTables): Catalog {
         basis: "CONSULT",
         label,
         note: optionalText(record, "note"),
+        ...(variantId ? { variantId } : {}),
       };
     } else {
       const amount = parsePositiveNumber(record, "amount", context);
@@ -576,6 +595,7 @@ export function buildCatalogFromTables(source: CatalogSourceTables): Catalog {
         basis,
         label,
         note: optionalText(record, "note"),
+        ...(variantId ? { variantId } : {}),
       };
     }
 
