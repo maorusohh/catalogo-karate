@@ -3,6 +3,7 @@ export interface CartItemSnapshot {
   sku: string;
   brandName: string;
   variantLabel: string;
+  paymentLabel?: string;
 }
 
 export interface CartItem {
