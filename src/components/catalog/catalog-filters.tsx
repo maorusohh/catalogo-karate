@@ -87,10 +87,8 @@ function FilterSection({
     <details className="group overflow-hidden rounded-2xl border border-black/10 bg-white transition-colors open:border-neutral-300">
       <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-3.5 [&::-webkit-details-marker]:hidden">
         <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-semibold tracking-[0.15em] text-neutral-500 uppercase">
-            {title}
-          </p>
-          <p className="mt-1 truncate text-sm font-semibold tracking-tight text-neutral-950">
+          <p className="text-xs font-semibold tracking-[0.06em] text-neutral-500 uppercase">{title}</p>
+          <p className="mt-1 truncate text-sm font-semibold tracking-[-0.01em] text-neutral-950">
             {value}
           </p>
         </div>
@@ -140,21 +138,22 @@ export function CatalogFilters({
 
   return (
     <div className="rounded-[1.5rem] border border-black/10 bg-white p-4 shadow-[0_10px_26px_rgba(0,0,0,0.03)]">
-      <div className="flex items-start justify-between gap-4 px-1">
-        <div>
-          <h2 className="text-sm font-semibold tracking-tight text-neutral-950">Filtros</h2>
-          <p className="mt-1 text-xs leading-5 text-neutral-400">
-            Refina el catálogo por marca, categoría y aprobación.
-          </p>
+      <div className="border-b border-black/7 px-1 pb-4">
+        <div className="flex items-baseline justify-between gap-4">
+          <h2 className="text-base font-semibold tracking-[-0.015em] text-neutral-950">
+            Filtrar productos
+          </h2>
+
+          <button
+            type="button"
+            onClick={onReset}
+            className="shrink-0 text-xs font-semibold text-neutral-400 transition-colors hover:text-[var(--ck-red)]"
+          >
+            Restablecer
+          </button>
         </div>
 
-        <button
-          type="button"
-          onClick={onReset}
-          className="shrink-0 rounded-full border border-black/8 px-3 py-1.5 text-[11px] font-semibold text-neutral-500 transition-colors hover:border-neutral-950 hover:text-neutral-950"
-        >
-          Limpiar
-        </button>
+        <p className="mt-1 text-xs leading-5 text-neutral-500">Marca, categoría y aprobación.</p>
       </div>
 
       <div className="mt-4 space-y-2.5">
@@ -377,9 +376,10 @@ export function CatalogFilters({
           </div>
         </FilterSection>
 
-        <p className="rounded-2xl border border-black/6 bg-[#f6f3ed] px-3 py-3 text-xs leading-5 text-neutral-500">
-          La disponibilidad se confirma al momento de la consulta por WhatsApp.
-        </p>
+        <div className="rounded-2xl border border-amber-200/80 bg-amber-50 px-3.5 py-3 text-xs leading-5 text-amber-900/75">
+          <p className="font-semibold text-amber-950">Disponibilidad por confirmar</p>
+          <p className="mt-0.5">Se valida al momento de realizar la consulta por WhatsApp.</p>
+        </div>
       </div>
     </div>
   );
