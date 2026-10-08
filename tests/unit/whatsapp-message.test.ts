@@ -18,9 +18,10 @@ const item: CartItem = {
 };
 
 describe("buildWhatsAppCartMessage", () => {
-  it("incluye la preferencia de pago y omite una variante artificial", () => {
+  it("incluye marca y preferencia de pago, y omite una variante artificial", () => {
     const message = buildWhatsAppCartMessage([item]);
 
+    expect(message).toContain("Marca: Marca Test");
     expect(message).toContain("Forma de pago preferida: 40 USDT / Binance");
     expect(message).not.toContain("Variante: Sin variante");
   });
