@@ -94,7 +94,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </p>
 
               <h2 className="mt-2 text-2xl font-semibold tracking-tight text-neutral-950">
-                Información del producto
+                Información del producto:
               </h2>
 
               {parsedFeatures.length > 0 ? (
