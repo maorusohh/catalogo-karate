@@ -52,7 +52,7 @@ export function HomeBrandsSection({ brands, products }: HomeBrandsSectionProps) 
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {brandsWithProducts.map(({ brand, productCount }) => (
-            <Link key={brand.id} href={`/marca/${brand.slug}`} className="group">
+            <Link key={brand.id} href={`/marcas/${brand.slug}`} className="group">
               <Surface className="flex h-full items-center gap-5 p-5 transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-[var(--ck-shadow-md)] sm:p-6">
                 {brand.logo ? (
                   <BrandLogo
