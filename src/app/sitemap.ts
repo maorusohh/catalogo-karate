@@ -2,6 +2,8 @@ import type { MetadataRoute } from "next";
 
 import { catalogRepository } from "@/lib/catalog/static-repository";
 
+export const dynamic = "force-static";
+
 const baseUrl = "https://catalogo-karate.pages.dev";
 
 function url(pathname: string) {
