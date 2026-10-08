@@ -10,6 +10,7 @@ type VariantSelectorProps = {
 };
 
 type SelectedOptions = Record<string, string>;
+type ColorKind = "BLUE" | "RED" | "YELLOW" | "ORANGE" | "GREEN" | "BROWN" | "OTHER";
 
 function getOptionGroups(variants: ProductVariant[]): Record<string, string[]> {
   const groups: Record<string, string[]> = {};
@@ -61,58 +62,124 @@ function isColorGroup(groupName: string): boolean {
   return normalized === "color" || normalized === "colour";
 }
 
-function getColorKind(value: string): "AO" | "AKA" | "OTHER" {
+function getOptionGroupLabel(groupName: string, valueCount: number): string {
+  const normalized = normalizeValue(groupName);
+  const plural = valueCount > 1;
+
+  if (normalized === "talla") {
+    return plural ? "Tallas:" : "Talla:";
+  }
+
+  if (normalized === "color" || normalized === "colour") {
+    return plural ? "Colores:" : "Color:";
+  }
+
+  if (normalized === "longitud") {
+    return plural ? "Longitudes:" : "Longitud:";
+  }
+
+  return `${groupName}:`;
+}
+
+function getColorKind(value: string): ColorKind {
   const normalized = normalizeValue(value);
 
   if (normalized === "ao" || normalized === "azul" || normalized === "blue") {
-    return "AO";
+    return "BLUE";
   }
 
   if (normalized === "aka" || normalized === "rojo" || normalized === "red") {
-    return "AKA";
+    return "RED";
+  }
+
+  if (normalized === "amarillo" || normalized === "yellow") {
+    return "YELLOW";
+  }
+
+  if (normalized === "naranja" || normalized === "orange") {
+    return "ORANGE";
+  }
+
+  if (normalized === "verde" || normalized === "green") {
+    return "GREEN";
+  }
+
+  if (normalized === "marrón" || normalized === "marron" || normalized === "brown") {
+    return "BROWN";
   }
 
   return "OTHER";
 }
 
-function getColorButtonClasses(
-  kind: "AO" | "AKA" | "OTHER",
-  selected: boolean,
-  available: boolean,
-): string {
+function usesCompetitionColorPair(values: string[]): boolean {
+  if (values.length !== 2) {
+    return false;
+  }
+
+  const kinds = new Set(values.map(getColorKind));
+
+  return kinds.size === 2 && kinds.has("BLUE") && kinds.has("RED");
+}
+
+function getColorButtonClasses(kind: ColorKind, selected: boolean, available: boolean): string {
   if (!available) {
     return "cursor-not-allowed border-black/5 bg-neutral-50 text-neutral-300 line-through";
   }
 
-  if (selected && kind === "AO") {
-    return "border-blue-700 bg-blue-700 text-white shadow-sm shadow-blue-900/15";
+  if (selected) {
+    switch (kind) {
+      case "BLUE":
+        return "border-blue-600 bg-blue-100 text-blue-950 ring-2 ring-blue-600/15 shadow-sm";
+      case "RED":
+        return "border-red-600 bg-red-100 text-red-950 ring-2 ring-red-600/15 shadow-sm";
+      case "YELLOW":
+        return "border-yellow-500 bg-yellow-100 text-yellow-950 ring-2 ring-yellow-500/15 shadow-sm";
+      case "ORANGE":
+        return "border-orange-500 bg-orange-100 text-orange-950 ring-2 ring-orange-500/15 shadow-sm";
+      case "GREEN":
+        return "border-green-600 bg-green-100 text-green-950 ring-2 ring-green-600/15 shadow-sm";
+      case "BROWN":
+        return "border-amber-800 bg-amber-100 text-amber-950 ring-2 ring-amber-800/15 shadow-sm";
+      default:
+        return "border-neutral-500 bg-neutral-100 text-neutral-950 ring-2 ring-neutral-500/15 shadow-sm";
+    }
   }
 
-  if (selected && kind === "AKA") {
-    return "border-[#b31322] bg-[#b31322] text-white shadow-sm shadow-red-950/15";
+  switch (kind) {
+    case "BLUE":
+      return "border-blue-200 bg-white text-blue-800 hover:border-blue-500 hover:bg-blue-50";
+    case "RED":
+      return "border-red-200 bg-white text-red-800 hover:border-red-500 hover:bg-red-50";
+    case "YELLOW":
+      return "border-yellow-200 bg-white text-yellow-900 hover:border-yellow-500 hover:bg-yellow-50";
+    case "ORANGE":
+      return "border-orange-200 bg-white text-orange-900 hover:border-orange-500 hover:bg-orange-50";
+    case "GREEN":
+      return "border-green-200 bg-white text-green-800 hover:border-green-500 hover:bg-green-50";
+    case "BROWN":
+      return "border-amber-300 bg-white text-amber-900 hover:border-amber-700 hover:bg-amber-50";
+    default:
+      return "border-black/10 bg-white text-neutral-700 hover:border-neutral-950";
   }
-
-  if (kind === "AO") {
-    return "border-blue-200 bg-blue-50 text-blue-800 hover:border-blue-500 hover:bg-blue-100";
-  }
-
-  if (kind === "AKA") {
-    return "border-red-200 bg-red-50 text-red-800 hover:border-[#b31322] hover:bg-red-100";
-  }
-
-  return "border-black/10 bg-white text-neutral-700 hover:border-neutral-950";
 }
 
-function getSwatchClasses(kind: "AO" | "AKA" | "OTHER"): string {
-  if (kind === "AO") {
-    return "bg-blue-700";
+function getSwatchClasses(kind: ColorKind): string {
+  switch (kind) {
+    case "BLUE":
+      return "bg-blue-700";
+    case "RED":
+      return "bg-[#b31322]";
+    case "YELLOW":
+      return "bg-yellow-400";
+    case "ORANGE":
+      return "bg-orange-500";
+    case "GREEN":
+      return "bg-green-600";
+    case "BROWN":
+      return "bg-amber-900";
+    default:
+      return "bg-neutral-400";
   }
-
-  if (kind === "AKA") {
-    return "bg-[#b31322]";
-  }
-
-  return "bg-neutral-400";
 }
 
 export function VariantSelector({ variants, onVariantChange }: VariantSelectorProps) {
@@ -156,15 +223,16 @@ export function VariantSelector({ variants, onVariantChange }: VariantSelectorPr
         const values = optionGroups[groupName];
         const selectedValue = selectedOptions[groupName];
         const isColor = isColorGroup(groupName);
+        const competitionColors = isColor && usesCompetitionColorPair(values);
 
         return (
           <fieldset key={groupName}>
             <div className="flex items-end justify-between gap-4">
               <legend className="text-sm font-semibold tracking-tight text-neutral-950">
-                {groupName}
+                {getOptionGroupLabel(groupName, values.length)}
               </legend>
 
-              {isColor ? (
+              {competitionColors ? (
                 <span className="text-[10px] font-semibold tracking-[0.12em] text-neutral-400 uppercase">
                   Ao / Aka
                 </span>
@@ -185,8 +253,13 @@ export function VariantSelector({ variants, onVariantChange }: VariantSelectorPr
                       : "border-black/10 bg-white text-neutral-700 hover:border-neutral-950"
                     : "cursor-not-allowed border-black/5 bg-neutral-50 text-neutral-300 line-through";
 
-                const accessibleColorLabel =
-                  colorKind === "AO" ? "Ao, azul" : colorKind === "AKA" ? "Aka, rojo" : value;
+                const accessibleColorLabel = competitionColors
+                  ? colorKind === "BLUE"
+                    ? "Ao, azul"
+                    : colorKind === "RED"
+                      ? "Aka, rojo"
+                      : value
+                  : value;
 
                 return (
                   <button
