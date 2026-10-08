@@ -242,10 +242,6 @@ export default function HomePage() {
               <div className="relative z-10 flex h-full min-h-[inherit] flex-col justify-between p-6 sm:p-8 lg:p-10">
                 <div className="flex items-center justify-between gap-4">
                   <span className="hero-stage-badge">Equipamiento especializado</span>
-
-                  <span className="text-[10px] font-semibold tracking-[0.16em] text-white/28 uppercase">
-                    2026 / INDEX
-                  </span>
                 </div>
 
                 <div className="max-w-md py-16 sm:py-20">
