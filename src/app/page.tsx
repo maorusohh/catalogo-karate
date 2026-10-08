@@ -5,12 +5,13 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { catalogRepository } from "@/lib/catalog/static-repository";
-import { buildWhatsAppUrl } from "@/lib/whatsapp/url";
+import { HomeBrandsSection } from "@/components/business/home-brands-section";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Surface } from "@/components/ui/surface";
+import { catalogRepository } from "@/lib/catalog/static-repository";
+import { buildWhatsAppUrl } from "@/lib/whatsapp/url";
 
 export const metadata: Metadata = {
   title: "Equipamiento de Karate-Do en Venezuela",
@@ -165,7 +166,7 @@ export default function HomePage() {
               </h1>
 
               <p className="text-lead text-lead-on-dark mt-9 max-w-2xl">
-                Encuentra equipamiento para entrenamiento, kata y kumite, revisa variantes y prepara
+                Encuentra equipamiento para entrenamiento, kata y kumite, revisa opciones y prepara
                 tu consulta antes de comprar.
               </p>
 
@@ -349,6 +350,8 @@ export default function HomePage() {
         </Container>
       </section>
 
+      <HomeBrandsSection brands={brands} products={products} />
+
       <section className="border-y border-black/6 bg-[#ebe7de]">
         <Container>
           <div className="grid gap-px overflow-hidden bg-black/8 md:grid-cols-2 lg:grid-cols-4">
@@ -375,7 +378,7 @@ export default function HomePage() {
             <SectionHeading
               eyebrow="Selección"
               title="Algunas referencias del catálogo."
-              description="Estas tarjetas ya consumen el catálogo real. Cuando incorporemos las fotografías, ocuparán automáticamente esta superficie."
+              description="Una muestra de productos disponibles para entrar rápidamente a sus fichas, precios y opciones."
             />
 
             <ButtonLink
