@@ -1,34 +1,92 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { useCart } from "@/components/cart/cart-provider";
 import { WhatsAppConsultButton } from "@/components/cart/whatsapp-consult-button";
 
+const focusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  '[tabindex]:not([tabindex="-1"])',
+].join(",");
+
 export function CartDrawer() {
   const { isOpen, closeCart, items, totalItems, updateQuantity, removeItem, clearCart } = useCart();
+  const dialogRef = useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!isOpen) {
       return;
     }
 
+    const dialog = dialogRef.current;
+    const previouslyFocusedElement =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousOverflow = document.body.style.overflow;
+
+    function getFocusableElements() {
+      if (!dialog) {
+        return [];
+      }
+
+      return Array.from(dialog.querySelectorAll<HTMLElement>(focusableSelector)).filter(
+        (element) => element.getClientRects().length > 0,
+      );
+    }
+
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
+        event.preventDefault();
         closeCart();
+        return;
+      }
+
+      if (event.key !== "Tab" || !dialog) {
+        return;
+      }
+
+      const focusableElements = getFocusableElements();
+
+      if (focusableElements.length === 0) {
+        event.preventDefault();
+        dialog.focus();
+        return;
+      }
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      const activeElement = document.activeElement;
+
+      if (event.shiftKey && (activeElement === firstElement || !dialog.contains(activeElement))) {
+        event.preventDefault();
+        lastElement.focus();
+        return;
+      }
+
+      if (!event.shiftKey && activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
       }
     }
 
-    const previousOverflow = document.body.style.overflow;
-
     document.body.style.overflow = "hidden";
-
+    closeButtonRef.current?.focus();
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.body.style.overflow = previousOverflow;
-
       window.removeEventListener("keydown", handleKeyDown);
+
+      if (previouslyFocusedElement?.isConnected) {
+        requestAnimationFrame(() => {
+          previouslyFocusedElement.focus();
+        });
+      }
     };
   }, [closeCart, isOpen]);
 
@@ -46,10 +104,12 @@ export function CartDrawer() {
       />
 
       <aside
+        ref={dialogRef}
         id="cart-drawer"
         role="dialog"
         aria-modal="true"
         aria-labelledby="cart-title"
+        tabIndex={-1}
         className="absolute top-0 right-0 flex h-full w-full max-w-md flex-col bg-[#faf9f6] shadow-2xl"
       >
         <header className="flex items-center justify-between border-b border-black/10 px-5 py-4 sm:px-6">
@@ -64,6 +124,7 @@ export function CartDrawer() {
           </div>
 
           <button
+            ref={closeButtonRef}
             type="button"
             aria-label="Cerrar carrito"
             onClick={closeCart}
