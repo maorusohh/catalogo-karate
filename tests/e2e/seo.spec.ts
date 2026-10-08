@@ -21,6 +21,7 @@ test("sitemap.xml incluye rutas comerciales principales", async ({ request }) =>
 
   expect(body).toContain("https://catalogo-karate.pages.dev/catalogo/");
   expect(body).toContain("https://catalogo-karate.pages.dev/marcas/");
+  expect(body).toContain("https://catalogo-karate.pages.dev/preguntas-frecuentes/");
   expect(body).toContain("https://catalogo-karate.pages.dev/marcas/adidas/");
   expect(body).toContain("https://catalogo-karate.pages.dev/producto/adidas-661-22-20/");
 });
