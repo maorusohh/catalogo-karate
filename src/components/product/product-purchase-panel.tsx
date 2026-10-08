@@ -52,14 +52,7 @@ export function ProductPurchasePanel({
 
   const variantSelector = requiresVariant ? (
     <VariantSelector variants={variants} onVariantChange={handleVariantChange} />
-  ) : (
-    <div className="rounded-2xl border border-black/8 bg-neutral-50 px-4 py-3">
-      <p className="text-sm font-semibold text-neutral-950">Variantes por confirmar</p>
-      <p className="mt-1 text-xs leading-5 text-neutral-500">
-        Si necesitas talla, color u otra opción, indícala durante la consulta por WhatsApp.
-      </p>
-    </div>
-  );
+  ) : null;
 
   const priceSelector = (
     <section>
