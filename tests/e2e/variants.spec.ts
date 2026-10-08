@@ -114,6 +114,11 @@ test("los cinturones de grado usan colores propios sin semántica Ao/Aka", async
   await expect(yellow).toHaveAttribute("aria-pressed", "true");
   await expect(yellow).toHaveClass(/bg-yellow-100/);
 
+  const orange = page.getByRole("button", { name: "Color Naranja" });
+  await orange.click();
+  await expect(orange).toHaveAttribute("aria-pressed", "true");
+  await expect(orange).toHaveClass(/bg-orange-100/);
+
   const green = page.getByRole("button", { name: "Color Verde" });
   await green.click();
   await expect(green).toHaveAttribute("aria-pressed", "true");
@@ -128,4 +133,9 @@ test("los cinturones de grado usan colores propios sin semántica Ao/Aka", async
   await brown.click();
   await expect(brown).toHaveAttribute("aria-pressed", "true");
   await expect(brown).toHaveClass(/bg-amber-100/);
+
+  const other = page.getByRole("button", { name: "Color Otro color a consultar" });
+  await other.click();
+  await expect(other).toHaveAttribute("aria-pressed", "true");
+  await expect(other).toHaveClass(/bg-neutral-100/);
 });
