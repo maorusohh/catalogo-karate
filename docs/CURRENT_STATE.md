@@ -202,6 +202,12 @@ Kit Karategi Kumite K220 DNA
 
 No debe reaparecer `adidas-k200dnakit` como producto canónico.
 
+Compatibilidad pública:
+
+```text
+/producto/adidas-k200dnakit/ -> /producto/adidas-k220dnakit/ 301
+```
+
 ## 7. Formato métrico y semántica de variantes
 
 Formato visible canónico:
@@ -470,6 +476,7 @@ La verificación pública de cada nuevo deployment es una comprobación operativ
 - ✅ home con sección de marcas;
 - ✅ variantes Adidas restauradas;
 - ✅ K220 DNA corregido;
+- ✅ redirección histórica K200 DNA -> K220 DNA;
 - ✅ tallas Adidas estandarizadas;
 - ✅ semántica singular/plural de variantes;
 - ✅ estados visuales de colores de cinturones de grado;
@@ -486,7 +493,6 @@ La verificación pública de cada nuevo deployment es una comprobación operativ
 - ⬜ SEO avanzado y dominio final;
 - ⬜ incorporar nueva marca cuando exista nombre/material exacto;
 - ⬜ logo actual de Adidas cuando se proporcione;
-- ⬜ decidir redirección específica del antiguo slug K200 DNA al K220 DNA;
 - ⬜ revisar `MALLEMS-22__01.webp`;
 - ⬜ revisar logos locales no rastreados;
 - ⬜ completar imágenes faltantes al final;
