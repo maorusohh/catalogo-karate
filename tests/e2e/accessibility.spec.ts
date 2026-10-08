@@ -22,3 +22,37 @@ test("la navegación puede saltar al contenido principal", async ({ page }, test
     await expect(mainContent).toBeVisible();
   }
 });
+
+test("el carrito administra el foco como diálogo modal", async ({ page }, testInfo) => {
+  const response = await page.goto("/", {
+    waitUntil: "domcontentloaded",
+  });
+
+  expect(response?.status()).toBe(200);
+
+  const trigger = page.getByRole("button", { name: /^Abrir carrito/ });
+  await trigger.click();
+
+  const dialog = page.getByRole("dialog", { name: "Carrito de consulta" });
+  const closeButton = dialog.getByRole("button", { name: "Cerrar carrito" });
+
+  await expect(dialog).toBeVisible();
+  await expect(closeButton).toBeFocused();
+
+  if (testInfo.project.name === "desktop") {
+    const continueButton = dialog.getByRole("button", { name: "Seguir explorando" });
+
+    await page.keyboard.press("Shift+Tab");
+    await expect(continueButton).toBeFocused();
+
+    await page.keyboard.press("Tab");
+    await expect(closeButton).toBeFocused();
+
+    await page.keyboard.press("Escape");
+  } else {
+    await closeButton.click();
+  }
+
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});
