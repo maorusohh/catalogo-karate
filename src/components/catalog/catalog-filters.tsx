@@ -96,8 +96,12 @@ export function CatalogFilters({
   onChange,
   onReset,
 }: CatalogFiltersProps) {
+  const activeProductBrandIds = new Set(
+    products.filter((product) => product.active).map((product) => product.brandId),
+  );
+
   const activeBrands = brands
-    .filter((brand) => brand.active)
+    .filter((brand) => brand.active && activeProductBrandIds.has(brand.id))
     .sort((a, b) => a.name.localeCompare(b.name, "es"));
 
   const activeCategories = categories.filter((category) => category.active);
@@ -145,6 +149,7 @@ export function CatalogFilters({
           <div className="space-y-2">
             <button
               type="button"
+              aria-pressed={filters.brandId === "ALL"}
               onClick={() => onChange({ ...filters, brandId: "ALL" })}
               className={`w-full rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-colors ${
                 filters.brandId === "ALL"
@@ -185,6 +190,7 @@ export function CatalogFilters({
                   <div className="space-y-1 border-t border-black/8 p-2">
                     <button
                       type="button"
+                      aria-pressed={brandSelected && filters.categoryId === "ALL"}
                       onClick={() => onChange({ ...filters, brandId: brand.id, categoryId: "ALL" })}
                       className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                         brandSelected && filters.categoryId === "ALL"
@@ -202,6 +208,7 @@ export function CatalogFilters({
                         <button
                           key={category.id}
                           type="button"
+                          aria-pressed={selected}
                           onClick={() =>
                             onChange({
                               ...filters,
@@ -230,6 +237,7 @@ export function CatalogFilters({
           <div className="space-y-2">
             <button
               type="button"
+              aria-pressed={filters.categoryId === "ALL"}
               onClick={() => onChange({ ...filters, categoryId: "ALL" })}
               className={`w-full rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-colors ${
                 filters.categoryId === "ALL"
@@ -266,6 +274,7 @@ export function CatalogFilters({
                   <div className="space-y-1 border-t border-black/8 p-2">
                     <button
                       type="button"
+                      aria-pressed={filters.categoryId === parent.id}
                       onClick={() => onChange({ ...filters, categoryId: parent.id })}
                       className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                         filters.categoryId === parent.id
@@ -280,6 +289,7 @@ export function CatalogFilters({
                       <button
                         key={child.id}
                         type="button"
+                        aria-pressed={filters.categoryId === child.id}
                         onClick={() => onChange({ ...filters, categoryId: child.id })}
                         className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
                           filters.categoryId === child.id
@@ -306,6 +316,7 @@ export function CatalogFilters({
                 <button
                   key={option.value}
                   type="button"
+                  aria-pressed={selected}
                   onClick={() => onChange({ ...filters, approval: option.value })}
                   className={`rounded-xl px-3 py-2.5 text-left transition-colors ${
                     selected
