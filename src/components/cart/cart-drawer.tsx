@@ -98,7 +98,8 @@ export function CartDrawer() {
     <div className="fixed inset-0 z-[100]">
       <button
         type="button"
-        aria-label="Cerrar carrito"
+        tabIndex={-1}
+        aria-label="Cerrar carrito al tocar fuera"
         onClick={closeCart}
         className="absolute inset-0 bg-neutral-950/45"
       />
@@ -110,7 +111,7 @@ export function CartDrawer() {
         aria-modal="true"
         aria-labelledby="cart-title"
         tabIndex={-1}
-        className="absolute top-0 right-0 flex h-full w-full max-w-md flex-col bg-[#faf9f6] shadow-2xl"
+        className="absolute top-0 right-0 flex h-full w-[88vw] max-w-md flex-col bg-[#faf9f6] shadow-2xl"
       >
         <header className="flex items-center justify-between border-b border-black/10 px-5 py-4 sm:px-6">
           <div>
