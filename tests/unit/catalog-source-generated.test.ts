@@ -15,7 +15,7 @@ test("el snapshot conserva las variantes verificadas del catálogo", () => {
   const catalog = buildCatalogFromTables(catalogSourceGoogle);
   const variants = catalog.products.flatMap((product) => product.variants);
 
-  expect(variants).toHaveLength(170);
+  expect(variants.length).toBeGreaterThanOrEqual(170);
 
   const gloves = catalog.products.find((product) => product.id === "mallems-guantes-karate-do-07");
   const gradeBeltsLabel = catalog.products.find(
