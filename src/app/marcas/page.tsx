@@ -43,7 +43,7 @@ export default function BrandsPage() {
         <Container>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {brandCards.map((brand) => (
-              <Link key={brand.id} href={`/marca/${brand.slug}`} className="group">
+              <Link key={brand.id} href={`/marcas/${brand.slug}`} className="group">
                 <Surface className="relative h-full overflow-hidden p-6 transition-all duration-200 group-hover:-translate-y-1 group-hover:shadow-[var(--ck-shadow-md)] sm:p-7">
                   <div className="flex min-h-28 items-center justify-between gap-5">
                     {brand.logo ? (
