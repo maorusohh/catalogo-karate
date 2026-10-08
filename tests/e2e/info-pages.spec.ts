@@ -53,3 +53,43 @@ test("contacto ofrece consulta directa por WhatsApp", async ({ page }) => {
   await expect(whatsappLink).toBeVisible();
   await expect(whatsappLink.locator("svg")).toHaveCount(1);
 });
+
+test("preguntas frecuentes explica el catálogo y responde dudas comunes", async ({ page }) => {
+  const response = await page.goto("/preguntas-frecuentes/", {
+    waitUntil: "domcontentloaded",
+  });
+
+  expect(response?.status()).toBe(200);
+
+  await expect(
+    page.getByRole("heading", { name: "Respuestas claras antes de preparar tu consulta." }),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Quiénes somos" })).toBeVisible();
+
+  const purchaseQuestion = page.getByText("¿Puedo comprar directamente desde la página?", {
+    exact: true,
+  });
+  await purchaseQuestion.click();
+
+  await expect(
+    page.getByText(/La web funciona como catálogo y carrito de consulta/),
+  ).toBeVisible();
+});
+
+test("header y footer usan la navegación comercial acordada", async ({ page }) => {
+  const response = await page.goto("/", {
+    waitUntil: "domcontentloaded",
+  });
+
+  expect(response?.status()).toBe(200);
+
+  await expect(
+    page.getByRole("banner").getByRole("link", { name: "Explorar marcas", exact: true }),
+  ).toBeVisible();
+
+  const footer = page.getByRole("contentinfo");
+  await expect(footer.getByRole("link", { name: "Explorar marcas", exact: true })).toBeVisible();
+  await expect(
+    footer.getByRole("link", { name: "Preguntas frecuentes", exact: true }),
+  ).toBeVisible();
+});
