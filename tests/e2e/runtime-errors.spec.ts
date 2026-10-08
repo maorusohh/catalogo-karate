@@ -5,6 +5,7 @@ const routes = [
   "/catalogo/",
   "/categoria/protecciones/",
   "/marcas/best-sport/",
+  "/preguntas-frecuentes/",
   "/producto/best-sport-canilleras-karate-aprobadas-wkf-1128wkf/",
   "/producto/mallems-guantes-karate-do-07/",
 ];
