@@ -100,6 +100,27 @@ test("las canilleras Best Sport exponen talla y colores Ao/Aka verificados", asy
   await expect(page.getByText("M · Aka (Rojo)", { exact: true })).toBeVisible();
 });
 
+test("Adidas presenta los colores de competencia como Ao y Aka", async ({ page }) => {
+  const routes = ["/producto/adidas-661-22-20/", "/producto/adidas-661-35-20/"];
+
+  for (const route of routes) {
+    const response = await page.goto(route, {
+      waitUntil: "domcontentloaded",
+    });
+
+    expect(response?.status(), `El producto ${route} no respondió correctamente.`).toBe(200);
+
+    await expect(page.getByText("Colores:", { exact: true })).toBeVisible();
+    await expect(page.getByText("Ao / Aka", { exact: true })).toBeVisible();
+
+    const aoButton = page.getByRole("button", { name: "Color Ao, azul" });
+    const akaButton = page.getByRole("button", { name: "Color Aka, rojo" });
+
+    await expect(aoButton).toHaveText("Ao");
+    await expect(akaButton).toHaveText("Aka");
+  }
+});
+
 test("los cinturones de grado usan colores propios sin semántica Ao/Aka", async ({ page }) => {
   const response = await page.goto("/producto/mallems-cinturones-grado-etiqueta-16/", {
     waitUntil: "domcontentloaded",
