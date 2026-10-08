@@ -19,7 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const brandRoutes: MetadataRoute.Sitemap = catalogRepository.getBrands().map((brand) => ({
-    url: url(`/marca/${brand.slug}/`),
+    url: url(`/marcas/${brand.slug}/`),
     changeFrequency: "weekly",
     priority: 0.7,
   }));
