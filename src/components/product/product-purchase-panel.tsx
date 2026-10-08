@@ -57,7 +57,7 @@ export function ProductPurchasePanel({
   const priceSelector = (
     <section>
       <p className="text-xs font-semibold tracking-[0.14em] text-neutral-400 uppercase">
-        {hasVariantPricing ? "Precio y forma de pago" : "Forma de pago"}
+        {hasVariantPricing ? "Precio y formas de pago:" : "Formas de pago:"}
       </p>
 
       <h2 className="mt-1 text-base font-semibold tracking-tight text-neutral-950">
