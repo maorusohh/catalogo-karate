@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { InfoCard, InfoPage, InfoSection } from "@/components/business/info-page";
+import { ButtonLink } from "@/components/ui/button-link";
 
 export const metadata: Metadata = {
   title: "Entregas",
@@ -70,6 +71,23 @@ export default function EntregasPage() {
             </p>
           </div>
         </InfoSection>
+
+        <div className="flex flex-col gap-4 rounded-3xl border border-black/10 bg-white p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div className="max-w-2xl">
+            <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
+              ¿Quieres consultar una entrega?
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-neutral-600">
+              Escríbenos con el producto que te interesa y tu ubicación para revisar las opciones
+              disponibles.
+            </p>
+          </div>
+
+          <ButtonLink href="/contacto" variant="secondary" size="lg" className="shrink-0">
+            Ir a contacto
+            <span aria-hidden="true">→</span>
+          </ButtonLink>
+        </div>
       </div>
     </InfoPage>
   );
