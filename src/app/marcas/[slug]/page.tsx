@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: BrandPageProps): Promise<Meta
         : undefined,
     },
     twitter: {
-      card: brand.logo ? "summary" : "summary",
+      card: "summary",
       title: brand.name,
       description,
       images: brand.logo ? [brand.logo] : undefined,
