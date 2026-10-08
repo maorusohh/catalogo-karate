@@ -19,15 +19,16 @@ test("una variante verificada de talla y color puede seleccionarse", async ({ pa
   await expect(page.getByRole("button", { name: "Agregar al carrito" })).toBeEnabled();
 });
 
-test("un cinturón 2 Pack expone únicamente la longitud verificada", async ({ page }) => {
+test("un cinturón 2 Pack expone las longitudes verificadas", async ({ page }) => {
   const response = await page.goto("/producto/mallems-cinturones-competencia-2-pack-19/", {
     waitUntil: "domcontentloaded",
   });
 
   expect(response?.status()).toBe(200);
 
-  await expect(page.getByText("Longitud:", { exact: true })).toBeVisible();
+  await expect(page.getByText("Longitudes:", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Longitud: 2.40m" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Longitud: 3.20m" })).toBeVisible();
   await expect(page.getByRole("button", { name: /Color/ })).toHaveCount(0);
 });
 
