@@ -15,8 +15,9 @@ test("el directorio de marcas expone las marcas activas con productos", async ({
 
   await page.getByRole("link", { name: /Mallems/ }).click();
 
-  await expect(page).toHaveURL(/\/marca\/mallems\/$/);
+  await expect(page).toHaveURL(/\/marcas\/mallems\/$/);
   await expect(page.getByRole("heading", { name: "Mallems" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Volver a marcas/ })).toBeVisible();
 });
 
 test("inicio permite abrir el directorio completo de marcas", async ({ page }) => {
