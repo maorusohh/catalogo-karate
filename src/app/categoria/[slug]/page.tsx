@@ -35,11 +35,28 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     return {};
   }
 
+  const description =
+    category.description ||
+    `Explora equipamiento de ${category.name} en el catálogo de Karate-Do.`;
+  const canonical = `/categoria/${category.slug}/`;
+
   return {
     title: category.name,
-    description:
-      category.description ||
-      `Explora equipamiento de ${category.name} en el catálogo de Karate-Do.`,
+    description,
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      type: "website",
+      url: canonical,
+      title: category.name,
+      description,
+    },
+    twitter: {
+      card: "summary",
+      title: category.name,
+      description,
+    },
   };
 }
 
