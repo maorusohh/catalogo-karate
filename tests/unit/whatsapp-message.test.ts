@@ -24,5 +24,6 @@ describe("buildWhatsAppCartMessage", () => {
     expect(message).toContain("Marca: Marca Test");
     expect(message).toContain("Forma de pago preferida: 40 USDT / Binance");
     expect(message).not.toContain("Variante: Sin variante");
+    expect(message).not.toContain("__default__");
   });
 });
