@@ -66,8 +66,8 @@ export default function PreguntasFrecuentesPage() {
         >
           <div className="rounded-3xl border border-black/10 bg-white p-6 sm:p-8">
             <p className="max-w-3xl text-base leading-7 text-neutral-600">
-              Somos un catálogo especializado en implementos de Karate-Do para entrenamiento, kata
-              y kumite. Reunimos distintas marcas y referencias para facilitar la búsqueda del
+              Somos un catálogo especializado en implementos de Karate-Do para entrenamiento, kata y
+              kumite. Reunimos distintas marcas y referencias para facilitar la búsqueda del
               equipamiento y acompañamos la confirmación final por WhatsApp antes de concretar cada
               compra.
             </p>
@@ -94,7 +94,7 @@ export default function PreguntasFrecuentesPage() {
                   </span>
                 </summary>
 
-                <div className="border-t border-black/6 pb-5 pt-4">
+                <div className="border-t border-black/6 pt-4 pb-5">
                   <p className="max-w-3xl text-sm leading-7 text-neutral-600 sm:text-base">
                     {item.answer}
                   </p>

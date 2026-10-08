@@ -71,9 +71,7 @@ test("preguntas frecuentes explica el catálogo y responde dudas comunes", async
   });
   await purchaseQuestion.click();
 
-  await expect(
-    page.getByText(/La web funciona como catálogo y carrito de consulta/),
-  ).toBeVisible();
+  await expect(page.getByText(/La web funciona como catálogo y carrito de consulta/)).toBeVisible();
 });
 
 test("header y footer usan la navegación comercial acordada", async ({ page }, testInfo) => {
