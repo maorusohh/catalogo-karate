@@ -53,9 +53,35 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     };
   }
 
+  const canonical = `/producto/${product.slug}/`;
+  const primaryImage = product.images[0];
+
   return {
     title: product.name,
     description: product.shortDescription,
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      type: "website",
+      url: canonical,
+      title: product.name,
+      description: product.shortDescription,
+      images: primaryImage
+        ? [
+            {
+              url: primaryImage.src,
+              alt: primaryImage.alt || product.name,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: primaryImage ? "summary_large_image" : "summary",
+      title: product.name,
+      description: product.shortDescription,
+      images: primaryImage ? [primaryImage.src] : undefined,
+    },
   };
 }
 
