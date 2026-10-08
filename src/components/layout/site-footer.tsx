@@ -42,6 +42,13 @@ export function SiteFooter() {
               </Link>
 
               <Link
+                href="/marcas"
+                className="text-sm text-white/64 transition-colors hover:text-white"
+              >
+                Marcas
+              </Link>
+
+              <Link
                 href="/como-comprar"
                 className="text-sm text-white/64 transition-colors hover:text-white"
               >
