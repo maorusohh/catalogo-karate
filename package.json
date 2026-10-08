@@ -17,7 +17,8 @@
     "build:catalog": "npm run catalog:sync && next build",
     "catalog:report": "tsx scripts/catalog-readiness-report.ts",
     "catalog:preflight": "tsx scripts/catalog-preflight.ts",
-    "catalog:inspect-images": "tsx scripts/inspect-product-images.ts"
+    "catalog:inspect-images": "tsx scripts/inspect-product-images.ts",
+    "images:audit": "tsx scripts/audit-image-sizes.ts"
   },
   "dependencies": {
     "next": "16.3.6",
