@@ -58,3 +58,6 @@ blob-report/
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Local working resources
+/recursos/
