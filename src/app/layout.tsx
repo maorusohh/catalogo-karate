@@ -7,6 +7,7 @@ import { SiteShell } from "@/components/layout/site-shell";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://catalogo-karate.pages.dev"),
   title: {
     default: "Catálogo Karate-Do",
     template: "%s | Catálogo Karate-Do",
