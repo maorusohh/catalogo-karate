@@ -2,7 +2,7 @@
 
 Última revisión canónica: **8 de octubre de 2026**.
 
-Este documento es la referencia operativa del proyecto. Resume el estado comprobado de `main`, la fuente editorial, las decisiones vigentes y el backlog inmediato. Si una conversación histórica contradice este archivo, debe revisarse primero el estado actual del repositorio y de Google Sheets.
+Este documento es la referencia operativa del proyecto. Resume el estado comprobado de producción, la fuente editorial, las decisiones vigentes y el backlog inmediato. Si una conversación histórica contradice este archivo, debe revisarse primero el repositorio y Google Sheets.
 
 ## 1. Estado estable actual
 
@@ -12,27 +12,74 @@ Repositorio:
 maorusohh/catalogo-karate
 ```
 
-Rama estable:
+Producción:
 
 ```text
+https://catalogo-karate.pages.dev
+```
+
+Checkpoint estable validado:
+
+```text
+33c1aec test: cover Adidas Ao Aka competition labels
+```
+
+Resultados del checkpoint estable:
+
+- Prettier: PASSED;
+- ESLint: PASSED;
+- production build: **73/73** páginas;
+- accesibilidad + carrito: **9/9**;
+- variantes + Ao/Aka: **21/21**;
+- E2E completo: **153/153**.
+
+Blindajes unitarios añadidos después en `release-candidate`:
+
+- K220 DNA conserva **11** variantes;
+- K200E conserva **6** rangos;
+- `adidas-k200dnakit` no existe como producto canónico;
+- `__default__` no aparece en el mensaje de WhatsApp.
+
+Validación del candidato:
+
+- unit tests: **32/32**;
+- Prettier: PASSED;
+- ESLint: PASSED.
+
+## 2. Flujo de releases
+
+No trabajar directamente sobre producción para cambios nuevos.
+
+Ramas operativas:
+
+```text
+release-candidate
+production-stable
+production-previous
 main
 ```
 
-Checkpoint comercial y de datos validado:
+Contrato:
+
+1. el trabajo nuevo entra en `release-candidate`;
+2. se valida localmente;
+3. el checkpoint estable anterior pasa a `production-previous`;
+4. el SHA validado pasa a `production-stable`;
+5. ese mismo SHA pasa a `main` y Cloudflare Pages.
+
+No introducir commits adicionales entre la validación y la promoción.
+
+Estado tras el último release:
 
 ```text
-ff8807d feat: standardize Adidas karategi size labels
+main              -> 33c1aec
+production-stable -> 33c1aec
+production-previous -> 3321aaa
 ```
 
-Checkpoint posterior de home:
+Este esquema permite comparar o recuperar la versión anterior aunque Cloudflare no la muestre de forma destacada en su interfaz.
 
-```text
-435c14d refine: remove obsolete home index label
-```
-
-El catálogo se mantiene funcional en cada checkpoint y todo trabajo nuevo debe preservar ese criterio.
-
-## 2. Alcance V1
+## 3. Alcance V1
 
 La V1 es un catálogo público nacional de implementos de Karate-Do para Venezuela, orientado a consulta comercial.
 
@@ -40,7 +87,7 @@ Incluye:
 
 - catálogo público;
 - búsqueda y filtros;
-- navegación por categorías y marcas;
+- categorías y marcas;
 - fichas de producto;
 - variantes verificadas;
 - precios y formas de pago;
@@ -58,12 +105,11 @@ No incluye:
 - pagos en línea;
 - inventario transaccional;
 - backend propio;
-- base de datos propia;
-- información privada de proveedores, costos, márgenes o credenciales.
+- base de datos propia.
 
-La V1 debe seguir siendo deliberadamente sencilla y profesional. No reabrir arquitectura, autenticación, pagos o inventario salvo necesidad nueva y explícita.
+La V1 debe seguir siendo deliberadamente sencilla y profesional.
 
-## 3. Stack y arquitectura
+## 4. Stack y arquitectura
 
 Stack verificado:
 
@@ -95,7 +141,7 @@ La UI no consulta Google Sheets directamente.
 
 Las pestañas `catalog_intake*` son staging editorial y no forman parte del contrato runtime.
 
-## 4. Google Sheets — fuente editorial canónica
+## 5. Google Sheets — fuente editorial canónica
 
 Documento:
 
@@ -142,9 +188,9 @@ Estado comprobado por sync/preflight el 8 de octubre de 2026:
 - **0** errores;
 - **9** warnings editoriales.
 
-## 5. Marcas y navegación
+## 6. Marcas y navegación
 
-Marcas activas actuales:
+Marcas activas:
 
 - Best Sport;
 - Mallems;
@@ -159,23 +205,25 @@ Rutas canónicas:
 /marcas/[slug]/
 ```
 
-La antigua ruta singular se eliminó del App Router. Cloudflare conserva redirección de compatibilidad:
+Compatibilidad histórica:
 
 ```text
 /marca/* -> /marcas/:splat 301
 ```
 
-La home incluye una sección reutilizable de marcas y solo deben exponerse filtros de marcas que tengan productos activos.
+La navegación visible usa **Explorar marcas**.
+
+La home incluye sección de marcas y solo expone filtros con productos activos.
 
 `Generica` y `Adidas` todavía no tienen logo runtime asignado en `brands.logo`.
 
-Una nueva marca del mismo proveedor está pendiente de alta. No crearla hasta confirmar el **nombre comercial exacto** y recibir/validar su material comercial.
+No crear una marca nueva hasta confirmar nombre comercial exacto y material verificable.
 
-## 6. Adidas — estado corregido
+## 7. Adidas y variantes
 
 Adidas quedó integrado con variantes reales y verificadas.
 
-Productos con variantes actuales:
+Productos con variantes:
 
 - `adidas-661-22-20`: XS/S/M/L/XL × Rojo/Azul;
 - `adidas-661-35-20`: XS/S/M/L/XL × Rojo/Azul;
@@ -188,9 +236,9 @@ Productos con variantes actuales:
 - `adidas-k999hwt`: 8 tallas;
 - `adidas-k192dnakit-v`: 12 tallas;
 - `adidas-k220dnakit`: 11 tallas;
-- `adidas-k200e`: 6 rangos de talla.
+- `adidas-k200e`: 6 rangos.
 
-El producto antes identificado erróneamente como K200 DNA fue corregido a:
+Producto corregido:
 
 ```text
 adidas-k220dnakit
@@ -198,7 +246,7 @@ ADIDAS-K220DNAKIT
 Kit Karategi Kumite K220 DNA
 ```
 
-`K200E` sigue siendo un producto separado y válido.
+`K200E` es un producto separado y válido.
 
 No debe reaparecer `adidas-k200dnakit` como producto canónico.
 
@@ -208,7 +256,7 @@ Compatibilidad pública:
 /producto/adidas-k200dnakit/ -> /producto/adidas-k220dnakit/ 301
 ```
 
-## 7. Formato métrico y semántica de variantes
+Las **45 variantes de karategui Adidas** fueron normalizadas en `variants.label` y `variant_options.value`.
 
 Formato visible canónico:
 
@@ -220,11 +268,11 @@ Formato visible canónico:
 Talla 0 · 1.00m - 1.05m
 ```
 
-Las **45 variantes de karategui Adidas** fueron normalizadas tanto en `variants.label` como en `variant_options.value`.
-
 Los IDs técnicos no cambian por ajustes de presentación.
 
-La interfaz usa singular/plural según la cantidad real de opciones:
+## 8. Semántica de opciones y colores
+
+La interfaz usa singular/plural según la cantidad real:
 
 - `Talla:` / `Tallas:`;
 - `Color:` / `Colores:`;
@@ -232,9 +280,18 @@ La interfaz usa singular/plural según la cantidad real de opciones:
 
 Productos sin ese tipo de opción no muestran una sección artificial.
 
-Ao/Aka solo se muestra cuando el conjunto real de colores es exclusivamente competitivo azul/rojo.
+Ao/Aka se usa únicamente cuando el conjunto real de colores es exactamente el par competitivo azul/rojo.
 
-Los cinturones de grado usan sus nombres de color normales:
+Para esos productos, la interfaz presenta:
+
+```text
+Ao = azul
+Aka = rojo
+```
+
+La regla aplica a Mallems, Best Sport y Adidas sin cambiar IDs ni datos canónicos.
+
+Los cinturones de grado conservan nombres normales:
 
 - Amarillo;
 - Naranja;
@@ -243,11 +300,9 @@ Los cinturones de grado usan sus nombres de color normales:
 - Marrón;
 - Otro color a consultar.
 
-El estado seleccionado de esos colores utiliza un fondo suave del color correspondiente y mantiene `aria-pressed` para accesibilidad.
+Los estados seleccionados mantienen color visual suave y `aria-pressed`.
 
-## 8. Precios y formas de pago
-
-El modelo soporta precios de producto y precios específicos por variante.
+## 9. Precios y formas de pago
 
 Bases soportadas:
 
@@ -274,19 +329,19 @@ Adidas usa, cuando corresponda:
 
 No se ofrece USDT/Binance para Adidas bajo el contrato comercial actual.
 
-La mención histórica `CL` fue un error de dictado referido a **Zelle**; no existe una forma de pago `CL`.
+`CL` fue un error de dictado referido a Zelle; no existe una forma de pago `CL`.
 
-La UI utiliza ahora `Formas de pago:` o `Precio y formas de pago:` según el caso.
+La UI utiliza `Formas de pago:` o `Precio y formas de pago:` según corresponda.
 
-## 9. Producto, carrito y WhatsApp
+## 10. Producto, carrito y WhatsApp
 
-La ficha de producto incluye el encabezado:
+La ficha usa el encabezado:
 
 ```text
 Información del producto:
 ```
 
-El carrito es local y la consulta final se genera por WhatsApp.
+El carrito es local y prepara una consulta por WhatsApp.
 
 El mensaje incluye, cuando corresponde:
 
@@ -297,69 +352,124 @@ El mensaje incluye, cuando corresponde:
 - cantidad;
 - SKU.
 
-La variante técnica `__default__` no debe presentarse al cliente como una variante comercial.
+La variante técnica `__default__` no se presenta al cliente.
 
-Los CTA de WhatsApp del home y Contacto comparten el estilo verde e iconografía consistente.
+El drawer del carrito:
 
-## 10. Home y páginas informativas
+- gestiona foco como diálogo modal en teclado;
+- confina `Tab` / `Shift+Tab` en desktop;
+- cierra con `Escape`;
+- restaura foco al trigger en interacción de teclado;
+- permite cierre por backdrop;
+- en pantallas compactas deja una franja exterior real para tocar fuera del drawer.
 
-La home contiene actualmente:
+Los CTA de WhatsApp usan estilo verde consistente.
+
+## 11. Home y páginas informativas
+
+La home contiene:
 
 - hero;
-- accesos por categorías;
-- sección de marcas;
+- categorías;
+- marcas;
 - franja de confianza;
 - productos seleccionados;
 - bloque “Cómo funciona”;
 - CTA de WhatsApp.
 
-La etiqueta decorativa obsoleta:
-
-```text
-2026 / INDEX
-```
-
-fue eliminada del hero en `435c14d`.
+`2026 / INDEX` fue eliminado.
 
 Páginas informativas:
 
 - `/como-comprar/`;
 - `/entregas/`;
-- `/contacto/`.
+- `/contacto/`;
+- `/preguntas-frecuentes/`.
 
-“Cómo comprar” y “Entregas” ya tienen CTA coherentes con el flujo actual y no contienen copy de prototipo como “en esta primera versión”.
+FAQ incorpora una introducción **Quiénes somos** y dudas de compra, disponibilidad, variantes, pagos, aprobaciones y envíos.
 
-## 11. SEO y exportación estática
+Cómo comprar, Envíos y Contacto se mantienen como accesos directos; FAQ los complementa, no los sustituye.
+
+## 12. Accesibilidad y responsive
+
+Implementado y cubierto:
+
+- skip link `Saltar al contenido principal`;
+- `aria-pressed` en filtros y opciones aplicables;
+- diálogo del carrito con gestión de foco;
+- responsive smoke sin overflow en rutas principales;
+- cobertura de Marcas y FAQ;
+- navegación compacta mobile/tablet y navegación horizontal desktop.
+
+El último checkpoint funcional completo pasó **153/153 E2E**.
+
+## 13. SEO y exportación estática
 
 SEO básico implementado:
 
 - `metadataBase`;
-- sitemap estático/dinámico;
+- sitemap;
 - robots;
-- rutas anidadas de marcas en sitemap;
-- pruebas E2E básicas de SEO.
+- rutas de marcas y FAQ en sitemap;
+- pruebas E2E de SEO.
 
-`robots.ts` y `sitemap.ts` están configurados para funcionar con `output: "export"`.
-
-Configuración de Next.js:
+Configuración Next.js:
 
 - `output: "export"`;
 - `trailingSlash: true`;
 - imágenes `unoptimized`.
 
-Build publicado desde:
+Build desde:
 
 ```text
 out
 ```
 
-SEO avanzado sigue pendiente: canonical dinámico fino, social previews finales y revisión asociada al dominio definitivo.
+SEO avanzado pendiente:
 
-## 12. Warnings editoriales actuales
+- canonical fino;
+- social previews finales;
+- revisión asociada al dominio definitivo.
 
-El preflight reporta **0 errores y 9 warnings**.
+## 14. Rendimiento
 
-Productos activos sin imagen:
+Cloudflare usa caché explícita:
+
+- `/_next/static/*`: caché larga e inmutable;
+- `/images/*`: caché corta con revalidación.
+
+La arquitectura cliente mantiene la interacción aislada en los componentes que realmente la requieren.
+
+Como `next/image` usa `unoptimized: true`, el peso original de cada imagen importa directamente.
+
+Auditoría repetible:
+
+```text
+npm run images:audit
+```
+
+Umbrales actuales:
+
+- warning: **300 KiB**;
+- bloqueo: **1 MiB**.
+
+Hallazgo crítico actual del repositorio:
+
+```text
+BESTSPORT-2808WKF__03.webp = 2,576,681 bytes (~2.46 MiB)
+```
+
+Otros archivos que merecen optimización editorial por superar ~300 KiB incluyen imágenes de Adidas ADIP03, ADITHGM01K, Best Sport 2652 y varios Mallems.
+
+`MALLEMS-22__01.webp` remoto pesa **452,750 bytes**; existe una versión local optimizada pendiente de revisión/versionado independiente.
+
+La optimización debe preservar calidad suficiente, modelo exacto y procedencia; no sustituir por imágenes parecidas.
+
+## 15. Warnings editoriales actuales
+
+Preflight: **0 errores / 9 warnings**.
+
+Sin imagen:
 
 1. `mallems-peto-corporal-karate-do-u14-11`;
 2. `mallems-cinturones-grado-bordado-17`;
@@ -370,62 +480,30 @@ Productos activos sin imagen:
 7. `adidas-k220dnakit`;
 8. `adidas-k200e`.
 
-Producto activo sin características:
+Sin características:
 
 9. `mallems-maleta-viajera-28`.
 
-Son warnings editoriales, no fallos de integridad. No deben resolverse inventando información o usando imágenes de modelos parecidos.
+Son warnings editoriales, no fallos de integridad.
 
-## 13. Imágenes
+## 16. Imágenes
 
 El catálogo tiene **109 referencias canónicas de imágenes**.
 
-Reglas vigentes:
+Reglas:
 
-- debe corresponder exactamente al modelo;
+- corresponder exactamente al modelo;
 - priorizar fabricante, marca, distribuidor autorizado o proveedor;
-- preferir producto aislado y fondo limpio/blanco cuando sea posible;
-- evitar collages, textos añadidos, suciedad e imágenes de productos meramente parecidos;
-- registrar procedencia cuando exista una URL útil;
-- nombres de archivo preferidos: `SKU__01.webp`, `SKU__02.webp`, etc.
+- preferir producto aislado y fondo limpio cuando sea posible;
+- evitar collages, textos añadidos, suciedad y modelos meramente parecidos;
+- registrar procedencia cuando exista URL útil;
+- nombres preferidos: `SKU__01.webp`, `SKU__02.webp`, etc.
 
-Las imágenes pendientes son **no bloqueantes** para el desarrollo estructural.
+Las imágenes pendientes no bloquean el desarrollo estructural.
 
-## 14. Validación integral más reciente
+## 17. Estado local deliberadamente fuera de Git
 
-Cadena comprobada durante el checkpoint actual:
-
-```text
-npm run catalog:sync
-npm run catalog:preflight
-npm run format:check
-npm run lint
-npm run test:unit
-npm run build
-npx playwright test tests/e2e/info-pages.spec.ts tests/e2e/variants.spec.ts
-npm run test:e2e
-```
-
-Resultados:
-
-- Google Sheets sync: PASSED;
-- validación de texto: PASSED;
-- validación de imágenes: **109** referencias;
-- preflight: **0 errores / 9 warnings**;
-- Adidas metric standardization: PASSED;
-- variantes Adidas de karategui verificadas: **45**;
-- variantes totales: **255**;
-- Prettier: PASSED;
-- ESLint: PASSED;
-- unit tests: **31/31**;
-- production build: PASSED;
-- páginas estáticas: **72/72**;
-- E2E focalizado info + variantes: **27/27**;
-- E2E completo: **123/123**.
-
-## 15. Estado local deliberadamente fuera de Git
-
-Después del commit `ff8807d`, el entorno local conserva intencionalmente:
+El entorno local conserva intencionalmente:
 
 ```text
 M public/images/catalogo/products/MALLEMS-22__01.webp
@@ -439,7 +517,7 @@ No usar `git add .`.
 
 `public/images/catalogo/brands/` y `recursos/` requieren revisión explícita antes de decidir si se versionan.
 
-## 16. Deployment
+## 18. Deployment
 
 Proveedor:
 
@@ -459,11 +537,11 @@ Configuración:
 - rama de producción: `main`;
 - build: `npx next build`;
 - salida: `out`;
-- no se requieren credenciales de Google Sheets en el deployment público ordinario porque producción consume el snapshot versionado.
+- producción consume el snapshot versionado y no necesita credenciales de Google Sheets para el deployment ordinario.
 
-La verificación pública de cada nuevo deployment es una comprobación operativa separada del build local.
+La verificación pública de cada deployment es separada del build local.
 
-## 17. Backlog inmediato
+## 19. Backlog inmediato
 
 ### Cerrado
 
@@ -474,40 +552,48 @@ La verificación pública de cada nuevo deployment es una comprobación operativ
 - ✅ directorio y páginas de marcas;
 - ✅ navegación `/marcas/[slug]`;
 - ✅ home con sección de marcas;
+- ✅ FAQ + Quiénes somos;
 - ✅ variantes Adidas restauradas;
 - ✅ K220 DNA corregido;
-- ✅ redirección histórica K200 DNA -> K220 DNA;
+- ✅ redirección K200 DNA -> K220 DNA;
 - ✅ tallas Adidas estandarizadas;
-- ✅ semántica singular/plural de variantes;
-- ✅ estados visuales de colores de cinturones de grado;
-- ✅ Ao/Aka condicionado a productos competitivos azul/rojo;
-- ✅ páginas informativas básicas;
+- ✅ semántica singular/plural;
+- ✅ Ao/Aka competitivo en Mallems, Best Sport y Adidas;
+- ✅ colores de cinturones de grado;
+- ✅ skip link y foco modal del carrito;
+- ✅ cierre del carrito por backdrop en pantallas compactas;
+- ✅ responsive smoke de rutas principales;
+- ✅ caché de assets Cloudflare;
 - ✅ robots + sitemap + SEO básico;
-- ✅ `2026 / INDEX` eliminado.
+- ✅ flujo `release-candidate` -> `production-stable` -> `main`;
+- ✅ 73/73 build y 153/153 E2E del último release estable;
+- ✅ 32/32 unit tests en el candidato actual.
 
 ### Pendiente
 
-- ⬜ auditoría final de UX del catálogo y fichas;
-- ⬜ auditoría de accesibilidad/responsive;
-- ⬜ revisión de rendimiento;
-- ⬜ SEO avanzado y dominio final;
-- ⬜ incorporar nueva marca cuando exista nombre/material exacto;
-- ⬜ logo actual de Adidas cuando se proporcione;
-- ⬜ revisar `MALLEMS-22__01.webp`;
+- 🟡 optimizar imágenes pesadas, empezando por `BESTSPORT-2808WKF__03.webp`;
+- 🟡 revisar/versionar `MALLEMS-22__01.webp` optimizada;
 - ⬜ revisar logos locales no rastreados;
-- ⬜ completar imágenes faltantes al final;
+- ⬜ incorporar logo definitivo para reemplazar `KD`;
+- ⬜ incorporar logo Adidas;
+- ⬜ completar imágenes faltantes;
 - ⬜ completar características de la maleta Mallems cuando exista información fiable;
+- ⬜ incorporar nueva marca cuando exista nombre/material exacto;
+- ⬜ SEO avanzado y dominio final;
 - ⬜ pulido visual final;
-- ⬜ smoke test público final en Cloudflare.
+- ⬜ smoke público final en Cloudflare;
+- ⬜ cierre V1.
 
-## 18. Regla de continuidad
+## 20. Regla de continuidad
 
-La prioridad sigue siendo **funcionalidad y estructura antes que decoración**.
+Prioridad: **funcionalidad y estructura antes que decoración**.
 
-Ante un error se corrige la causa integral antes de avanzar a nuevas funcionalidades.
+Ante un error se corrige la causa integral antes de avanzar.
 
-Los cambios sustanciales deben conservar rutas, imports, tipos y build válidos, y deben terminar en un checkpoint funcional.
+Los cambios deben mantener rutas, imports, tipos y build válidos y terminar en un checkpoint funcional.
+
+Cambiar únicamente lo solicitado, salvo dependencias directas necesarias para mantener coherencia o evitar romper funcionalidad relacionada.
 
 No inventar datos comerciales, variantes, fotos, precios o características.
 
-Las imágenes y el pulido visual no deben bloquear el avance funcional mientras la ausencia esté representada de forma segura en la interfaz.
+Las imágenes y el pulido visual no deben bloquear el avance funcional mientras la ausencia esté representada de forma segura.
