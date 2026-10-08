@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: url("/como-comprar/"), changeFrequency: "monthly", priority: 0.6 },
     { url: url("/entregas/"), changeFrequency: "monthly", priority: 0.6 },
     { url: url("/contacto/"), changeFrequency: "monthly", priority: 0.6 },
+    { url: url("/preguntas-frecuentes/"), changeFrequency: "monthly", priority: 0.6 },
   ];
 
   const brandRoutes: MetadataRoute.Sitemap = catalogRepository.getBrands().map((brand) => ({
