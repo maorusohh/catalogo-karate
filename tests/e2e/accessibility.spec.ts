@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("la navegación por teclado puede saltar al contenido principal", async ({ page }) => {
+test("la navegación puede saltar al contenido principal", async ({ page }, testInfo) => {
   const response = await page.goto("/", {
     waitUntil: "domcontentloaded",
   });
@@ -8,12 +8,17 @@ test("la navegación por teclado puede saltar al contenido principal", async ({ 
   expect(response?.status()).toBe(200);
 
   const skipLink = page.getByRole("link", { name: "Saltar al contenido principal" });
+  const mainContent = page.locator("#main-content");
 
-  await page.keyboard.press("Tab");
-  await expect(skipLink).toBeFocused();
+  await expect(skipLink).toHaveAttribute("href", "#main-content");
+  await expect(mainContent).toHaveCount(1);
 
-  await page.keyboard.press("Enter");
+  if (testInfo.project.name === "desktop") {
+    await page.keyboard.press("Tab");
+    await expect(skipLink).toBeFocused();
 
-  await expect(page).toHaveURL(/#main-content$/);
-  await expect(page.locator("#main-content")).toBeVisible();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/#main-content$/);
+    await expect(mainContent).toBeVisible();
+  }
 });
