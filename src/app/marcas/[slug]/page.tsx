@@ -35,10 +35,36 @@ export async function generateMetadata({ params }: BrandPageProps): Promise<Meta
     return {};
   }
 
+  const description =
+    brand.description || `Explora productos de ${brand.name} en el catálogo de Karate-Do.`;
+  const canonical = `/marcas/${brand.slug}/`;
+
   return {
     title: brand.name,
-    description:
-      brand.description || `Explora productos de ${brand.name} en el catálogo de Karate-Do.`,
+    description,
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      type: "website",
+      url: canonical,
+      title: brand.name,
+      description,
+      images: brand.logo
+        ? [
+            {
+              url: brand.logo,
+              alt: `Logo de ${brand.name}`,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: brand.logo ? "summary" : "summary",
+      title: brand.name,
+      description,
+      images: brand.logo ? [brand.logo] : undefined,
+    },
   };
 }
 
