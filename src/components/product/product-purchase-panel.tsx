@@ -62,7 +62,7 @@ export function ProductPurchasePanel({
 
       <h2 className="mt-1 text-base font-semibold tracking-tight text-neutral-950">
         {hasVariantPricing && !selectedVariant
-          ? "Selecciona una talla para ver el precio."
+          ? "Selecciona una variante para ver el precio."
           : hasVariantPricing && selectedVariant
             ? `Precio para ${selectedVariant.label}.`
             : "Selecciona tu forma de pago preferida."}
@@ -99,12 +99,12 @@ export function ProductPurchasePanel({
       ) : hasVariantPricing ? (
         <div className="mt-3 rounded-xl border border-black/10 bg-neutral-50 px-4 py-3">
           <p className="text-sm font-semibold text-neutral-950">
-            {selectedVariant ? "Precio por confirmar" : "Selecciona una talla"}
+            {selectedVariant ? "Precio por confirmar" : "Selecciona una variante"}
           </p>
           <p className="mt-1 text-xs leading-5 text-neutral-500">
             {selectedVariant
               ? "No hay un precio verificado asociado a esta variante."
-              : "Al elegir una talla aparecerán las opciones de precio disponibles."}
+              : "Al elegir una variante aparecerán las opciones de precio disponibles."}
           </p>
         </div>
       ) : (
