@@ -11,7 +11,9 @@ test("cómo comprar guía al catálogo", async ({ page }) => {
     page.getByRole("heading", { name: "Del catálogo a tu pedido, sin complicaciones." }),
   ).toBeVisible();
 
-  const catalogLink = page.getByRole("link", { name: /Ver catálogo/ });
+  const catalogLink = page
+    .getByRole("main")
+    .getByRole("link", { name: "Ver catálogo", exact: true });
   await expect(catalogLink).toBeVisible();
   await catalogLink.click();
 
@@ -46,5 +48,8 @@ test("contacto ofrece consulta directa por WhatsApp", async ({ page }) => {
   expect(response?.status()).toBe(200);
 
   await expect(page.getByRole("heading", { name: "¿Necesitas ayuda para elegir?" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Escribir por WhatsApp" })).toBeVisible();
+
+  const whatsappLink = page.getByRole("link", { name: "Escribir por WhatsApp" });
+  await expect(whatsappLink).toBeVisible();
+  await expect(whatsappLink.locator("svg")).toHaveCount(1);
 });
