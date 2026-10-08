@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { InfoCard, InfoPage, InfoSection } from "@/components/business/info-page";
+import { ButtonLink } from "@/components/ui/button-link";
 
 export const metadata: Metadata = {
   title: "Cómo comprar",
@@ -50,7 +51,7 @@ export default function ComoComprarPage() {
       <div className="space-y-16">
         <InfoSection
           title="Un proceso pensado para consultar antes de comprar"
-          description="No necesitas crear una cuenta ni realizar un pago desde el sitio en esta primera versión."
+          description="No necesitas crear una cuenta ni realizar un pago desde el sitio para preparar tu consulta."
         >
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {steps.map((step) => (
@@ -90,6 +91,20 @@ export default function ComoComprarPage() {
             </ul>
           </div>
         </InfoSection>
+
+        <div className="flex flex-col gap-4 rounded-3xl bg-neutral-950 p-6 text-white sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div className="max-w-2xl">
+            <h2 className="text-2xl font-semibold tracking-tight">Empieza por el catálogo.</h2>
+            <p className="mt-3 text-sm leading-6 text-neutral-300">
+              Revisa las opciones disponibles y arma tu consulta con los productos que necesitas.
+            </p>
+          </div>
+
+          <ButtonLink href="/catalogo" size="lg" className="shrink-0">
+            Ver catálogo
+            <span aria-hidden="true">→</span>
+          </ButtonLink>
+        </div>
       </div>
     </InfoPage>
   );
