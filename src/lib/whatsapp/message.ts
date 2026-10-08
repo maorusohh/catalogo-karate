@@ -8,6 +8,7 @@ export function buildWhatsAppCartMessage(items: CartItem[]): string {
 
   items.forEach((item, index) => {
     lines.push(`${index + 1}. ${item.snapshot.productName}`);
+    lines.push(`   Marca: ${item.snapshot.brandName}`);
 
     if (item.snapshot.variantLabel !== "Sin variante") {
       lines.push(`   Variante: ${item.snapshot.variantLabel}`);
