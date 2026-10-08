@@ -49,10 +49,42 @@ test("el carrito administra el foco como diálogo modal", async ({ page }, testI
     await expect(closeButton).toBeFocused();
 
     await page.keyboard.press("Escape");
+    await expect(dialog).toHaveCount(0);
+    await expect(trigger).toBeFocused();
   } else {
     await closeButton.click();
+    await expect(dialog).toHaveCount(0);
   }
+});
+
+test("el carrito puede cerrarse al tocar fuera del panel", async ({ page }) => {
+  const response = await page.goto("/", {
+    waitUntil: "domcontentloaded",
+  });
+
+  expect(response?.status()).toBe(200);
+
+  await page.getByRole("button", { name: /^Abrir carrito/ }).click();
+
+  const dialog = page.getByRole("dialog", { name: "Carrito de consulta" });
+  const backdrop = page.getByRole("button", { name: "Cerrar carrito al tocar fuera" });
+
+  await expect(dialog).toBeVisible();
+  await expect(backdrop).toBeVisible();
+
+  const dialogBox = await dialog.boundingBox();
+  const viewport = page.viewportSize();
+
+  expect(dialogBox).not.toBeNull();
+  expect(viewport).not.toBeNull();
+  expect(dialogBox!.width).toBeLessThan(viewport!.width);
+
+  await backdrop.click({
+    position: {
+      x: 8,
+      y: 100,
+    },
+  });
 
   await expect(dialog).toHaveCount(0);
-  await expect(trigger).toBeFocused();
 });
