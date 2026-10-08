@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/container";
 
 const navigation = [
   { href: "/catalogo", label: "Catálogo" },
-  { href: "/marcas", label: "Marcas" },
+  { href: "/marcas", label: "Explorar marcas" },
   { href: "/como-comprar", label: "Cómo comprar" },
   { href: "/entregas", label: "Envíos" },
   { href: "/contacto", label: "Contacto" },
