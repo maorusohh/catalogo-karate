@@ -1,24 +1,27 @@
 import { expect, test } from "@playwright/test";
 
-test("el directorio de marcas expone las marcas activas con productos", async ({ page }) => {
-  const response = await page.goto("/marcas/", { waitUntil: "domcontentloaded" });
+test(
+  "el directorio de marcas expone las marcas activas con productos",
+  async ({ page }) => {
+    const response = await page.goto("/marcas/", { waitUntil: "domcontentloaded" });
 
-  expect(response?.status()).toBe(200);
+    expect(response?.status()).toBe(200);
 
-  await expect(
-    page.getByRole("heading", { name: "Explora el catálogo por marca." }),
-  ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Explora el catálogo por marca." }),
+    ).toBeVisible();
 
-  await expect(page.getByRole("link", { name: /Best Sport/ })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Mallems/ })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Adidas/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Best Sport/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Mallems/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Adidas/ })).toBeVisible();
 
-  await page.getByRole("link", { name: /Mallems/ }).click();
+    await page.getByRole("link", { name: /Mallems/ }).click();
 
-  await expect(page).toHaveURL(/\/marcas\/mallems\/$/);
-  await expect(page.getByRole("heading", { name: "Mallems" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Volver a marcas/ })).toBeVisible();
-});
+    await expect(page).toHaveURL(/\/marcas\/mallems\/$/);
+    await expect(page.getByRole("heading", { name: "Mallems" })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Volver a marcas/ })).toBeVisible();
+  },
+);
 
 test("inicio permite abrir el directorio completo de marcas", async ({ page }) => {
   const response = await page.goto("/", { waitUntil: "domcontentloaded" });
