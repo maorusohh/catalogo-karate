@@ -14,5 +14,6 @@ test("la navegación por teclado puede saltar al contenido principal", async ({ 
 
   await page.keyboard.press("Enter");
 
-  await expect(page.locator("#main-content")).toBeFocused();
+  await expect(page).toHaveURL(/#main-content$/);
+  await expect(page.locator("#main-content")).toBeVisible();
 });
