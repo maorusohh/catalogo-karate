@@ -20,7 +20,9 @@ test(
     await page.getByRole("link", { name: /Mallems/ }).click();
 
     await expect(page).toHaveURL(/\/marcas\/mallems\/$/);
-    await expect(page.getByRole("heading", { name: "Mallems" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Mallems", exact: true }),
+    ).toBeVisible();
     await expect(
       page.getByRole("link", { name: /Volver a marcas/ }),
     ).toBeVisible();
