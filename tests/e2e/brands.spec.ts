@@ -18,3 +18,19 @@ test("el directorio de marcas expone las marcas activas con productos", async ({
   await expect(page).toHaveURL(/\/marca\/mallems\/$/);
   await expect(page.getByRole("heading", { name: "Mallems" })).toBeVisible();
 });
+
+test("inicio permite abrir el directorio completo de marcas", async ({ page }) => {
+  const response = await page.goto("/", { waitUntil: "domcontentloaded" });
+
+  expect(response?.status()).toBe(200);
+
+  await expect(
+    page.getByRole("heading", { name: "Encuentra el equipamiento por la marca que prefieres." }),
+  ).toBeVisible();
+
+  const allBrandsLink = page.getByRole("link", { name: /Ver todas las marcas/ });
+  await expect(allBrandsLink).toBeVisible();
+  await allBrandsLink.click();
+
+  await expect(page).toHaveURL(/\/marcas\/$/);
+});
