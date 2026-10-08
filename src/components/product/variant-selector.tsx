@@ -121,6 +121,18 @@ function usesCompetitionColorPair(values: string[]): boolean {
   return kinds.size === 2 && kinds.has("BLUE") && kinds.has("RED");
 }
 
+function getCompetitionColorDisplayValue(kind: ColorKind, fallback: string): string {
+  if (kind === "BLUE") {
+    return "Ao";
+  }
+
+  if (kind === "RED") {
+    return "Aka";
+  }
+
+  return fallback;
+}
+
 function getColorButtonClasses(kind: ColorKind, selected: boolean, available: boolean): string {
   if (!available) {
     return "cursor-not-allowed border-black/5 bg-neutral-50 text-neutral-300 line-through";
@@ -244,6 +256,9 @@ export function VariantSelector({ variants, onVariantChange }: VariantSelectorPr
                 const selected = selectedValue === value;
                 const available = isOptionAvailable(groupName, value);
                 const colorKind = isColor ? getColorKind(value) : "OTHER";
+                const displayValue = competitionColors
+                  ? getCompetitionColorDisplayValue(colorKind, value)
+                  : value;
 
                 const buttonClasses = isColor
                   ? getColorButtonClasses(colorKind, selected, available)
@@ -282,7 +297,7 @@ export function VariantSelector({ variants, onVariantChange }: VariantSelectorPr
                       />
                     ) : null}
 
-                    {value}
+                    {displayValue}
                   </button>
                 );
               })}
