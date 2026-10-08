@@ -89,3 +89,37 @@ test("el snapshot conserva las variantes verificadas del catálogo", () => {
     ],
   });
 });
+
+test("el snapshot conserva K220 DNA, mantiene K200E y no reintroduce K200 DNA", () => {
+  const catalog = buildCatalogFromTables(catalogSourceGoogle);
+  const k220 = catalog.products.find((product) => product.id === "adidas-k220dnakit");
+  const k200e = catalog.products.find((product) => product.id === "adidas-k200e");
+  const legacyK200 = catalog.products.find((product) => product.id === "adidas-k200dnakit");
+
+  expect(legacyK200).toBeUndefined();
+
+  expect(k220?.variants).toHaveLength(11);
+  expect(k220?.variants.map((variant) => variant.label)).toEqual([
+    "1.40m",
+    "1.45m",
+    "1.50m",
+    "1.55m",
+    "1.60m",
+    "1.65m",
+    "1.70m",
+    "1.75m",
+    "1.80m",
+    "1.85m",
+    "1.90m",
+  ]);
+
+  expect(k200e?.variants).toHaveLength(6);
+  expect(k200e?.variants.map((variant) => variant.label)).toEqual([
+    "1.00m - 1.10m",
+    "1.10m - 1.20m",
+    "1.20m - 1.30m",
+    "1.30m - 1.40m",
+    "1.40m - 1.50m",
+    "1.50m - 1.60m",
+  ]);
+});
