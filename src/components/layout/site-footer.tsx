@@ -45,7 +45,7 @@ export function SiteFooter() {
                 href="/marcas"
                 className="text-sm text-white/64 transition-colors hover:text-white"
               >
-                Marcas
+                Explorar marcas
               </Link>
 
               <Link
@@ -81,13 +81,23 @@ export function SiteFooter() {
               compra.
             </p>
 
-            <Link
-              href="/catalogo"
-              className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-[#25d366]"
-            >
-              Explorar catálogo
-              <span aria-hidden="true">→</span>
-            </Link>
+            <div className="mt-5 grid gap-3">
+              <Link
+                href="/preguntas-frecuentes"
+                className="text-sm font-semibold text-white transition-colors hover:text-[#25d366]"
+              >
+                Preguntas frecuentes
+                <span aria-hidden="true"> →</span>
+              </Link>
+
+              <Link
+                href="/catalogo"
+                className="text-sm font-semibold text-white transition-colors hover:text-[#25d366]"
+              >
+                Explorar catálogo
+                <span aria-hidden="true"> →</span>
+              </Link>
+            </div>
           </div>
         </div>
       </Container>
