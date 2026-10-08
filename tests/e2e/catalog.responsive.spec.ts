@@ -9,9 +9,11 @@ const staticRoutes = [
   "/categoria/cinturones/",
   "/categoria/guantines/",
   "/categoria/accesorios/",
+  "/marcas/",
   "/como-comprar/",
   "/entregas/",
   "/contacto/",
+  "/preguntas-frecuentes/",
 ];
 
 for (const route of staticRoutes) {
