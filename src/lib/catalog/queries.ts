@@ -1,3 +1,4 @@
+import { approvalPresentation } from "@/lib/catalog/approval";
 import { getCategoryTreeIds } from "@/lib/catalog/scoped";
 import type { ApprovalLevel, Category, Product } from "@/types/catalog";
 
@@ -12,12 +13,36 @@ export type CatalogFilters = {
 
 type CatalogReferenceMap = Record<string, string>;
 
+const searchAliasGroups = [
+  ["karategi", "karategis", "kimono", "kimonos", "uniforme", "uniformes"],
+  ["guantin", "guantines", "guante", "guantes"],
+  ["espinillera", "espinilleras", "canillera", "canilleras"],
+  ["empeinera", "empeineras", "empeine", "empeines"],
+  ["peto", "petos", "pechera", "pecheras"],
+  ["casco", "cascos", "cabezal", "cabezales"],
+  ["cinturon", "cinturones", "cinto", "cintos", "obi"],
+  ["bolso", "bolsos", "maleta", "maletas", "mochila", "mochilas"],
+] as const;
+
 function normalize(value: string): string {
   return value
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
     .trim();
+}
+
+function getSearchCandidates(token: string): readonly string[] {
+  return searchAliasGroups.find((group) => group.includes(token as never)) ?? [token];
+}
+
+function matchesSearch(searchableText: string, normalizedSearch: string): boolean {
+  const tokens = normalizedSearch.split(/\s+/).filter(Boolean);
+
+  return tokens.every((token) =>
+    getSearchCandidates(token).some((candidate) => searchableText.includes(candidate)),
+  );
 }
 
 export function filterProducts(
@@ -59,6 +84,13 @@ export function filterProducts(
       return true;
     }
 
+    const approval = approvalPresentation[product.approval];
+    const variantText = product.variants.flatMap((variant) => [
+      variant.label,
+      ...variant.options.flatMap((option) => [option.name, option.value]),
+    ]);
+    const priceText = product.prices.flatMap((price) => [price.label, price.note ?? ""]);
+
     const searchableText = normalize(
       [
         product.name,
@@ -66,12 +98,18 @@ export function filterProducts(
         product.shortDescription,
         product.description,
         ...product.features,
+        ...variantText,
+        ...priceText,
         brandNames[product.brandId] ?? "",
         categoryNames[product.categoryId] ?? "",
+        approval.shortLabel,
+        approval.cardLabel,
+        approval.badgeLabel,
+        approval.detail ?? "",
       ].join(" "),
     );
 
-    return searchableText.includes(normalizedSearch);
+    return matchesSearch(searchableText, normalizedSearch);
   });
 }
 
