@@ -141,9 +141,7 @@ export function CatalogFilters({
           </button>
         </div>
 
-        <p className="mt-1 text-xs leading-5 text-neutral-500">
-          Marcas, categorías y aprobación.
-        </p>
+        <p className="mt-1 text-xs leading-5 text-neutral-500">Marcas, categorías y aprobación.</p>
       </div>
 
       <div className="mt-4 space-y-3">
