@@ -30,7 +30,12 @@ const categories: Category[] = [
   },
 ];
 
-function makeProduct(id: string, categoryId: string, approval: Product["approval"]): Product {
+function makeProduct(
+  id: string,
+  categoryId: string,
+  approval: Product["approval"],
+  overrides: Partial<Product> = {},
+): Product {
   return {
     id,
     sku: id.toUpperCase(),
@@ -48,6 +53,7 @@ function makeProduct(id: string, categoryId: string, approval: Product["approval
     availability: "CONSULT",
     featured: false,
     active: true,
+    ...overrides,
   };
 }
 
@@ -106,5 +112,77 @@ describe("filterProducts", () => {
     );
 
     expect(result.map((product) => product.id)).toEqual(["guante-nacional"]);
+  });
+
+  it("resuelve equivalencias controladas sin exigir el término exacto del catálogo", () => {
+    const products = [
+      makeProduct("guantin-wkf", "guantines", "WKF", {
+        name: "Guantines de competición",
+      }),
+      makeProduct("karategi-entrenamiento", "karategis", "UNSPECIFIED", {
+        name: "Karategi de entrenamiento",
+      }),
+    ];
+
+    const gloves = filterProducts(
+      products,
+      { ...baseFilters, search: "guantes" },
+      brandNames,
+      categoryNames,
+      categories,
+    );
+    const uniform = filterProducts(
+      products,
+      { ...baseFilters, search: "kimono" },
+      brandNames,
+      categoryNames,
+      categories,
+    );
+
+    expect(gloves.map((product) => product.id)).toEqual(["guantin-wkf"]);
+    expect(uniform.map((product) => product.id)).toEqual(["karategi-entrenamiento"]);
+  });
+
+  it("combina sinónimos con atributos reales de variantes", () => {
+    const products = [
+      makeProduct("guantin-azul", "guantines", "WKF", {
+        name: "Guantines de competición",
+        variants: [
+          {
+            id: "guantin-azul-s",
+            label: "Talla S · Azul",
+            available: true,
+            options: [
+              { name: "Talla", value: "S" },
+              { name: "Color", value: "Azul" },
+            ],
+          },
+        ],
+      }),
+      makeProduct("guantin-rojo", "guantines", "WKF", {
+        name: "Guantines de entrenamiento",
+        variants: [
+          {
+            id: "guantin-rojo-s",
+            label: "Talla S · Rojo",
+            available: true,
+            options: [
+              { name: "Talla", value: "S" },
+              { name: "Color", value: "Rojo" },
+            ],
+          },
+        ],
+      }),
+    ];
+
+    const result = filterProducts(
+      products,
+      { ...baseFilters, search: "guantes azul" },
+      brandNames,
+      categoryNames,
+      categories,
+    );
+
+    expect(result.map((product) => product.id)).toEqual(["guantin-azul"]);
   });
 });
