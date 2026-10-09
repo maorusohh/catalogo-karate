@@ -16,8 +16,6 @@ type BrandPageProps = {
   }>;
 };
 
-export const dynamicParams = false;
-
 export function generateStaticParams() {
   return catalogRepository
     .getBrands()
