@@ -100,7 +100,9 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
             </div>
 
             <div className="hidden lg:block">
-              <p className="text-xs font-bold tracking-[0.1em] text-neutral-500 uppercase">Precio:</p>
+              <p className="text-xs font-bold tracking-[0.1em] text-neutral-500 uppercase">
+                Precio:
+              </p>
               <p className="mt-1 text-sm leading-5 font-semibold tracking-tight text-neutral-950">
                 {cardPriceLabel}
               </p>
