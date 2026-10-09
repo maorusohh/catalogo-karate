@@ -59,7 +59,7 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-black/6 bg-neutral-50 px-3 py-1.5 text-[11px] leading-none font-semibold tracking-[0.02em] text-neutral-650 sm:text-xs">
+          <span className="rounded-full border border-black/6 bg-neutral-50 px-3 py-1.5 text-[11px] leading-none font-semibold tracking-[0.02em] text-neutral-600 sm:text-xs">
             {categoryName}
           </span>
 
