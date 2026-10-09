@@ -8,9 +8,7 @@ type CatalogSearchProps = {
 export function CatalogSearch({ value, onChange }: CatalogSearchProps) {
   return (
     <label className="block">
-      <span className="mb-2 block text-sm font-medium text-neutral-500">
-        Buscar productos
-      </span>
+      <span className="mb-2 block text-sm font-medium text-neutral-500">Buscar productos</span>
 
       <span className="relative block">
         <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
@@ -30,7 +28,7 @@ export function CatalogSearch({ value, onChange }: CatalogSearchProps) {
         <input
           type="search"
           value={value}
-          onChange={(event) => onChange(event.target.value)}
+          onInput={(event) => onChange(event.currentTarget.value)}
           placeholder="Buscar por nombre, marca, categoría o SKU"
           className="min-h-13 w-full rounded-2xl border border-black/12 bg-white pr-4 pl-12 text-sm text-neutral-950 outline-none transition-colors placeholder:text-neutral-500 focus:border-neutral-950"
         />
