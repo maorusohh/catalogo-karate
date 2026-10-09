@@ -67,25 +67,6 @@ function ChevronIcon({ className = "" }: { className?: string }) {
   );
 }
 
-function ClearIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m15.5 5.5 3 3-8.75 8.75H6.5l-2-2 11-9.75Z" />
-      <path d="m12.5 8.5 3 3" />
-      <path d="M10 19h9" />
-    </svg>
-  );
-}
-
 function FilterSection({
   title,
   value,
@@ -164,10 +145,10 @@ function AllOptionButton({
       } ${
         selected
           ? "bg-neutral-950 font-semibold text-white"
-          : "bg-white font-semibold text-neutral-900 hover:bg-neutral-50"
+          : "bg-white text-neutral-900 hover:bg-neutral-50"
       }`}
     >
-      <span>{label}</span>
+      <span className={`font-semibold ${selected ? "text-white" : "text-neutral-900"}`}>{label}</span>
       <OptionCount count={count} selected={selected} />
     </button>
   );
@@ -214,7 +195,7 @@ export function CatalogFilters({
   return (
     <div className="rounded-3xl border border-black/10 bg-white p-5">
       <div className="border-b border-black/8 pb-4">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-baseline justify-between gap-4">
           <h2 className="text-base font-semibold tracking-tight whitespace-nowrap text-neutral-950">
             Filtrar productos
           </h2>
@@ -222,10 +203,9 @@ export function CatalogFilters({
           <button
             type="button"
             onClick={onReset}
-            className="inline-flex min-h-8 items-center gap-1.5 rounded-full px-2.5 text-xs font-semibold text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-[#b31322]"
+            className="text-xs font-semibold text-neutral-500 transition-colors hover:text-[#b31322]"
           >
-            <ClearIcon className="size-3.5" />
-            <span>Limpiar</span>
+            Limpiar
           </button>
         </div>
 
