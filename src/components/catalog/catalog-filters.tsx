@@ -39,11 +39,7 @@ function getCategoryOrder(category: Category): number {
 }
 
 function getApprovalLabel(value: ApprovalLevel | "ALL"): string {
-  if (value === "ALL") {
-    return "Sin filtro";
-  }
-
-  return approvalPresentation[value].shortLabel;
+  return value === "ALL" ? "—" : approvalPresentation[value].shortLabel;
 }
 
 function ChevronIcon({ className = "" }: { className?: string }) {
@@ -100,14 +96,16 @@ function OptionCount({ count, selected = false }: { count: number; selected?: bo
   );
 }
 
-function ClearFacetButton({ label, onClick }: { label: string; onClick: () => void }) {
+function NeutralFacetButton({ label, onClick }: { label: string; onClick: () => void }) {
   return (
     <button
       type="button"
+      aria-label={label}
+      title={label}
       onClick={onClick}
-      className="w-full rounded-xl border border-dashed border-black/10 bg-white px-3 py-2.5 text-left text-xs font-semibold text-neutral-500 transition-colors hover:border-black/20 hover:text-neutral-950"
+      className="flex min-h-10 w-full items-center justify-center rounded-xl border border-dashed border-black/10 bg-white px-3 text-sm font-semibold text-neutral-400 transition-colors hover:border-black/20 hover:text-neutral-700"
     >
-      {label}
+      —
     </button>
   );
 }
@@ -138,20 +136,20 @@ export function CatalogFilters({
 
   const selectedBrandName =
     filters.brandId === "ALL"
-      ? `${activeBrands.length} ${activeBrands.length === 1 ? "marca" : "marcas"}`
-      : (activeBrands.find((brand) => brand.id === filters.brandId)?.name ?? "Marca seleccionada");
+      ? "Todas las marcas"
+      : (activeBrands.find((brand) => brand.id === filters.brandId)?.name ?? "Todas las marcas");
 
   const selectedCategoryName =
     filters.categoryId === "ALL"
-      ? `${activeCategories.length} ${activeCategories.length === 1 ? "categoría" : "categorías"}`
+      ? "Todo el equipamiento"
       : (activeCategories.find((category) => category.id === filters.categoryId)?.name ??
-        "Categoría seleccionada");
+        "Todo el equipamiento");
 
   return (
     <div className="rounded-3xl border border-black/10 bg-white p-5">
       <div className="border-b border-black/8 pb-4">
         <div className="flex items-baseline justify-between gap-4">
-          <h2 className="text-base font-semibold tracking-tight text-neutral-950">
+          <h2 className="whitespace-nowrap text-base font-semibold tracking-tight text-neutral-950">
             Filtrar productos
           </h2>
 
@@ -164,14 +162,16 @@ export function CatalogFilters({
           </button>
         </div>
 
-        <p className="mt-1 text-xs leading-5 text-neutral-500">Marcas, categorías y aprobación.</p>
+        <p className="mt-1 whitespace-nowrap text-xs leading-5 text-neutral-500">
+          Marca, categoría y aprobación.
+        </p>
       </div>
 
       <div className="mt-4 space-y-3">
         <FilterSection title="Marcas" value={selectedBrandName}>
           <div className="space-y-2">
             {filters.brandId !== "ALL" ? (
-              <ClearFacetButton
+              <NeutralFacetButton
                 label="Quitar filtro de marca"
                 onClick={() => onChange({ ...filters, brandId: "ALL" })}
               />
@@ -263,7 +263,7 @@ export function CatalogFilters({
         <FilterSection title="Categorías" value={selectedCategoryName}>
           <div className="space-y-2">
             {filters.categoryId !== "ALL" ? (
-              <ClearFacetButton
+              <NeutralFacetButton
                 label="Quitar filtro de categoría"
                 onClick={() => onChange({ ...filters, categoryId: "ALL" })}
               />
@@ -350,7 +350,7 @@ export function CatalogFilters({
         <FilterSection title="Aprobación" value={getApprovalLabel(filters.approval)}>
           <div className="grid gap-2">
             {filters.approval !== "ALL" ? (
-              <ClearFacetButton
+              <NeutralFacetButton
                 label="Quitar filtro de aprobación"
                 onClick={() => onChange({ ...filters, approval: "ALL" })}
               />
