@@ -15,8 +15,6 @@ type CategoryPageProps = {
   }>;
 };
 
-export const dynamicParams = false;
-
 export function generateStaticParams() {
   return catalogRepository
     .getCategories()
