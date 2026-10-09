@@ -86,45 +86,22 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
 
         <div className="mt-auto pt-5 sm:pt-6">
           <div className="border-t border-black/7 pt-4">
-            <div className="lg:hidden">
-              <div className="flex items-center justify-between gap-3">
-                <p className="min-w-0 text-base leading-5 font-semibold tracking-tight text-neutral-950">
-                  {cardPriceLabel}
-                </p>
+            <p className="text-sm leading-5">
+              <span className="mr-2 text-xs font-medium text-neutral-500">Precio</span>
+              <span className="font-semibold tracking-tight text-neutral-950">{cardPriceLabel}</span>
+            </p>
 
-                <p className="shrink-0 text-right text-xs leading-5 font-medium text-neutral-500">
-                  {availabilityLabels[product.availability]}
-                </p>
-              </div>
+            <p className="mt-1 text-xs leading-5 font-medium text-neutral-500">
+              {availabilityLabels[product.availability]}
+            </p>
 
-              <Link
-                href={`/producto/${product.slug}`}
-                aria-label={`Ver producto: ${product.name}`}
-                className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[var(--ck-red)]"
-              >
-                Ver producto
-              </Link>
-            </div>
-
-            <div className="hidden lg:flex lg:items-center lg:justify-between lg:gap-4">
-              <div className="min-w-0">
-                <p className="text-base leading-5 font-semibold tracking-tight text-neutral-950">
-                  {cardPriceLabel}
-                </p>
-
-                <p className="mt-1 text-xs leading-5 font-medium text-neutral-500">
-                  {availabilityLabels[product.availability]}
-                </p>
-              </div>
-
-              <Link
-                href={`/producto/${product.slug}`}
-                aria-label={`Ver producto: ${product.name}`}
-                className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[var(--ck-red)]"
-              >
-                Ver producto
-              </Link>
-            </div>
+            <Link
+              href={`/producto/${product.slug}`}
+              aria-label={`Ver producto: ${product.name}`}
+              className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[var(--ck-red)]"
+            >
+              Ver producto
+            </Link>
           </div>
         </div>
       </div>
