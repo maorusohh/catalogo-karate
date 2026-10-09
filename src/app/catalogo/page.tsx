@@ -19,17 +19,17 @@ export default function CatalogoPage() {
     <main>
       <section className="border-b border-black/5">
         <Container>
-          <div className="py-14 sm:py-18 lg:py-20">
+          <div className="pt-12 pb-8 sm:pt-14 sm:pb-10 lg:pt-18 lg:pb-12">
             <SectionHeading
               eyebrow="Equipamiento"
-              title="Explora el catálogo."
+              title="Explora el catálogo"
               description="Encuentra productos por nombre, marca, categoría o aprobación. La información comercial definitiva se confirma al momento de la consulta."
             />
           </div>
         </Container>
       </section>
 
-      <section className="py-10 sm:py-12 lg:py-14">
+      <section className="pt-5 pb-10 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-14">
         <Container>
           <CatalogClient products={products} brands={brands} categories={categories} />
         </Container>
