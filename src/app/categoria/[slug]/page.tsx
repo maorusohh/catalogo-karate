@@ -36,8 +36,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   }
 
   const description =
-    category.description ||
-    `Explora equipamiento de ${category.name} en el catálogo de Karate-Do.`;
+    category.description || `Explora equipamiento de ${category.name} en el catálogo de Karate-Do.`;
   const canonical = `/categoria/${category.slug}/`;
 
   return {

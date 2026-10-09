@@ -49,12 +49,18 @@ test("páginas dinámicas publican canonical y Open Graph consistentes", async (
     await page.goto(item.path);
 
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", item.canonical);
-    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", item.canonical);
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+      "content",
+      item.canonical,
+    );
     await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", /.+/);
     await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", /summary/);
 
     if (item.expectsImage) {
-      await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /^https:\/\//);
+      await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+        "content",
+        /^https:\/\//,
+      );
     }
   }
 });
