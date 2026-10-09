@@ -86,16 +86,26 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
 
         <div className="mt-auto pt-5 sm:pt-6">
           <div className="border-t border-black/7 pt-4">
-            <p className="text-sm leading-5">
-              <span className="mr-2 text-xs font-medium text-neutral-500">Precio</span>
-              <span className="font-semibold tracking-tight text-neutral-950">
-                {cardPriceLabel}
-              </span>
-            </p>
+            <div className="lg:hidden">
+              <p className="text-sm leading-5 text-neutral-950">
+                <span className="font-semibold text-neutral-600">Precio:</span>{" "}
+                <span className="font-semibold tracking-tight">{cardPriceLabel}</span>
+              </p>
 
-            <p className="mt-1 text-xs leading-5 font-medium text-neutral-500">
-              {availabilityLabels[product.availability]}
-            </p>
+              <p className="mt-1 text-xs leading-5 font-medium text-neutral-500">
+                {availabilityLabels[product.availability]}
+              </p>
+            </div>
+
+            <div className="hidden lg:block">
+              <p className="text-xs font-semibold tracking-[0.08em] text-neutral-500">Precio:</p>
+              <p className="mt-1 text-sm leading-5 font-semibold tracking-tight text-neutral-950">
+                {cardPriceLabel}
+              </p>
+              <p className="mt-1 text-xs leading-5 font-medium text-neutral-500">
+                {availabilityLabels[product.availability]}
+              </p>
+            </div>
 
             <Link
               href={`/producto/${product.slug}`}
