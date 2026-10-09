@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 
 import { approvalPresentation } from "@/lib/catalog/approval";
 import type { CatalogFilters as CatalogFiltersState } from "@/lib/catalog/queries";
+import { getCategoryTreeIds } from "@/lib/catalog/scoped";
 import type { ApprovalLevel, Brand, Category, Product } from "@/types/catalog";
 
 type CatalogFiltersProps = {
@@ -16,21 +17,18 @@ type CatalogFiltersProps = {
 };
 
 type ApprovalOption = {
-  value: ApprovalLevel | "ALL";
+  value: ApprovalLevel;
   label: string;
   detail?: string;
 };
 
 const approvalLevels: ApprovalLevel[] = ["WKF", "NATIONAL", "NON_APPROVED", "UNSPECIFIED"];
 
-const approvalOptions: ApprovalOption[] = [
-  { value: "ALL", label: "Todas" },
-  ...approvalLevels.map((value) => ({
-    value,
-    label: approvalPresentation[value].shortLabel,
-    detail: approvalPresentation[value].detail,
-  })),
-];
+const approvalOptions: ApprovalOption[] = approvalLevels.map((value) => ({
+  value,
+  label: approvalPresentation[value].shortLabel,
+  detail: approvalPresentation[value].detail,
+}));
 
 const categoryOrder = ["karategis", "protecciones", "cinturones", "accesorios"];
 
@@ -41,7 +39,11 @@ function getCategoryOrder(category: Category): number {
 }
 
 function getApprovalLabel(value: ApprovalLevel | "ALL"): string {
-  return approvalOptions.find((option) => option.value === value)?.label ?? "Todas";
+  if (value === "ALL") {
+    return "Sin filtro";
+  }
+
+  return approvalPresentation[value].shortLabel;
 }
 
 function ChevronIcon({ className = "" }: { className?: string }) {
@@ -88,13 +90,25 @@ function FilterSection({
   );
 }
 
-function OptionCount({ count, selected }: { count: number; selected: boolean }) {
+function OptionCount({ count, selected = false }: { count: number; selected?: boolean }) {
   return (
     <span
       className={`shrink-0 text-[11px] font-semibold tabular-nums ${selected ? "text-white/60" : "text-neutral-400"}`}
     >
       {count}
     </span>
+  );
+}
+
+function ClearFacetButton({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full rounded-xl border border-dashed border-black/10 bg-white px-3 py-2.5 text-left text-xs font-semibold text-neutral-500 transition-colors hover:border-black/20 hover:text-neutral-950"
+    >
+      {label}
+    </button>
   );
 }
 
@@ -124,14 +138,14 @@ export function CatalogFilters({
 
   const selectedBrandName =
     filters.brandId === "ALL"
-      ? "Todas las marcas"
-      : (activeBrands.find((brand) => brand.id === filters.brandId)?.name ?? "Todas las marcas");
+      ? `${activeBrands.length} ${activeBrands.length === 1 ? "marca" : "marcas"}`
+      : (activeBrands.find((brand) => brand.id === filters.brandId)?.name ?? "Marca seleccionada");
 
   const selectedCategoryName =
     filters.categoryId === "ALL"
-      ? "Todo el equipamiento"
+      ? `${activeCategories.length} ${activeCategories.length === 1 ? "categoría" : "categorías"}`
       : (activeCategories.find((category) => category.id === filters.categoryId)?.name ??
-        "Todo el equipamiento");
+        "Categoría seleccionada");
 
   return (
     <div className="rounded-3xl border border-black/10 bg-white p-5">
@@ -156,19 +170,12 @@ export function CatalogFilters({
       <div className="mt-4 space-y-3">
         <FilterSection title="Marcas" value={selectedBrandName}>
           <div className="space-y-2">
-            <button
-              type="button"
-              aria-pressed={filters.brandId === "ALL"}
-              onClick={() => onChange({ ...filters, brandId: "ALL" })}
-              className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-colors ${
-                filters.brandId === "ALL"
-                  ? "bg-neutral-950 text-white"
-                  : "bg-white text-neutral-700 hover:bg-neutral-100"
-              }`}
-            >
-              <span>Todas las marcas</span>
-              <OptionCount count={activeProducts.length} selected={filters.brandId === "ALL"} />
-            </button>
+            {filters.brandId !== "ALL" ? (
+              <ClearFacetButton
+                label="Quitar filtro de marca"
+                onClick={() => onChange({ ...filters, brandId: "ALL" })}
+              />
+            ) : null}
 
             {activeBrands.map((brand) => {
               const brandProducts = activeProducts.filter(
@@ -190,9 +197,7 @@ export function CatalogFilters({
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
                     <span className="min-w-0 truncate">{brand.name}</span>
                     <span className="flex shrink-0 items-center gap-2">
-                      <span className="text-[11px] font-semibold text-neutral-400 tabular-nums">
-                        {brandProducts.length}
-                      </span>
+                      <OptionCount count={brandProducts.length} />
                       <ChevronIcon
                         className={`size-4 transition-transform duration-200 group-open/brand:rotate-180 ${
                           brandSelected ? "text-[#b31322]" : "text-neutral-400"
@@ -257,23 +262,21 @@ export function CatalogFilters({
 
         <FilterSection title="Categorías" value={selectedCategoryName}>
           <div className="space-y-2">
-            <button
-              type="button"
-              aria-pressed={filters.categoryId === "ALL"}
-              onClick={() => onChange({ ...filters, categoryId: "ALL" })}
-              className={`w-full rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-colors ${
-                filters.categoryId === "ALL"
-                  ? "bg-neutral-950 text-white"
-                  : "bg-white text-neutral-700 hover:bg-neutral-100"
-              }`}
-            >
-              Todo el equipamiento
-            </button>
+            {filters.categoryId !== "ALL" ? (
+              <ClearFacetButton
+                label="Quitar filtro de categoría"
+                onClick={() => onChange({ ...filters, categoryId: "ALL" })}
+              />
+            ) : null}
 
             {topLevelCategories.map((parent) => {
               const children = activeCategories
                 .filter((category) => category.parentId === parent.id)
                 .sort((a, b) => a.name.localeCompare(b.name, "es"));
+              const categoryTreeIds = new Set(getCategoryTreeIds(parent.id, activeCategories));
+              const parentProductCount = activeProducts.filter((product) =>
+                categoryTreeIds.has(product.categoryId),
+              ).length;
 
               const selectedInGroup =
                 filters.categoryId === parent.id ||
@@ -286,11 +289,14 @@ export function CatalogFilters({
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
                     <span>{parent.name}</span>
-                    <ChevronIcon
-                      className={`size-4 transition-transform duration-200 group-open/category:rotate-180 ${
-                        selectedInGroup ? "text-[#b31322]" : "text-neutral-400"
-                      }`}
-                    />
+                    <span className="flex shrink-0 items-center gap-2">
+                      <OptionCount count={parentProductCount} />
+                      <ChevronIcon
+                        className={`size-4 transition-transform duration-200 group-open/category:rotate-180 ${
+                          selectedInGroup ? "text-[#b31322]" : "text-neutral-400"
+                        }`}
+                      />
+                    </span>
                   </summary>
 
                   <div className="space-y-1 border-t border-black/8 p-2">
@@ -298,30 +304,42 @@ export function CatalogFilters({
                       type="button"
                       aria-pressed={filters.categoryId === parent.id}
                       onClick={() => onChange({ ...filters, categoryId: parent.id })}
-                      className={`w-full rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${
+                      className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${
                         filters.categoryId === parent.id
                           ? "bg-neutral-950 font-semibold text-white"
                           : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-950"
                       }`}
                     >
-                      Todos
+                      <span>Ver todo en {parent.name}</span>
+                      <OptionCount
+                        count={parentProductCount}
+                        selected={filters.categoryId === parent.id}
+                      />
                     </button>
 
-                    {children.map((child) => (
-                      <button
-                        key={child.id}
-                        type="button"
-                        aria-pressed={filters.categoryId === child.id}
-                        onClick={() => onChange({ ...filters, categoryId: child.id })}
-                        className={`w-full rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${
-                          filters.categoryId === child.id
-                            ? "bg-neutral-950 font-semibold text-white"
-                            : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-950"
-                        }`}
-                      >
-                        {child.name}
-                      </button>
-                    ))}
+                    {children.map((child) => {
+                      const selected = filters.categoryId === child.id;
+                      const count = activeProducts.filter(
+                        (product) => product.categoryId === child.id,
+                      ).length;
+
+                      return (
+                        <button
+                          key={child.id}
+                          type="button"
+                          aria-pressed={selected}
+                          onClick={() => onChange({ ...filters, categoryId: child.id })}
+                          className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${
+                            selected
+                              ? "bg-neutral-950 font-semibold text-white"
+                              : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-950"
+                          }`}
+                        >
+                          <span>{child.name}</span>
+                          <OptionCount count={count} selected={selected} />
+                        </button>
+                      );
+                    })}
                   </div>
                 </details>
               );
@@ -331,8 +349,18 @@ export function CatalogFilters({
 
         <FilterSection title="Aprobación" value={getApprovalLabel(filters.approval)}>
           <div className="grid gap-2">
+            {filters.approval !== "ALL" ? (
+              <ClearFacetButton
+                label="Quitar filtro de aprobación"
+                onClick={() => onChange({ ...filters, approval: "ALL" })}
+              />
+            ) : null}
+
             {approvalOptions.map((option) => {
               const selected = filters.approval === option.value;
+              const count = activeProducts.filter(
+                (product) => product.approval === option.value,
+              ).length;
 
               return (
                 <button
@@ -340,22 +368,26 @@ export function CatalogFilters({
                   type="button"
                   aria-pressed={selected}
                   onClick={() => onChange({ ...filters, approval: option.value })}
-                  className={`rounded-xl px-3 py-2.5 text-left transition-colors ${
+                  className={`flex items-start justify-between gap-3 rounded-xl px-3 py-2.5 text-left transition-colors ${
                     selected
                       ? "bg-neutral-950 text-white"
                       : "bg-white text-neutral-700 hover:bg-neutral-100"
                   }`}
                 >
-                  <span className="block text-sm font-semibold">{option.label}</span>
-                  {option.detail ? (
-                    <span
-                      className={`mt-0.5 block text-[11px] leading-4 ${
-                        selected ? "text-white/65" : "text-neutral-500"
-                      }`}
-                    >
-                      {option.detail}
-                    </span>
-                  ) : null}
+                  <span className="min-w-0">
+                    <span className="block text-sm font-semibold">{option.label}</span>
+                    {option.detail ? (
+                      <span
+                        className={`mt-0.5 block text-[11px] leading-4 ${
+                          selected ? "text-white/65" : "text-neutral-500"
+                        }`}
+                      >
+                        {option.detail}
+                      </span>
+                    ) : null}
+                  </span>
+
+                  <OptionCount count={count} selected={selected} />
                 </button>
               );
             })}
