@@ -130,14 +130,17 @@ test("el catálogo inicia sin orden adicional y equipara karategi con karategui"
 
   const sort = page.getByLabel("Ordenar por");
   const searchbox = page.getByRole("searchbox", { name: "Buscar productos" });
-  const productCards = page.locator('article a[aria-label^="Ver "]');
+  const resultCount = page.getByTestId("catalog-result-count");
+  const productCards = page.locator("article");
 
   await expect(sort).toHaveValue("none");
 
   await searchbox.fill("karategi");
+  await expect(resultCount).toContainText(/\d+ Productos Encontrados/);
   const withoutUCount = await productCards.count();
 
   await searchbox.fill("karategui");
+  await expect(resultCount).toContainText(/\d+ Productos Encontrados/);
   await expect(productCards).toHaveCount(withoutUCount);
 });
 
