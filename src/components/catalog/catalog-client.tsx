@@ -42,11 +42,20 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
     [categories],
   );
 
-  const filteredProducts = useMemo(() => {
-    const filtered = filterProducts(products, filters, brandNames, categoryNames, categories);
+  const matchingProducts = useMemo(
+    () => filterProducts(products, filters, brandNames, categoryNames, categories),
+    [products, filters, brandNames, categoryNames, categories],
+  );
 
-    return sortProducts(filtered, sort);
-  }, [products, filters, sort, brandNames, categoryNames, categories]);
+  const filteredProducts = useMemo(
+    () => sortProducts(matchingProducts, sort),
+    [matchingProducts, sort],
+  );
+
+  const searchSuggestions = useMemo(
+    () => (filters.search.trim().length >= 2 ? matchingProducts.slice(0, 5) : []),
+    [filters.search, matchingProducts],
+  );
 
   const activeFilterCount = [
     filters.brandId !== "ALL",
@@ -79,6 +88,9 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
                 search,
               })
             }
+            suggestions={searchSuggestions}
+            brandNames={brandNames}
+            totalMatches={matchingProducts.length}
           />
 
           <CatalogSortSelect value={sort} onChange={setSort} />
@@ -122,7 +134,7 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
         </details>
       </div>
 
-      <div className="mt-8 grid gap-7 lg:grid-cols-[280px_minmax(0,1fr)] xl:gap-8">
+      <div className="mt-8 grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)]">
         <aside className="hidden lg:block">
           <div className="sticky top-24 max-h-[calc(100vh-7rem)] [scrollbar-gutter:stable] overflow-y-scroll overscroll-contain pr-2">
             <CatalogFilters
