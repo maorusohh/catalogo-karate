@@ -9,7 +9,7 @@ export type CatalogFilters = {
   search: string;
   brandId: string;
   categoryId: string;
-  approval: ApprovalLevel | "ALL";
+  approval: ApprovalLevel | "ALL" | "NONE";
 };
 
 type CatalogReferenceMap = Record<string, string>;
@@ -63,6 +63,10 @@ const searchAliasGroups: readonly SearchAliasGroup[] = [
   },
 ];
 
+const categorySearchAliases: Record<string, readonly string[]> = {
+  "espinilleras-empeineras": ["canillera", "canilleras", "espinillera", "espinilleras"],
+};
+
 function normalize(value: string): string {
   return value
     .normalize("NFD")
@@ -70,6 +74,10 @@ function normalize(value: string): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
+}
+
+function isUnfilteredFacet(value: string): boolean {
+  return value === "NONE" || value === "ALL";
 }
 
 function getSearchCandidates(token: string): readonly string[] {
@@ -98,22 +106,21 @@ export function filterProducts(
   categories: Category[],
 ): Product[] {
   const normalizedSearch = normalize(filters.search);
-  const selectedCategoryIds =
-    filters.categoryId === "ALL"
-      ? null
-      : new Set(
-          getCategoryTreeIds(
-            filters.categoryId,
-            categories.filter((category) => category.active),
-          ),
-        );
+  const selectedCategoryIds = isUnfilteredFacet(filters.categoryId)
+    ? null
+    : new Set(
+        getCategoryTreeIds(
+          filters.categoryId,
+          categories.filter((category) => category.active),
+        ),
+      );
 
   return products.filter((product) => {
     if (!product.active) {
       return false;
     }
 
-    if (filters.brandId !== "ALL" && product.brandId !== filters.brandId) {
+    if (!isUnfilteredFacet(filters.brandId) && product.brandId !== filters.brandId) {
       return false;
     }
 
@@ -121,7 +128,7 @@ export function filterProducts(
       return false;
     }
 
-    if (filters.approval !== "ALL" && product.approval !== filters.approval) {
+    if (!isUnfilteredFacet(filters.approval) && product.approval !== filters.approval) {
       return false;
     }
 
@@ -145,6 +152,7 @@ export function filterProducts(
         ...product.features,
         ...variantText,
         ...priceText,
+        ...(categorySearchAliases[product.categoryId] ?? []),
         brandNames[product.brandId] ?? "",
         categoryNames[product.categoryId] ?? "",
         approval.shortLabel,
