@@ -111,7 +111,7 @@ test("el catálogo diferencia productos totales de resultados filtrados", async 
   });
 
   const resultCount = page.getByTestId("catalog-result-count");
-  const searchbox = page.getByRole("searchbox", { name: "Buscar productos" });
+  const searchbox = page.getByRole("combobox", { name: "Buscar productos" });
 
   await expect(resultCount).toContainText(/\d+ Productos Totales/);
 
@@ -131,7 +131,7 @@ test("el catálogo inicia sin orden adicional y equipara karategi con karategui"
   });
 
   const sort = page.getByLabel("Ordenar por");
-  const searchbox = page.getByRole("searchbox", { name: "Buscar productos" });
+  const searchbox = page.getByRole("combobox", { name: "Buscar productos" });
   const resultCount = page.getByTestId("catalog-result-count");
   const productCards = page.locator("article");
 
@@ -151,10 +151,11 @@ test("el buscador muestra un autosuggest breve con enlaces a productos", async (
     waitUntil: "domcontentloaded",
   });
 
-  const searchbox = page.getByRole("searchbox", { name: "Buscar productos" });
+  const searchbox = page.getByRole("combobox", { name: "Buscar productos" });
   await searchbox.fill("karategui");
 
   const suggestions = page.getByTestId("catalog-search-suggestions");
+  await expect(searchbox).toHaveAttribute("aria-expanded", "true");
   await expect(suggestions).toBeVisible();
 
   const productLinks = suggestions.locator('a[href^="/producto/"]');
@@ -176,8 +177,13 @@ test("seleccionar una marca aplica el filtro en el primer clic", async ({ page }
     await compactFilters.first().click();
   }
 
-  const adidasSummary = page.locator("summary:visible").filter({ hasText: "Adidas" }).first();
+  const brandsSection = page.locator("summary:visible").filter({ hasText: /^Marcas/ }).first();
+  await expect(brandsSection).toBeVisible();
+  await brandsSection.click();
+
+  const adidasSummary = page.locator("summary:visible").filter({ hasText: /^Adidas/ }).first();
   await expect(adidasSummary).toBeVisible();
+  await adidasSummary.scrollIntoViewIfNeeded();
   await adidasSummary.click();
 
   await expect(page.getByTestId("catalog-result-count")).toContainText(/\d+ Productos Encontrados/);
