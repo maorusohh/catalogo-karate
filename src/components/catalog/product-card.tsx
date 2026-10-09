@@ -17,9 +17,14 @@ type ProductCardProps = {
   categoryName: string;
 };
 
+function getCardPriceLabel(label?: string): string {
+  return label?.replace(/\s+según talla$/i, "") ?? "Consultar precio";
+}
+
 export function ProductCard({ product, brandName, categoryName }: ProductCardProps) {
   const image = product.images[0];
   const primaryPrice = product.prices.find((price) => !price.variantId) ?? product.prices[0];
+  const cardPriceLabel = getCardPriceLabel(primaryPrice?.label);
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-black/8 bg-white shadow-[0_10px_30px_rgb(23_23_23_/_0.045)] transition-all duration-200 hover:-translate-y-1 hover:border-black/12 hover:shadow-[var(--ck-shadow-md)]">
@@ -79,25 +84,47 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
           {product.shortDescription}
         </p>
 
-        <div className="mt-auto pt-6">
+        <div className="mt-auto pt-5 sm:pt-6">
           <div className="border-t border-black/7 pt-4">
-            <div className="flex min-h-11 items-start justify-between gap-3">
-              <p className="min-w-0 text-sm leading-5 font-semibold tracking-tight text-neutral-950">
-                {primaryPrice?.label ?? "Consultar precio"}
-              </p>
+            <div className="lg:hidden">
+              <div className="flex items-center justify-between gap-3">
+                <p className="min-w-0 text-base leading-5 font-semibold tracking-tight text-neutral-950">
+                  {cardPriceLabel}
+                </p>
 
-              <p className="shrink-0 pt-0.5 text-right text-xs leading-5 font-medium text-neutral-500">
-                {availabilityLabels[product.availability]}
-              </p>
+                <p className="shrink-0 text-right text-xs leading-5 font-medium text-neutral-500">
+                  {availabilityLabels[product.availability]}
+                </p>
+              </div>
+
+              <Link
+                href={`/producto/${product.slug}`}
+                aria-label={`Ver producto: ${product.name}`}
+                className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[var(--ck-red)]"
+              >
+                Ver producto
+              </Link>
             </div>
 
-            <Link
-              href={`/producto/${product.slug}`}
-              aria-label={`Ver producto: ${product.name}`}
-              className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[var(--ck-red)]"
-            >
-              Ver producto
-            </Link>
+            <div className="hidden lg:flex lg:items-center lg:justify-between lg:gap-4">
+              <div className="min-w-0">
+                <p className="text-base leading-5 font-semibold tracking-tight text-neutral-950">
+                  {cardPriceLabel}
+                </p>
+
+                <p className="mt-1 text-xs leading-5 font-medium text-neutral-500">
+                  {availabilityLabels[product.availability]}
+                </p>
+              </div>
+
+              <Link
+                href={`/producto/${product.slug}`}
+                aria-label={`Ver producto: ${product.name}`}
+                className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[var(--ck-red)]"
+              >
+                Ver producto
+              </Link>
+            </div>
           </div>
         </div>
       </div>
