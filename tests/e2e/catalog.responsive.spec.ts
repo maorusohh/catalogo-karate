@@ -146,6 +146,43 @@ test("el catálogo inicia sin orden adicional y equipara karategi con karategui"
   await expect(productCards).toHaveCount(withoutUCount);
 });
 
+test("el buscador muestra un autosuggest breve con enlaces a productos", async ({ page }) => {
+  await page.goto("/catalogo/", {
+    waitUntil: "domcontentloaded",
+  });
+
+  const searchbox = page.getByRole("searchbox", { name: "Buscar productos" });
+  await searchbox.fill("karategui");
+
+  const suggestions = page.getByTestId("catalog-search-suggestions");
+  await expect(suggestions).toBeVisible();
+
+  const productLinks = suggestions.locator('a[href^="/producto/"]');
+  const suggestionCount = await productLinks.count();
+
+  expect(suggestionCount).toBeGreaterThan(0);
+  expect(suggestionCount).toBeLessThanOrEqual(5);
+  await expect(productLinks.first()).toHaveAttribute("href", /^\/producto\//);
+});
+
+test("seleccionar una marca aplica el filtro en el primer clic", async ({ page }) => {
+  await page.goto("/catalogo/", {
+    waitUntil: "domcontentloaded",
+  });
+
+  const compactFilters = page.locator("summary:visible").filter({ hasText: /^Filtros/ });
+
+  if ((await compactFilters.count()) > 0) {
+    await compactFilters.first().click();
+  }
+
+  const adidasSummary = page.locator("summary:visible").filter({ hasText: "Adidas" }).first();
+  await expect(adidasSummary).toBeVisible();
+  await adidasSummary.click();
+
+  await expect(page.getByTestId("catalog-result-count")).toContainText(/\d+ Productos Encontrados/);
+});
+
 test("la navegación principal mantiene enlaces internos válidos", async ({ page }) => {
   await page.goto("/", {
     waitUntil: "domcontentloaded",
