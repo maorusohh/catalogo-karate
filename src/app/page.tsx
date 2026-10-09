@@ -91,8 +91,8 @@ const purchaseSteps = [
 ];
 
 const approvalLabels: Record<string, string> = {
-  WKF: "WKF",
-  NATIONAL: "FVKD",
+  WKF: "Aprobación WKF",
+  NATIONAL: "Aprobación FVKD",
   NON_APPROVED: "No aprobado",
   UNSPECIFIED: "Sin aprobación",
 };
@@ -165,7 +165,7 @@ export default function HomePage() {
                 Equípate para entrenar. Prepárate para competir.
               </h1>
 
-              <p className="text-lead text-lead-on-dark mt-9 max-w-2xl">
+              <p className="text-lead text-lead-on-dark mt-7 max-w-2xl">
                 Encuentra equipamiento para entrenamiento, kata y kumite, revisa opciones y prepara
                 tu consulta antes de comprar.
               </p>
