@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 
 import { CatalogClient } from "@/components/catalog/catalog-client";
 import { Container } from "@/components/ui/container";
-import { SectionHeading } from "@/components/ui/section-heading";
 import { catalogRepository } from "@/lib/catalog/static-repository";
 
 export const metadata: Metadata = {
@@ -19,17 +18,22 @@ export default function CatalogoPage() {
     <main>
       <section className="border-b border-black/5">
         <Container>
-          <div className="pt-12 pb-8 sm:pt-14 sm:pb-10 lg:pt-18 lg:pb-12">
-            <SectionHeading
-              eyebrow="Equipamiento"
-              title="Explora el catálogo"
-              description="Encuentra productos por nombre, marca, categoría o aprobación. La información comercial definitiva se confirma al momento de la consulta."
-            />
+          <div className="pt-12 pb-9 sm:pt-14 sm:pb-11 lg:pt-16 lg:pb-12">
+            <div className="max-w-2xl">
+              <p className="eyebrow">Equipamiento</p>
+
+              <h1 className="heading-section mt-6">Explora el catálogo</h1>
+
+              <p className="text-lead mt-7">
+                Encuentra productos por nombre, marca, categoría o aprobación. La información
+                comercial definitiva se confirma al momento de la consulta.
+              </p>
+            </div>
           </div>
         </Container>
       </section>
 
-      <section className="pt-5 pb-10 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-14">
+      <section className="pt-7 pb-10 sm:pt-8 sm:pb-12 lg:pt-10 lg:pb-14">
         <Container>
           <CatalogClient products={products} brands={brands} categories={categories} />
         </Container>
