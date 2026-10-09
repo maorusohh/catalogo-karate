@@ -46,7 +46,7 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
                   KD
                 </span>
 
-                <p className="mt-3 text-[10px] font-semibold tracking-[0.16em] text-neutral-400 uppercase">
+                <p className="mt-3 text-[11px] font-semibold tracking-[0.14em] text-neutral-400 uppercase">
                   Imagen pendiente
                 </p>
               </div>
@@ -59,16 +59,16 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-black/6 bg-neutral-50 px-3 py-1 text-[10px] font-semibold tracking-[0.04em] text-neutral-600">
+          <span className="rounded-full border border-black/6 bg-neutral-50 px-3 py-1.5 text-[11px] leading-none font-semibold tracking-[0.02em] text-neutral-650 sm:text-xs">
             {categoryName}
           </span>
 
-          <span className="rounded-full border border-[var(--ck-red)]/10 bg-[var(--ck-red-soft)] px-3 py-1 text-[10px] font-semibold tracking-[0.04em] text-[var(--ck-red-dark)]">
+          <span className="rounded-full border border-[var(--ck-red)]/10 bg-[var(--ck-red-soft)] px-3 py-1.5 text-[11px] leading-none font-semibold tracking-[0.02em] text-[var(--ck-red-dark)] sm:text-xs">
             {approvalLabels[product.approval]}
           </span>
         </div>
 
-        <p className="mt-5 text-[10px] font-semibold tracking-[0.16em] text-neutral-400 uppercase">
+        <p className="mt-4 text-xs font-semibold tracking-[0.13em] text-neutral-500 uppercase">
           {brandName}
         </p>
 
@@ -93,21 +93,20 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
                   {primaryPrice?.label ?? "Consultar precio"}
                 </p>
 
-                <p className="mt-1.5 flex items-center gap-2 text-xs text-neutral-500">
-                  <span
-                    aria-hidden="true"
-                    className="size-1.5 shrink-0 rounded-full bg-[var(--ck-red)]/70"
-                  />
+                <p className="mt-1 text-xs font-medium text-neutral-500">
                   {availabilityLabels[product.availability]}
                 </p>
               </div>
 
               <Link
                 href={`/producto/${product.slug}`}
-                aria-label={`Abrir ficha de ${product.name}`}
-                className="flex size-10 shrink-0 items-center justify-center rounded-full bg-neutral-950 text-base text-white transition-all duration-200 group-hover:bg-[var(--ck-red)]"
+                aria-label={`Ver producto: ${product.name}`}
+                className="inline-flex min-h-10 shrink-0 items-center justify-center gap-1.5 rounded-full bg-neutral-950 px-3.5 text-xs font-semibold text-white transition-all duration-200 group-hover:bg-[var(--ck-red)] sm:px-4 sm:text-sm"
               >
-                <span aria-hidden="true">→</span>
+                Ver producto
+                <span aria-hidden="true" className="text-white/70">
+                  →
+                </span>
               </Link>
             </div>
           </div>
