@@ -14,7 +14,7 @@ export function CatalogSort({ value, onChange }: CatalogSortProps) {
         <select
           value={value}
           onChange={(event) => onChange(event.target.value as CatalogSort)}
-          className="min-h-13 w-full appearance-none rounded-2xl border border-black/12 bg-white pr-11 pl-4 text-sm font-medium text-neutral-950 outline-none transition-colors focus:border-neutral-950 lg:min-w-56"
+          className="min-h-13 w-full appearance-none rounded-2xl border border-black/12 bg-white pr-11 pl-4 text-sm font-medium text-neutral-950 transition-colors outline-none focus:border-neutral-950 lg:min-w-56"
         >
           <option value="featured">Destacados</option>
           <option value="name-asc">Nombre: A–Z</option>

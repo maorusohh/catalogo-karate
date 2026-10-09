@@ -171,7 +171,9 @@ export function CatalogFilters({
             </button>
 
             {activeBrands.map((brand) => {
-              const brandProducts = activeProducts.filter((product) => product.brandId === brand.id);
+              const brandProducts = activeProducts.filter(
+                (product) => product.brandId === brand.id,
+              );
               const categoryIds = new Set(brandProducts.map((product) => product.categoryId));
 
               const brandCategories = activeCategories
