@@ -116,7 +116,7 @@ export function CatalogSearch({
                   </span>
 
                   <span className="min-w-0 flex-1">
-                    <span className="block line-clamp-2 text-sm leading-5 font-semibold text-neutral-950">
+                    <span className="line-clamp-2 block text-sm leading-5 font-semibold text-neutral-950">
                       {product.name}
                     </span>
                     <span className="mt-0.5 block truncate text-[11px] font-semibold tracking-[0.08em] text-neutral-500 uppercase">

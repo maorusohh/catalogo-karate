@@ -162,7 +162,7 @@ export function CatalogFilters({
     <div className="rounded-3xl border border-black/10 bg-white p-5">
       <div className="border-b border-black/8 pb-4">
         <div className="flex items-baseline justify-between gap-4">
-          <h2 className="whitespace-nowrap text-base font-semibold tracking-tight text-neutral-950">
+          <h2 className="text-base font-semibold tracking-tight whitespace-nowrap text-neutral-950">
             Filtrar productos
           </h2>
 
@@ -175,7 +175,7 @@ export function CatalogFilters({
           </button>
         </div>
 
-        <p className="mt-1 whitespace-nowrap text-xs leading-5 text-neutral-500">
+        <p className="mt-1 text-xs leading-5 whitespace-nowrap text-neutral-500">
           Marca, categoría y aprobación.
         </p>
       </div>
