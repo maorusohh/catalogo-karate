@@ -23,9 +23,9 @@ type CatalogClientProps = {
 
 const initialFilters: CatalogFiltersState = {
   search: "",
-  brandId: "ALL",
-  categoryId: "ALL",
-  approval: "ALL",
+  brandId: "NONE",
+  categoryId: "NONE",
+  approval: "NONE",
 };
 
 export function CatalogClient({ products, brands, categories }: CatalogClientProps) {
@@ -52,15 +52,33 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
     [matchingProducts, sort],
   );
 
-  const searchSuggestions = useMemo(
-    () => (filters.search.trim().length >= 2 ? matchingProducts.slice(0, 5) : []),
-    [filters.search, matchingProducts],
-  );
+  const suggestionProducts = useMemo(() => {
+    const search = filters.search.trim();
+
+    if (search.length < 2) {
+      return [];
+    }
+
+    return filterProducts(
+      products,
+      {
+        search,
+        brandId: "NONE",
+        categoryId: "NONE",
+        approval: "NONE",
+      },
+      brandNames,
+      categoryNames,
+      categories,
+    );
+  }, [products, filters.search, brandNames, categoryNames, categories]);
+
+  const searchSuggestions = useMemo(() => suggestionProducts.slice(0, 5), [suggestionProducts]);
 
   const activeFilterCount = [
-    filters.brandId !== "ALL",
-    filters.categoryId !== "ALL",
-    filters.approval !== "ALL",
+    filters.brandId !== "NONE" && filters.brandId !== "ALL",
+    filters.categoryId !== "NONE" && filters.categoryId !== "ALL",
+    filters.approval !== "NONE" && filters.approval !== "ALL",
   ].filter(Boolean).length;
 
   const hasActiveQuery = filters.search.trim().length > 0 || activeFilterCount > 0;
@@ -90,7 +108,7 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
             }
             suggestions={searchSuggestions}
             brandNames={brandNames}
-            totalMatches={matchingProducts.length}
+            totalMatches={suggestionProducts.length}
           />
 
           <CatalogSortSelect value={sort} onChange={setSort} />
