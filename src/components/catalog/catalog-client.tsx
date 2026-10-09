@@ -56,10 +56,10 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
 
   const hasActiveQuery = filters.search.trim().length > 0 || activeFilterCount > 0;
 
-  let resultLabel = products.length === 1 ? "producto total" : "productos totales";
+  let resultLabel = products.length === 1 ? "Producto Total" : "Productos Totales";
 
   if (hasActiveQuery) {
-    resultLabel = filteredProducts.length === 1 ? "producto encontrado" : "productos encontrados";
+    resultLabel = filteredProducts.length === 1 ? "Producto Encontrado" : "Productos Encontrados";
   }
 
   function clearFilters() {
