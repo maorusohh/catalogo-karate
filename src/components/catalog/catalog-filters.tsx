@@ -209,7 +209,7 @@ export function CatalogFilters({
                 >
                   <summary
                     onClick={() => {
-                      if (!brandSelected) {
+                      if (!brandSelected || filters.categoryId !== "ALL") {
                         onChange({ ...filters, brandId: brand.id, categoryId: "ALL" });
                       }
                     }}
@@ -292,7 +292,7 @@ export function CatalogFilters({
                 >
                   <summary
                     onClick={() => {
-                      if (!selectedInGroup) {
+                      if (filters.categoryId !== parent.id) {
                         onChange({ ...filters, categoryId: parent.id });
                       }
                     }}
