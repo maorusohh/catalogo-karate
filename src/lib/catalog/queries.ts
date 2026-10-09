@@ -19,27 +19,54 @@ export type CatalogFilters = {
 
 type CatalogReferenceMap = Record<string, string>;
 
-const MIN_ALIAS_PREFIX_LENGTH = 4;
+type SearchAliasGroup = {
+  minPrefixLength: number;
+  terms: readonly string[];
+};
 
-const searchAliasGroups = [
-  [
-    "karategi",
-    "karategis",
-    "karategui",
-    "karateguis",
-    "kimono",
-    "kimonos",
-    "uniforme",
-    "uniformes",
-  ],
-  ["guantin", "guantines", "guante", "guantes"],
-  ["espinillera", "espinilleras", "canillera", "canilleras"],
-  ["empeinera", "empeineras", "empeine", "empeines"],
-  ["peto", "petos", "pechera", "pecheras"],
-  ["casco", "cascos", "cabezal", "cabezales"],
-  ["cinturon", "cinturones", "cinto", "cintos", "obi"],
-  ["bolso", "bolsos", "maleta", "maletas", "mochila", "mochilas"],
-] as const;
+const searchAliasGroups: readonly SearchAliasGroup[] = [
+  {
+    minPrefixLength: 7,
+    terms: [
+      "karategi",
+      "karategis",
+      "karategui",
+      "karateguis",
+      "kimono",
+      "kimonos",
+      "uniforme",
+      "uniformes",
+    ],
+  },
+  {
+    minPrefixLength: 5,
+    terms: ["guantin", "guantines", "guante", "guantes"],
+  },
+  {
+    minPrefixLength: 6,
+    terms: ["espinillera", "espinilleras", "canillera", "canilleras"],
+  },
+  {
+    minPrefixLength: 6,
+    terms: ["empeinera", "empeineras", "empeine", "empeines"],
+  },
+  {
+    minPrefixLength: 4,
+    terms: ["peto", "petos", "pechera", "pecheras"],
+  },
+  {
+    minPrefixLength: 5,
+    terms: ["casco", "cascos", "cabezal", "cabezales"],
+  },
+  {
+    minPrefixLength: 5,
+    terms: ["cinturon", "cinturones", "cinto", "cintos", "obi"],
+  },
+  {
+    minPrefixLength: 5,
+    terms: ["bolso", "bolsos", "maleta", "maletas", "mochila", "mochilas"],
+  },
+];
 
 function normalize(value: string): string {
   return value
@@ -51,15 +78,13 @@ function normalize(value: string): string {
 }
 
 function getSearchCandidates(token: string): readonly string[] {
-  const aliasGroup = searchAliasGroups.find((group) =>
-    group.some(
-      (alias) =>
-        alias === token ||
-        (token.length >= MIN_ALIAS_PREFIX_LENGTH && alias.startsWith(token)),
-    ),
+  const aliasGroup = searchAliasGroups.find(
+    ({ minPrefixLength, terms }) =>
+      terms.includes(token) ||
+      (token.length >= minPrefixLength && terms.some((term) => term.startsWith(token))),
   );
 
-  return aliasGroup ?? [token];
+  return aliasGroup?.terms ?? [token];
 }
 
 function matchesSearch(searchableText: string, normalizedSearch: string): boolean {
