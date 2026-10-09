@@ -30,7 +30,7 @@ const initialFilters: CatalogFiltersState = {
 
 export function CatalogClient({ products, brands, categories }: CatalogClientProps) {
   const [filters, setFilters] = useState<CatalogFiltersState>(initialFilters);
-  const [sort, setSort] = useState<CatalogSort>("featured");
+  const [sort, setSort] = useState<CatalogSort>("none");
 
   const brandNames = useMemo(
     () => Object.fromEntries(brands.map((brand) => [brand.id, brand.name])),
@@ -64,7 +64,7 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
 
   function clearFilters() {
     setFilters(initialFilters);
-    setSort("featured");
+    setSort("none");
   }
 
   return (
@@ -122,7 +122,7 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
         </details>
       </div>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)]">
+      <div className="mt-8 grid gap-7 lg:grid-cols-[280px_minmax(0,1fr)] xl:gap-8">
         <aside className="hidden lg:block">
           <div className="sticky top-24 max-h-[calc(100vh-7rem)] [scrollbar-gutter:stable] overflow-y-scroll overscroll-contain pr-2">
             <CatalogFilters
