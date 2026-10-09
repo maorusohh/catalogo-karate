@@ -4,7 +4,7 @@
 
 Este documento es la referencia operativa del proyecto. Resume el estado comprobado de producción, la fuente editorial, las decisiones vigentes y el backlog inmediato. Si una conversación histórica contradice este archivo, debe revisarse primero el repositorio y Google Sheets.
 
-## 1. Estado estable actual
+## 1. Estado estable y candidato actual
 
 Repositorio:
 
@@ -18,13 +18,13 @@ Producción:
 https://catalogo-karate.pages.dev
 ```
 
-Checkpoint estable validado:
+Checkpoint estable actualmente publicado:
 
 ```text
 33c1aec test: cover Adidas Ao Aka competition labels
 ```
 
-Resultados del checkpoint estable:
+Resultados comprobados del checkpoint estable:
 
 - Prettier: PASSED;
 - ESLint: PASSED;
@@ -33,18 +33,29 @@ Resultados del checkpoint estable:
 - variantes + Ao/Aka: **21/21**;
 - E2E completo: **153/153**.
 
-Blindajes unitarios añadidos después en `release-candidate`:
+Checkpoint candidato validado más reciente:
+
+```text
+903bbca style: format dynamic SEO metadata
+```
+
+Validaciones recientes de `release-candidate`:
+
+- Prettier: PASSED;
+- ESLint: PASSED;
+- production build: **73/73** páginas;
+- SEO E2E dirigido: **9/9**;
+- unit tests del bloque de blindajes previo: **32/32**;
+- working tree: limpio tras validación.
+
+Blindajes vigentes en el candidato:
 
 - K220 DNA conserva **11** variantes;
 - K200E conserva **6** rangos;
 - `adidas-k200dnakit` no existe como producto canónico;
 - `__default__` no aparece en el mensaje de WhatsApp.
 
-Validación del candidato:
-
-- unit tests: **32/32**;
-- Prettier: PASSED;
-- ESLint: PASSED.
+El candidato todavía **no** debe considerarse producción hasta completar el ciclo de validación/promoción correspondiente.
 
 ## 2. Flujo de releases
 
@@ -67,13 +78,13 @@ Contrato:
 4. el SHA validado pasa a `production-stable`;
 5. ese mismo SHA pasa a `main` y Cloudflare Pages.
 
-No introducir commits adicionales entre la validación y la promoción.
+No introducir commits adicionales entre la validación final del candidato y la promoción.
 
-Estado tras el último release:
+Estado de producción vigente:
 
 ```text
-main              -> 33c1aec
-production-stable -> 33c1aec
+main                -> 33c1aec
+production-stable   -> 33c1aec
 production-previous -> 3321aaa
 ```
 
@@ -215,7 +226,17 @@ La navegación visible usa **Explorar marcas**.
 
 La home incluye sección de marcas y solo expone filtros con productos activos.
 
+Logos runtime canónicos ya versionados:
+
+```text
+public/images/brands/best-sport.webp
+public/images/brands/mallems.webp
+public/images/brands/no-kashi.png
+```
+
 `Generica` y `Adidas` todavía no tienen logo runtime asignado en `brands.logo`.
+
+La carpeta local duplicada `public/images/catalogo/brands/` fue revisada y eliminada tras verificar por SHA-256 que los tres logos usados eran idénticos a los canónicos.
 
 No crear una marca nueva hasta confirmar nombre comercial exacto y material verificable.
 
@@ -401,17 +422,29 @@ Implementado y cubierto:
 - cobertura de Marcas y FAQ;
 - navegación compacta mobile/tablet y navegación horizontal desktop.
 
-El último checkpoint funcional completo pasó **153/153 E2E**.
+El último checkpoint funcional completo de producción pasó **153/153 E2E**.
 
 ## 13. SEO y exportación estática
 
-SEO básico implementado:
+SEO implementado:
 
-- `metadataBase`;
+- `metadataBase` global;
 - sitemap;
 - robots;
 - rutas de marcas y FAQ en sitemap;
-- pruebas E2E de SEO.
+- canonical explícito en producto, marca y categoría;
+- Open Graph dinámico en producto, marca y categoría;
+- Twitter metadata dinámica;
+- producto reutiliza su primera imagen canónica como imagen social cuando existe;
+- marca reutiliza su logo canónico como imagen social cuando existe;
+- pruebas E2E específicas de SEO.
+
+Validación del candidato SEO:
+
+```text
+9/9 E2E SEO
+73/73 build estático
+```
 
 Configuración Next.js:
 
@@ -425,11 +458,12 @@ Build desde:
 out
 ```
 
-SEO avanzado pendiente:
+Pendiente relacionado con SEO:
 
-- canonical fino;
-- social previews finales;
-- revisión asociada al dominio definitivo.
+- revisar metadatos y canonicales cuando exista dominio definitivo distinto de `catalogo-karate.pages.dev`;
+- definir imagen social/branding global definitivo cuando exista el activo de identidad aprobado.
+
+No publicar datos estructurados de ofertas que simplifiquen o contradigan las distintas bases comerciales de precio.
 
 ## 14. Rendimiento
 
@@ -453,15 +487,56 @@ Umbrales actuales:
 - warning: **300 KiB**;
 - bloqueo: **1 MiB**.
 
-Hallazgo crítico actual del repositorio:
+Bloqueador original resuelto:
 
 ```text
-BESTSPORT-2808WKF__03.webp = 2,576,681 bytes (~2.46 MiB)
+BESTSPORT-2808WKF__03.webp
+antes: 2,576,681 bytes (~2.46 MiB)
+ahora: 617,972 bytes (~603.5 KiB)
 ```
 
-Otros archivos que merecen optimización editorial por superar ~300 KiB incluyen imágenes de Adidas ADIP03, ADITHGM01K, Best Sport 2652 y varios Mallems.
+La optimización preservó las dimensiones originales y quedó versionada en:
 
-`MALLEMS-22__01.webp` remoto pesa **452,750 bytes**; existe una versión local optimizada pendiente de revisión/versionado independiente.
+```text
+9a3bdc6 perf: optimize Best Sport competition belt image
+```
+
+Optimización Mallems resuelta:
+
+```text
+MALLEMS-22__01.webp
+antes: 452,750 bytes (~442.1 KiB)
+ahora: 70,938 bytes (~69.3 KiB)
+dimensiones: 881x1279
+PSNR comprobado: 49.11 dB
+```
+
+Quedó versionada en:
+
+```text
+c19d6a7 perf: optimize Mallems product image
+```
+
+Última auditoría comprobada tras ambas optimizaciones:
+
+- **109** imágenes revisadas;
+- **0** bloqueadores por encima de 1 MiB;
+- **11** warnings por encima de 300 KiB;
+- resultado: PASSED.
+
+Warnings de tamaño actuales, todos no bloqueantes:
+
+- `ADIDAS-ADITHGM01K__04.webp` ~616.3 KiB;
+- `BESTSPORT-2808WKF__03.webp` ~603.5 KiB;
+- `ADIDAS-ADIP03__04.webp` ~491.3 KiB;
+- `MALLEMS-09__02.webp` ~452.7 KiB;
+- `ADIDAS-ADIP03__02.webp` ~404.1 KiB;
+- `ADIDAS-ADITHGM01K__01.webp` ~398.2 KiB;
+- `ADIDAS-ADIP03__01.webp` ~378.8 KiB;
+- `MALLEMS-23__01.webp` ~361.7 KiB;
+- `BESTSPORT-2652__02.webp` ~356.2 KiB;
+- `MALLEMS-21__01.webp` ~351.6 KiB;
+- `ADIDAS-ADIP03__03.webp` ~343.0 KiB.
 
 La optimización debe preservar calidad suficiente, modelo exacto y procedencia; no sustituir por imágenes parecidas.
 
@@ -501,21 +576,41 @@ Reglas:
 
 Las imágenes pendientes no bloquean el desarrollo estructural.
 
-## 17. Estado local deliberadamente fuera de Git
+## 17. Estado local y recursos de trabajo
 
-El entorno local conserva intencionalmente:
+Tras el checkpoint SEO validado, el working tree quedó limpio.
+
+`recursos/` contiene material fuente, auditorías, imágenes extraídas y capturas de revisión. Es deliberadamente local y está excluido mediante:
 
 ```text
-M public/images/catalogo/products/MALLEMS-22__01.webp
-?? public/images/catalogo/brands/
-?? recursos/
+/recursos/
 ```
 
-No usar `git add .`.
+en `.gitignore`.
 
-`MALLEMS-22__01.webp` debe revisarse como checkpoint de imagen independiente.
+Commit de higiene:
 
-`public/images/catalogo/brands/` y `recursos/` requieren revisión explícita antes de decidir si se versionan.
+```text
+14b8a00 chore: ignore local project resources
+```
+
+La antigua carpeta local redundante:
+
+```text
+public/images/catalogo/brands/
+```
+
+fue eliminada después de verificar que Best Sport, Mallems y No Kashi coincidían por SHA-256 con los logos runtime canónicos.
+
+No existe actualmente ningún archivo deliberadamente modificado o no rastreado que deba preservarse dentro del working tree.
+
+Sigue vigente la regla:
+
+```text
+NO usar git add .
+```
+
+Los stages deben ser explícitos por archivo.
 
 ## 18. Deployment
 
@@ -564,23 +659,30 @@ La verificación pública de cada deployment es separada del build local.
 - ✅ cierre del carrito por backdrop en pantallas compactas;
 - ✅ responsive smoke de rutas principales;
 - ✅ caché de assets Cloudflare;
-- ✅ robots + sitemap + SEO básico;
+- ✅ robots + sitemap;
+- ✅ canonical dinámico + Open Graph + Twitter metadata;
+- ✅ auditoría de peso de imágenes;
+- ✅ bloqueador Best Sport optimizado y versionado;
+- ✅ Mallems-22 optimizada y versionada;
+- ✅ `recursos/` excluido como material local;
+- ✅ logos locales redundantes revisados y eliminados;
 - ✅ flujo `release-candidate` -> `production-stable` -> `main`;
 - ✅ 73/73 build y 153/153 E2E del último release estable;
-- ✅ 32/32 unit tests en el candidato actual.
+- ✅ 32/32 unit tests de blindaje;
+- ✅ 73/73 build + 9/9 SEO E2E del candidato `903bbca`.
 
 ### Pendiente
 
-- 🟡 optimizar imágenes pesadas, empezando por `BESTSPORT-2808WKF__03.webp`;
-- 🟡 revisar/versionar `MALLEMS-22__01.webp` optimizada;
-- ⬜ revisar logos locales no rastreados;
-- ⬜ incorporar logo definitivo para reemplazar `KD`;
-- ⬜ incorporar logo Adidas;
-- ⬜ completar imágenes faltantes;
+- ⬜ incorporar logo definitivo del Catálogo Karate-Do para reemplazar el marcador `KD`;
+- ⬜ incorporar logo Adidas cuando exista un activo exacto aprobado;
+- ⬜ completar imágenes faltantes con fuentes fiables;
 - ⬜ completar características de la maleta Mallems cuando exista información fiable;
 - ⬜ incorporar nueva marca cuando exista nombre/material exacto;
-- ⬜ SEO avanzado y dominio final;
+- 🟡 continuar optimización editorial de imágenes >300 KiB cuando aporte valor sin degradar calidad;
+- ⬜ revisar SEO al migrar a un dominio definitivo, si ocurre;
 - ⬜ pulido visual final;
+- ⬜ validación integral final del candidato;
+- ⬜ promoción exacta del SHA validado;
 - ⬜ smoke público final en Cloudflare;
 - ⬜ cierre V1.
 
