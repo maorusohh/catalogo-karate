@@ -649,31 +649,46 @@ La verificación pública de cada deployment es separada del build local.
 - ✅ último pase dirigido del candidato: 38/38 unit, 73/73 build y 108/108 responsive+a11y E2E;
 - ✅ últimos ajustes visuales de filtros: format, lint y 73/73 build.
 
-### Pendiente
+### Camino crítico de cierre V1
 
-- ⬜ incorporar logo definitivo del Catálogo Karate-Do para reemplazar el marcador `KD`;
-- ⬜ incorporar logo Adidas cuando exista un activo exacto aprobado;
-- ⬜ completar imágenes faltantes con fuentes fiables;
-- ⬜ completar características de la maleta Mallems cuando exista información fiable;
-- ⬜ incorporar nueva marca cuando exista nombre/material exacto;
-- ⬜ revisar SEO al migrar a un dominio definitivo, si ocurre;
-- ⬜ pulido visual global final — pospuesto hasta cerrar contenido y activos;
 - ⬜ validación integral final del candidato;
+- ⬜ congelar el SHA exacto que pase la validación;
 - ⬜ promoción exacta del SHA validado;
 - ⬜ smoke público final en Cloudflare;
 - ⬜ cierre V1.
 
+### Backlog editorial diferido — no bloquea el cierre técnico
+
+Mantener estos pendientes visibles y resolverlos ordenadamente cuando exista material verificable. No deben desviar el camino crítico ni resolverse con datos o activos aproximados.
+
+1. ⬜ **Ocho productos sin imagen canónica:**
+   - `mallems-peto-corporal-karate-do-u14-11`;
+   - `mallems-cinturones-grado-bordado-17`;
+   - `generica-cinturon-blanco-principiantes-20`;
+   - `adidas-k999kit`;
+   - `adidas-k999hwt`;
+   - `adidas-k192dnakit-v`;
+   - `adidas-k220dnakit`;
+   - `adidas-k200e`.
+2. ⬜ **Características de `mallems-maleta-viajera-28`**, únicamente cuando el proveedor confirme información fiable.
+3. ⬜ **Logo Adidas**, únicamente con activo exacto aprobado.
+4. ⬜ **Logo definitivo del Catálogo Karate-Do**, para reemplazar el marcador temporal `KD` cuando exista diseño aprobado.
+5. ⬜ **Nueva marca**, únicamente cuando estén confirmados nombre comercial, productos y material exacto.
+6. ⬜ **SEO de dominio definitivo**, solo si se migra desde `catalogo-karate.pages.dev`.
+7. ⬜ **Pulido visual global final / microestética**, agrupado como una auditoría posterior y no como cambios aislados durante el cierre funcional.
+
+Estos puntos pueden incorporarse después como checkpoints editoriales independientes sin reabrir la arquitectura de V1.
+
 ## 21. Orden de trabajo restante
 
-1. resolver contenido/activos verificables pendientes sin inventar datos;
-2. incorporar branding definitivo cuando estén disponibles los activos aprobados;
-3. realizar una auditoría visual global final, no microajustes aislados;
-4. actualizar esta documentación con el SHA definitivo si cambia el candidato;
-5. ejecutar validación integral final;
-6. congelar el SHA validado;
-7. promover el mismo SHA a `production-stable` y `main`;
-8. comprobar deployment público en Cloudflare;
-9. cerrar V1.
+1. ejecutar la validación integral final del candidato actual;
+2. si alguna validación modifica el snapshot o detecta una regresión, corregir la causa y repetir únicamente lo necesario hasta obtener un árbol limpio;
+3. registrar los conteos reales finales y actualizar esta documentación si el SHA cambia;
+4. congelar el SHA exacto validado y no crear commits posteriores;
+5. promover ese mismo SHA a `production-stable` y `main`;
+6. comprobar el deployment público en Cloudflare;
+7. cerrar técnicamente V1;
+8. resolver después el backlog editorial diferido en checkpoints separados cuando existan los activos o datos aprobados.
 
 ## 22. Regla de continuidad
 
