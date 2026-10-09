@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { filterProducts, type CatalogFilters } from "@/lib/catalog/queries";
+import { filterProducts, sortProducts, type CatalogFilters } from "@/lib/catalog/queries";
 import type { Category, Product } from "@/types/catalog";
 
 const categories: Category[] = [
@@ -143,6 +143,66 @@ describe("filterProducts", () => {
     expect(uniform.map((product) => product.id)).toEqual(["karategi-entrenamiento"]);
   });
 
+  it("trata karategi y karategui como la misma intención de búsqueda", () => {
+    const products = [
+      makeProduct("karategi-entrenamiento", "karategis", "UNSPECIFIED", {
+        name: "Karategi de entrenamiento",
+      }),
+      makeProduct("karategui-kumite", "karategis", "WKF", {
+        name: "Karategui de kumite",
+      }),
+      makeProduct("uniforme-iniciacion", "karategis", "UNSPECIFIED", {
+        name: "Uniforme de iniciación",
+      }),
+    ];
+
+    const withoutU = filterProducts(
+      products,
+      { ...baseFilters, search: "karategi" },
+      brandNames,
+      categoryNames,
+      categories,
+    );
+    const withU = filterProducts(
+      products,
+      { ...baseFilters, search: "karategui" },
+      brandNames,
+      categoryNames,
+      categories,
+    );
+
+    expect(withoutU.map((product) => product.id)).toEqual([
+      "karategi-entrenamiento",
+      "karategui-kumite",
+      "uniforme-iniciacion",
+    ]);
+    expect(withU.map((product) => product.id)).toEqual(withoutU.map((product) => product.id));
+  });
+
+  it("expande prefijos inequívocos de términos equivalentes", () => {
+    const products = [
+      makeProduct("canillera", "guantines", "WKF", {
+        name: "Canilleras de competición",
+      }),
+      makeProduct("espinillera-adidas", "guantines", "WKF", {
+        name: "Espinilleras Adidas",
+      }),
+      makeProduct("guantin", "guantines", "WKF", {
+        name: "Guantines",
+      }),
+    ];
+
+    const result = filterProducts(
+      products,
+      { ...baseFilters, search: "caniller" },
+      brandNames,
+      categoryNames,
+      categories,
+    );
+
+    expect(result.map((product) => product.id)).toEqual(["canillera", "espinillera-adidas"]);
+  });
+
   it("combina sinónimos con atributos reales de variantes", () => {
     const products = [
       makeProduct("guantin-azul", "guantines", "WKF", {
@@ -184,5 +244,19 @@ describe("filterProducts", () => {
     );
 
     expect(result.map((product) => product.id)).toEqual(["guantin-azul"]);
+  });
+});
+
+describe("sortProducts", () => {
+  it("preserva el orden de origen cuando no se selecciona criterio", () => {
+    const products = [
+      makeProduct("producto-b", "karategis", "UNSPECIFIED"),
+      makeProduct("producto-a", "karategis", "UNSPECIFIED"),
+    ];
+
+    expect(sortProducts(products, "none").map((product) => product.id)).toEqual([
+      "producto-b",
+      "producto-a",
+    ]);
   });
 });
