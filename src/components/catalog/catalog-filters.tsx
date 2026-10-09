@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 
+import { approvalPresentation } from "@/lib/catalog/approval";
 import type { CatalogFilters as CatalogFiltersState } from "@/lib/catalog/queries";
 import type { ApprovalLevel, Brand, Category, Product } from "@/types/catalog";
 
@@ -20,16 +21,15 @@ type ApprovalOption = {
   detail?: string;
 };
 
+const approvalLevels: ApprovalLevel[] = ["WKF", "NATIONAL", "NON_APPROVED", "UNSPECIFIED"];
+
 const approvalOptions: ApprovalOption[] = [
   { value: "ALL", label: "Todas" },
-  { value: "WKF", label: "WKF", detail: "World Karate Federation" },
-  {
-    value: "NATIONAL",
-    label: "FVKD",
-    detail: "Federación Venezolana de Karate Do · Nacional",
-  },
-  { value: "NON_APPROVED", label: "No aprobado" },
-  { value: "UNSPECIFIED", label: "Sin aprobación especificada" },
+  ...approvalLevels.map((value) => ({
+    value,
+    label: approvalPresentation[value].shortLabel,
+    detail: approvalPresentation[value].detail,
+  })),
 ];
 
 const categoryOrder = ["karategis", "protecciones", "cinturones", "accesorios"];
@@ -88,6 +88,16 @@ function FilterSection({
   );
 }
 
+function OptionCount({ count, selected }: { count: number; selected: boolean }) {
+  return (
+    <span
+      className={`shrink-0 text-[11px] font-semibold tabular-nums ${selected ? "text-white/60" : "text-neutral-400"}`}
+    >
+      {count}
+    </span>
+  );
+}
+
 export function CatalogFilters({
   filters,
   brands,
@@ -96,9 +106,8 @@ export function CatalogFilters({
   onChange,
   onReset,
 }: CatalogFiltersProps) {
-  const activeProductBrandIds = new Set(
-    products.filter((product) => product.active).map((product) => product.brandId),
-  );
+  const activeProducts = products.filter((product) => product.active);
+  const activeProductBrandIds = new Set(activeProducts.map((product) => product.brandId));
 
   const activeBrands = brands
     .filter((brand) => brand.active && activeProductBrandIds.has(brand.id))
@@ -151,21 +160,19 @@ export function CatalogFilters({
               type="button"
               aria-pressed={filters.brandId === "ALL"}
               onClick={() => onChange({ ...filters, brandId: "ALL" })}
-              className={`w-full rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-colors ${
+              className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-colors ${
                 filters.brandId === "ALL"
                   ? "bg-neutral-950 text-white"
                   : "bg-white text-neutral-700 hover:bg-neutral-100"
               }`}
             >
-              Todas las marcas
+              <span>Todas las marcas</span>
+              <OptionCount count={activeProducts.length} selected={filters.brandId === "ALL"} />
             </button>
 
             {activeBrands.map((brand) => {
-              const categoryIds = new Set(
-                products
-                  .filter((product) => product.active && product.brandId === brand.id)
-                  .map((product) => product.categoryId),
-              );
+              const brandProducts = activeProducts.filter((product) => product.brandId === brand.id);
+              const categoryIds = new Set(brandProducts.map((product) => product.categoryId));
 
               const brandCategories = activeCategories
                 .filter((category) => categoryIds.has(category.id))
@@ -179,12 +186,17 @@ export function CatalogFilters({
                   className="group/brand overflow-hidden rounded-xl border border-black/10 bg-white"
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden">
-                    <span>{brand.name}</span>
-                    <ChevronIcon
-                      className={`size-4 transition-transform duration-200 group-open/brand:rotate-180 ${
-                        brandSelected ? "text-[#b31322]" : "text-neutral-400"
-                      }`}
-                    />
+                    <span className="min-w-0 truncate">{brand.name}</span>
+                    <span className="flex shrink-0 items-center gap-2">
+                      <span className="text-[11px] font-semibold text-neutral-400 tabular-nums">
+                        {brandProducts.length}
+                      </span>
+                      <ChevronIcon
+                        className={`size-4 transition-transform duration-200 group-open/brand:rotate-180 ${
+                          brandSelected ? "text-[#b31322]" : "text-neutral-400"
+                        }`}
+                      />
+                    </span>
                   </summary>
 
                   <div className="space-y-1 border-t border-black/8 p-2">
@@ -192,17 +204,24 @@ export function CatalogFilters({
                       type="button"
                       aria-pressed={brandSelected && filters.categoryId === "ALL"}
                       onClick={() => onChange({ ...filters, brandId: brand.id, categoryId: "ALL" })}
-                      className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                      className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${
                         brandSelected && filters.categoryId === "ALL"
                           ? "bg-neutral-950 font-semibold text-white"
                           : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-950"
                       }`}
                     >
-                      Todos los productos
+                      <span>Ver todos</span>
+                      <OptionCount
+                        count={brandProducts.length}
+                        selected={brandSelected && filters.categoryId === "ALL"}
+                      />
                     </button>
 
                     {brandCategories.map((category) => {
                       const selected = brandSelected && filters.categoryId === category.id;
+                      const count = brandProducts.filter(
+                        (product) => product.categoryId === category.id,
+                      ).length;
 
                       return (
                         <button
@@ -216,13 +235,14 @@ export function CatalogFilters({
                               categoryId: category.id,
                             })
                           }
-                          className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                          className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${
                             selected
                               ? "bg-neutral-950 font-semibold text-white"
                               : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-950"
                           }`}
                         >
-                          {category.name}
+                          <span className="min-w-0">{category.name}</span>
+                          <OptionCount count={count} selected={selected} />
                         </button>
                       );
                     })}
@@ -276,7 +296,7 @@ export function CatalogFilters({
                       type="button"
                       aria-pressed={filters.categoryId === parent.id}
                       onClick={() => onChange({ ...filters, categoryId: parent.id })}
-                      className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                      className={`w-full rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${
                         filters.categoryId === parent.id
                           ? "bg-neutral-950 font-semibold text-white"
                           : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-950"
@@ -291,7 +311,7 @@ export function CatalogFilters({
                         type="button"
                         aria-pressed={filters.categoryId === child.id}
                         onClick={() => onChange({ ...filters, categoryId: child.id })}
-                        className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                        className={`w-full rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${
                           filters.categoryId === child.id
                             ? "bg-neutral-950 font-semibold text-white"
                             : "text-neutral-600 hover:bg-neutral-50 hover:text-neutral-950"
