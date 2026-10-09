@@ -56,6 +56,12 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
 
   const hasActiveQuery = filters.search.trim().length > 0 || activeFilterCount > 0;
 
+  let resultLabel = products.length === 1 ? "producto total" : "productos totales";
+
+  if (hasActiveQuery) {
+    resultLabel = filteredProducts.length === 1 ? "producto encontrado" : "productos encontrados";
+  }
+
   function clearFilters() {
     setFilters(initialFilters);
     setSort("featured");
@@ -79,15 +85,9 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
         </div>
 
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-black/6 pt-4">
-          <p className="text-sm text-neutral-500">
+          <p data-testid="catalog-result-count" className="text-sm text-neutral-500">
             <span className="font-semibold text-neutral-950">{filteredProducts.length}</span>{" "}
-            {hasActiveQuery
-              ? filteredProducts.length === 1
-                ? "producto encontrado"
-                : "productos encontrados"
-              : products.length === 1
-                ? "producto total"
-                : "productos totales"}
+            {resultLabel}
           </p>
 
           {hasActiveQuery && (
@@ -124,7 +124,7 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)]">
         <aside className="hidden lg:block">
-          <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto overscroll-contain pr-2 [scrollbar-gutter:stable]">
+          <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-scroll overscroll-contain pr-2 [scrollbar-gutter:stable]">
             <CatalogFilters
               filters={filters}
               brands={brands}
