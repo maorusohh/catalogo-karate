@@ -14,6 +14,7 @@ export function CatalogSort({ value, onChange }: CatalogSortProps) {
         <select
           value={value}
           onChange={(event) => onChange(event.target.value as CatalogSort)}
+          aria-describedby="catalog-sort-help"
           className={`min-h-13 w-full appearance-none rounded-2xl border border-black/12 bg-white pr-11 pl-4 text-sm font-medium transition-colors outline-none focus:border-neutral-950 lg:min-w-56 ${
             value === "none" ? "text-neutral-400" : "text-neutral-950"
           }`}
@@ -40,6 +41,10 @@ export function CatalogSort({ value, onChange }: CatalogSortProps) {
             <path d="m7 10 5 5 5-5" />
           </svg>
         </span>
+      </span>
+
+      <span id="catalog-sort-help" className="sr-only">
+        La opción con raya conserva el orden original del catálogo sin aplicar un orden adicional.
       </span>
     </label>
   );
