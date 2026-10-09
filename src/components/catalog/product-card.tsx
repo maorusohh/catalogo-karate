@@ -1,14 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import type { ApprovalLevel, AvailabilityStatus, Product } from "@/types/catalog";
-
-const approvalLabels: Record<ApprovalLevel, string> = {
-  WKF: "Aprobación WKF",
-  NATIONAL: "Aprobación FVKD",
-  NON_APPROVED: "No aprobado",
-  UNSPECIFIED: "Por confirmar",
-};
+import { approvalPresentation } from "@/lib/catalog/approval";
+import type { AvailabilityStatus, Product } from "@/types/catalog";
 
 const availabilityLabels: Record<AvailabilityStatus, string> = {
   AVAILABLE: "Disponible",
@@ -64,7 +58,7 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
           </span>
 
           <span className="rounded-full border border-[var(--ck-red)]/10 bg-[var(--ck-red-soft)] px-3 py-1.5 text-[11px] leading-none font-semibold tracking-[0.02em] text-[var(--ck-red-dark)] sm:text-xs">
-            {approvalLabels[product.approval]}
+            {approvalPresentation[product.approval].cardLabel}
           </span>
         </div>
 
@@ -87,25 +81,23 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
 
         <div className="mt-auto pt-6">
           <div className="border-t border-black/7 pt-4">
-            <div className="flex items-stretch justify-between gap-4">
-              <div className="flex min-h-11 min-w-0 flex-col justify-center">
-                <p className="text-sm font-semibold tracking-tight text-neutral-950">
-                  {primaryPrice?.label ?? "Consultar precio"}
-                </p>
+            <div className="flex min-h-11 items-start justify-between gap-3">
+              <p className="min-w-0 text-sm leading-5 font-semibold tracking-tight text-neutral-950">
+                {primaryPrice?.label ?? "Consultar precio"}
+              </p>
 
-                <p className="mt-1 text-xs font-medium text-neutral-500">
-                  {availabilityLabels[product.availability]}
-                </p>
-              </div>
-
-              <Link
-                href={`/producto/${product.slug}`}
-                aria-label={`Ver producto: ${product.name}`}
-                className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-neutral-950 px-4 text-sm font-semibold text-white transition-all duration-200 group-hover:bg-[var(--ck-red)]"
-              >
-                Ver producto
-              </Link>
+              <p className="shrink-0 pt-0.5 text-right text-xs leading-5 font-medium text-neutral-500">
+                {availabilityLabels[product.availability]}
+              </p>
             </div>
+
+            <Link
+              href={`/producto/${product.slug}`}
+              aria-label={`Ver producto: ${product.name}`}
+              className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-[var(--ck-red)]"
+            >
+              Ver producto
+            </Link>
           </div>
         </div>
       </div>
