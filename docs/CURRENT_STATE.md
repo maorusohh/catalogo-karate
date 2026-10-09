@@ -33,20 +33,27 @@ Resultados comprobados del checkpoint estable:
 - variantes + Ao/Aka: **21/21**;
 - E2E completo: **153/153**.
 
-Checkpoint candidato validado más reciente:
+Checkpoint candidato más reciente:
 
 ```text
-903bbca style: format dynamic SEO metadata
+a66f622 perf: optimize remaining catalog images
 ```
 
-Validaciones recientes de `release-candidate`:
+Validación funcional reciente de `release-candidate`:
 
 - Prettier: PASSED;
 - ESLint: PASSED;
 - production build: **73/73** páginas;
 - SEO E2E dirigido: **9/9**;
-- unit tests del bloque de blindajes previo: **32/32**;
-- working tree: limpio tras validación.
+- unit tests del bloque de blindajes previo: **32/32**.
+
+Validación de rendimiento posterior:
+
+- auditoría de imágenes: **109** archivos;
+- bloqueadores por encima de 1 MiB: **0**;
+- warnings por encima de 300 KiB: **1**;
+- 10 imágenes adicionales optimizadas y versionadas;
+- working tree: limpio tras el checkpoint.
 
 Blindajes vigentes en el candidato:
 
@@ -55,7 +62,7 @@ Blindajes vigentes en el candidato:
 - `adidas-k200dnakit` no existe como producto canónico;
 - `__default__` no aparece en el mensaje de WhatsApp.
 
-El candidato todavía **no** debe considerarse producción hasta completar el ciclo de validación/promoción correspondiente.
+El candidato todavía **no** debe considerarse producción hasta completar la validación integral final y el ciclo de promoción correspondiente.
 
 ## 2. Flujo de releases
 
@@ -495,7 +502,7 @@ antes: 2,576,681 bytes (~2.46 MiB)
 ahora: 617,972 bytes (~603.5 KiB)
 ```
 
-La optimización preservó las dimensiones originales y quedó versionada en:
+La primera optimización preservó las dimensiones originales y quedó versionada en:
 
 ```text
 9a3bdc6 perf: optimize Best Sport competition belt image
@@ -517,28 +524,30 @@ Quedó versionada en:
 c19d6a7 perf: optimize Mallems product image
 ```
 
-Última auditoría comprobada tras ambas optimizaciones:
+Checkpoint final de optimización de imágenes:
+
+```text
+a66f622 perf: optimize remaining catalog images
+```
+
+En el lote final se optimizaron otras **10 imágenes**, preservando dimensiones originales y validando cada candidato antes de sustituir el archivo del proyecto.
+
+Resultado final comprobado:
 
 - **109** imágenes revisadas;
 - **0** bloqueadores por encima de 1 MiB;
-- **11** warnings por encima de 300 KiB;
+- **1** warning por encima de 300 KiB;
 - resultado: PASSED.
 
-Warnings de tamaño actuales, todos no bloqueantes:
+Único warning residual deliberado:
 
-- `ADIDAS-ADITHGM01K__04.webp` ~616.3 KiB;
-- `BESTSPORT-2808WKF__03.webp` ~603.5 KiB;
-- `ADIDAS-ADIP03__04.webp` ~491.3 KiB;
-- `MALLEMS-09__02.webp` ~452.7 KiB;
-- `ADIDAS-ADIP03__02.webp` ~404.1 KiB;
-- `ADIDAS-ADITHGM01K__01.webp` ~398.2 KiB;
-- `ADIDAS-ADIP03__01.webp` ~378.8 KiB;
-- `MALLEMS-23__01.webp` ~361.7 KiB;
-- `BESTSPORT-2652__02.webp` ~356.2 KiB;
-- `MALLEMS-21__01.webp` ~351.6 KiB;
-- `ADIDAS-ADIP03__03.webp` ~343.0 KiB.
+```text
+BESTSPORT-2808WKF__03.webp = ~603.5 KiB
+```
 
-La optimización debe preservar calidad suficiente, modelo exacto y procedencia; no sustituir por imágenes parecidas.
+El análisis conservador de recompresión no produjo una variante por debajo de 300 KiB que justificara sustituir la versión actual. Se conserva deliberadamente para evitar una reducción adicional sin suficiente beneficio.
+
+La optimización de peso de imágenes para V1 se considera **cerrada**. Futuras optimizaciones solo deben hacerse cuando exista una mejora material verificable sin degradar calidad, modelo exacto o procedencia.
 
 ## 15. Warnings editoriales actuales
 
@@ -578,7 +587,7 @@ Las imágenes pendientes no bloquean el desarrollo estructural.
 
 ## 17. Estado local y recursos de trabajo
 
-Tras el checkpoint SEO validado, el working tree quedó limpio.
+Tras el checkpoint de rendimiento `a66f622`, el working tree quedó limpio.
 
 `recursos/` contiene material fuente, auditorías, imágenes extraídas y capturas de revisión. Es deliberadamente local y está excluido mediante:
 
@@ -601,6 +610,8 @@ public/images/catalogo/brands/
 ```
 
 fue eliminada después de verificar que Best Sport, Mallems y No Kashi coincidían por SHA-256 con los logos runtime canónicos.
+
+Los originales previos de las optimizaciones de imágenes se conservaron únicamente como respaldos temporales fuera del repositorio durante la validación.
 
 No existe actualmente ningún archivo deliberadamente modificado o no rastreado que deba preservarse dentro del working tree.
 
@@ -661,15 +672,17 @@ La verificación pública de cada deployment es separada del build local.
 - ✅ caché de assets Cloudflare;
 - ✅ robots + sitemap;
 - ✅ canonical dinámico + Open Graph + Twitter metadata;
-- ✅ auditoría de peso de imágenes;
-- ✅ bloqueador Best Sport optimizado y versionado;
+- ✅ auditoría repetible de peso de imágenes;
+- ✅ bloqueador Best Sport reducido por debajo de 1 MiB;
 - ✅ Mallems-22 optimizada y versionada;
+- ✅ lote final de 10 imágenes adicionales optimizado;
+- ✅ auditoría final de imágenes: 109 revisadas, 0 bloqueadores y 1 warning residual deliberado;
 - ✅ `recursos/` excluido como material local;
 - ✅ logos locales redundantes revisados y eliminados;
 - ✅ flujo `release-candidate` -> `production-stable` -> `main`;
 - ✅ 73/73 build y 153/153 E2E del último release estable;
 - ✅ 32/32 unit tests de blindaje;
-- ✅ 73/73 build + 9/9 SEO E2E del candidato `903bbca`.
+- ✅ 73/73 build + 9/9 SEO E2E del candidato previo al bloque de imágenes.
 
 ### Pendiente
 
@@ -678,7 +691,6 @@ La verificación pública de cada deployment es separada del build local.
 - ⬜ completar imágenes faltantes con fuentes fiables;
 - ⬜ completar características de la maleta Mallems cuando exista información fiable;
 - ⬜ incorporar nueva marca cuando exista nombre/material exacto;
-- 🟡 continuar optimización editorial de imágenes >300 KiB cuando aporte valor sin degradar calidad;
 - ⬜ revisar SEO al migrar a un dominio definitivo, si ocurre;
 - ⬜ pulido visual final;
 - ⬜ validación integral final del candidato;
