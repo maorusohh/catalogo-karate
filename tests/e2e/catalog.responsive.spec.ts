@@ -87,6 +87,37 @@ test("productos reales del catálogo cargan correctamente y sin overflow", async
   }
 });
 
+test("el CTA Ver producto navega desde el catálogo a la ficha", async ({ page }) => {
+  await page.goto("/catalogo/", {
+    waitUntil: "domcontentloaded",
+  });
+
+  const productLink = page.getByRole("link", { name: /^Ver producto:/ }).first();
+  const href = await productLink.getAttribute("href");
+
+  expect(href).toBeTruthy();
+
+  await productLink.click();
+  await page.waitForURL("**/producto/**");
+
+  const pathname = new URL(page.url()).pathname;
+
+  expect([href, `${href}/`]).toContain(pathname);
+});
+
+test("el catálogo diferencia productos totales de resultados filtrados", async ({ page }) => {
+  await page.goto("/catalogo/", {
+    waitUntil: "domcontentloaded",
+  });
+
+  await expect(page.getByText(/\d+ productos totales/)).toBeVisible();
+
+  await page.getByRole("searchbox", { name: "Buscar productos" }).fill("karategi");
+
+  await expect(page.getByText(/\d+ productos encontrados/)).toBeVisible();
+  await expect(page.getByText(/\d+ productos totales/)).toHaveCount(0);
+});
+
 test("la navegación principal mantiene enlaces internos válidos", async ({ page }) => {
   await page.goto("/", {
     waitUntil: "domcontentloaded",
