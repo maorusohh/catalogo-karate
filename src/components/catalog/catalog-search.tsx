@@ -30,7 +30,7 @@ export function CatalogSearch({ value, onChange }: CatalogSearchProps) {
           value={value}
           onInput={(event) => onChange(event.currentTarget.value)}
           placeholder="Buscar por nombre, marca, categoría o SKU"
-          className="min-h-13 w-full rounded-2xl border border-black/12 bg-white pr-4 pl-12 text-sm text-neutral-950 outline-none transition-colors placeholder:text-neutral-500 focus:border-neutral-950"
+          className="min-h-13 w-full rounded-2xl border border-black/12 bg-white pr-4 pl-12 text-sm text-neutral-950 transition-colors outline-none placeholder:text-neutral-500 focus:border-neutral-950"
         />
       </span>
     </label>

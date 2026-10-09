@@ -124,7 +124,7 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)]">
         <aside className="hidden lg:block">
-          <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-scroll overscroll-contain pr-2 [scrollbar-gutter:stable]">
+          <div className="sticky top-24 max-h-[calc(100vh-7rem)] [scrollbar-gutter:stable] overflow-y-scroll overscroll-contain pr-2">
             <CatalogFilters
               filters={filters}
               brands={brands}
