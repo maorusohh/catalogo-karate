@@ -111,10 +111,13 @@ test("el catálogo diferencia productos totales de resultados filtrados", async 
   });
 
   const resultCount = page.getByTestId("catalog-result-count");
+  const searchbox = page.getByRole("searchbox", { name: "Buscar productos" });
 
   await expect(resultCount).toContainText(/\d+ productos totales/);
 
-  await page.getByRole("searchbox", { name: "Buscar productos" }).fill("karategi");
+  await searchbox.click();
+  await searchbox.pressSequentially("karategi");
+  await expect(searchbox).toHaveValue("karategi");
 
   await expect(resultCount).toContainText(/\d+ productos encontrados/);
   await expect(resultCount).not.toContainText("productos totales");
