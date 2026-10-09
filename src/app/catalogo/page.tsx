@@ -18,13 +18,13 @@ export default function CatalogoPage() {
     <main>
       <section className="border-b border-black/5">
         <Container>
-          <div className="pt-12 pb-9 sm:pt-14 sm:pb-11 lg:pt-16 lg:pb-12">
+          <div className="pt-12 pb-7 sm:pt-14 sm:pb-8 lg:pt-16 lg:pb-8">
             <div className="max-w-2xl">
               <p className="eyebrow">Equipamiento</p>
 
-              <h1 className="heading-section mt-6">Explora el catálogo</h1>
+              <h1 className="heading-section mt-7 sm:mt-8">Explora el catálogo</h1>
 
-              <p className="text-lead mt-7">
+              <p className="text-lead mt-7 sm:mt-8">
                 Encuentra productos por nombre, marca, categoría o aprobación. La información
                 comercial definitiva se confirma al momento de la consulta.
               </p>
@@ -33,7 +33,7 @@ export default function CatalogoPage() {
         </Container>
       </section>
 
-      <section className="pt-7 pb-10 sm:pt-8 sm:pb-12 lg:pt-10 lg:pb-14">
+      <section className="pt-7 pb-10 sm:pt-8 sm:pb-12 lg:pt-8 lg:pb-14">
         <Container>
           <CatalogClient products={products} brands={brands} categories={categories} />
         </Container>
