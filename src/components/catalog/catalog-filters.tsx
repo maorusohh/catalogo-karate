@@ -38,8 +38,16 @@ function getCategoryOrder(category: Category): number {
   return index === -1 ? categoryOrder.length : index;
 }
 
-function getApprovalLabel(value: ApprovalLevel | "ALL"): string {
-  return value === "ALL" ? "—" : approvalPresentation[value].shortLabel;
+function getApprovalLabel(value: CatalogFiltersState["approval"]): string {
+  if (value === "NONE") {
+    return "—";
+  }
+
+  if (value === "ALL") {
+    return "Todos los estados";
+  }
+
+  return approvalPresentation[value].shortLabel;
 }
 
 function ChevronIcon({ className = "" }: { className?: string }) {
@@ -96,6 +104,24 @@ function OptionCount({ count, selected = false }: { count: number; selected?: bo
   );
 }
 
+function NeutralOptionButton({ selected, onClick }: { selected: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-label="Volver al estado neutro"
+      aria-pressed={selected}
+      onClick={onClick}
+      className={`flex min-h-10 w-full items-center justify-center rounded-xl border border-dashed px-3 text-sm font-semibold transition-colors ${
+        selected
+          ? "border-black/10 bg-neutral-50 text-neutral-500"
+          : "border-black/10 bg-white text-neutral-400 hover:border-black/20 hover:text-neutral-700"
+      }`}
+    >
+      —
+    </button>
+  );
+}
+
 function AllOptionButton({
   label,
   count,
@@ -149,14 +175,18 @@ export function CatalogFilters({
     });
 
   const selectedBrandName =
-    filters.brandId === "ALL"
+    filters.brandId === "NONE"
       ? "—"
-      : (activeBrands.find((brand) => brand.id === filters.brandId)?.name ?? "—");
+      : filters.brandId === "ALL"
+        ? "Todas las marcas"
+        : (activeBrands.find((brand) => brand.id === filters.brandId)?.name ?? "—");
 
   const selectedCategoryName =
-    filters.categoryId === "ALL"
+    filters.categoryId === "NONE"
       ? "—"
-      : (activeCategories.find((category) => category.id === filters.categoryId)?.name ?? "—");
+      : filters.categoryId === "ALL"
+        ? "Todas las categorías"
+        : (activeCategories.find((category) => category.id === filters.categoryId)?.name ?? "—");
 
   return (
     <div className="rounded-3xl border border-black/10 bg-white p-5">
@@ -183,6 +213,11 @@ export function CatalogFilters({
       <div className="mt-4 space-y-3">
         <FilterSection title="Marcas" value={selectedBrandName}>
           <div className="space-y-2">
+            <NeutralOptionButton
+              selected={filters.brandId === "NONE"}
+              onClick={() => onChange({ ...filters, brandId: "NONE" })}
+            />
+
             <AllOptionButton
               label="Todas las marcas"
               count={activeProducts.length}
@@ -209,18 +244,20 @@ export function CatalogFilters({
                 >
                   <summary
                     onClick={() => {
-                      if (!brandSelected || filters.categoryId !== "ALL") {
-                        onChange({ ...filters, brandId: brand.id, categoryId: "ALL" });
+                      if (!brandSelected || filters.categoryId !== "NONE") {
+                        onChange({ ...filters, brandId: brand.id, categoryId: "NONE" });
                       }
                     }}
-                    className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden"
+                    className={`flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-semibold transition-colors [&::-webkit-details-marker]:hidden ${
+                      brandSelected ? "bg-neutral-950 text-white" : "text-neutral-900"
+                    }`}
                   >
                     <span className="min-w-0 truncate">{brand.name}</span>
                     <span className="flex shrink-0 items-center gap-2">
-                      <OptionCount count={brandProducts.length} />
+                      <OptionCount count={brandProducts.length} selected={brandSelected} />
                       <ChevronIcon
                         className={`size-4 transition-transform duration-200 group-open/brand:rotate-180 ${
-                          brandSelected ? "text-[#b31322]" : "text-neutral-400"
+                          brandSelected ? "text-white/70" : "text-neutral-400"
                         }`}
                       />
                     </span>
@@ -265,6 +302,11 @@ export function CatalogFilters({
 
         <FilterSection title="Categorías" value={selectedCategoryName}>
           <div className="space-y-2">
+            <NeutralOptionButton
+              selected={filters.categoryId === "NONE"}
+              onClick={() => onChange({ ...filters, categoryId: "NONE" })}
+            />
+
             <AllOptionButton
               label="Todas las categorías"
               count={activeProducts.length}
@@ -296,14 +338,16 @@ export function CatalogFilters({
                         onChange({ ...filters, categoryId: parent.id });
                       }
                     }}
-                    className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-semibold text-neutral-900 [&::-webkit-details-marker]:hidden"
+                    className={`flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 text-sm font-semibold transition-colors [&::-webkit-details-marker]:hidden ${
+                      selectedInGroup ? "bg-neutral-950 text-white" : "text-neutral-900"
+                    }`}
                   >
                     <span>{parent.name}</span>
                     <span className="flex shrink-0 items-center gap-2">
-                      <OptionCount count={parentProductCount} />
+                      <OptionCount count={parentProductCount} selected={selectedInGroup} />
                       <ChevronIcon
                         className={`size-4 transition-transform duration-200 group-open/category:rotate-180 ${
-                          selectedInGroup ? "text-[#b31322]" : "text-neutral-400"
+                          selectedInGroup ? "text-white/70" : "text-neutral-400"
                         }`}
                       />
                     </span>
@@ -342,6 +386,11 @@ export function CatalogFilters({
 
         <FilterSection title="Aprobación" value={getApprovalLabel(filters.approval)}>
           <div className="grid gap-2">
+            <NeutralOptionButton
+              selected={filters.approval === "NONE"}
+              onClick={() => onChange({ ...filters, approval: "NONE" })}
+            />
+
             <AllOptionButton
               label="Todos los estados"
               count={activeProducts.length}
