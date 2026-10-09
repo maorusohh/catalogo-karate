@@ -21,6 +21,14 @@ const categories: Category[] = [
     active: true,
   },
   {
+    id: "espinilleras-empeineras",
+    slug: "espinilleras-empeineras",
+    name: "Espinilleras y empeineras",
+    description: "",
+    parentId: "protecciones",
+    active: true,
+  },
+  {
     id: "karategis",
     slug: "karategis",
     name: "Karategis",
@@ -114,6 +122,28 @@ describe("filterProducts", () => {
     expect(result.map((product) => product.id)).toEqual(["guante-nacional"]);
   });
 
+  it("trata NONE como estado neutro sin restringir el catálogo", () => {
+    const products = [
+      makeProduct("guante-wkf", "guantines", "WKF"),
+      makeProduct("karategi", "karategis", "UNSPECIFIED"),
+    ];
+
+    const result = filterProducts(
+      products,
+      {
+        search: "",
+        brandId: "NONE",
+        categoryId: "NONE",
+        approval: "NONE",
+      },
+      brandNames,
+      categoryNames,
+      categories,
+    );
+
+    expect(result.map((product) => product.id)).toEqual(["guante-wkf", "karategi"]);
+  });
+
   it("resuelve equivalencias controladas sin exigir el término exacto del catálogo", () => {
     const products = [
       makeProduct("guantin-wkf", "guantines", "WKF", {
@@ -179,28 +209,36 @@ describe("filterProducts", () => {
     expect(withU.map((product) => product.id)).toEqual(withoutU.map((product) => product.id));
   });
 
-  it("expande prefijos inequívocos de términos equivalentes", () => {
+  it("encuentra la espinillera Adidas al buscar canilleras o canille", () => {
     const products = [
-      makeProduct("canillera", "guantines", "WKF", {
+      makeProduct("canillera", "espinilleras-empeineras", "WKF", {
         name: "Canilleras de competición",
       }),
-      makeProduct("espinillera-adidas", "guantines", "WKF", {
-        name: "Espinilleras Adidas",
+      makeProduct("adidas-661-35-20", "espinilleras-empeineras", "WKF", {
+        name: "Protector de Empeine y Espinillera Removible de Karate",
       }),
       makeProduct("guantin", "guantines", "WKF", {
         name: "Guantines",
       }),
     ];
 
-    const result = filterProducts(
+    const fullTerm = filterProducts(
       products,
-      { ...baseFilters, search: "caniller" },
+      { ...baseFilters, search: "canilleras" },
+      brandNames,
+      categoryNames,
+      categories,
+    );
+    const prefix = filterProducts(
+      products,
+      { ...baseFilters, search: "canille" },
       brandNames,
       categoryNames,
       categories,
     );
 
-    expect(result.map((product) => product.id)).toEqual(["canillera", "espinillera-adidas"]);
+    expect(fullTerm.map((product) => product.id)).toEqual(["canillera", "adidas-661-35-20"]);
+    expect(prefix.map((product) => product.id)).toEqual(fullTerm.map((product) => product.id));
   });
 
   it("combina sinónimos con atributos reales de variantes", () => {
