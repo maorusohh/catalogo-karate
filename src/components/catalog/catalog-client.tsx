@@ -60,46 +60,48 @@ export function CatalogClient({ products, brands, categories }: CatalogClientPro
   }
 
   return (
-    <section className="mt-10">
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-        <CatalogSearch
-          value={filters.search}
-          onChange={(search) =>
-            setFilters({
-              ...filters,
-              search,
-            })
-          }
-        />
+    <section>
+      <div className="rounded-3xl border border-black/8 bg-white p-4 shadow-[var(--ck-shadow-sm)] sm:p-5">
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+          <CatalogSearch
+            value={filters.search}
+            onChange={(search) =>
+              setFilters({
+                ...filters,
+                search,
+              })
+            }
+          />
 
-        <CatalogSortSelect value={sort} onChange={setSort} />
+          <CatalogSortSelect value={sort} onChange={setSort} />
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-black/6 pt-4">
+          <p className="text-sm text-neutral-500">
+            <span className="font-semibold text-neutral-950">{filteredProducts.length}</span>{" "}
+            {filteredProducts.length === 1 ? "producto encontrado" : "productos encontrados"}
+          </p>
+
+          {(filters.search || activeFilterCount > 0) && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="text-sm font-semibold text-[var(--ck-red)] transition-colors hover:text-[var(--ck-red-dark)]"
+            >
+              Limpiar búsqueda y filtros
+            </button>
+          )}
+        </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-neutral-500">
-          <span className="font-semibold text-neutral-950">{filteredProducts.length}</span>{" "}
-          {filteredProducts.length === 1 ? "producto encontrado" : "productos encontrados"}
-        </p>
-
-        {(filters.search || activeFilterCount > 0) && (
-          <button
-            type="button"
-            onClick={clearFilters}
-            className="text-sm font-semibold text-[#b31322]"
-          >
-            Limpiar búsqueda y filtros
-          </button>
-        )}
-      </div>
-
-      <div className="mt-8 lg:hidden">
-        <details className="overflow-hidden rounded-3xl border border-black/10 bg-white">
+      <div className="mt-6 lg:hidden">
+        <details className="overflow-hidden rounded-3xl border border-black/8 bg-white shadow-[var(--ck-shadow-sm)]">
           <summary className="cursor-pointer px-5 py-4 text-sm font-semibold text-neutral-950">
             Filtros
             {activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
           </summary>
 
-          <div className="border-t border-black/10 p-4">
+          <div className="border-t border-black/8 p-4">
             <CatalogFilters
               filters={filters}
               brands={brands}
