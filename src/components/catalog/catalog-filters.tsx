@@ -148,7 +148,9 @@ function AllOptionButton({
           : "bg-white text-neutral-900 hover:bg-neutral-50"
       }`}
     >
-      <span className={`font-semibold ${selected ? "text-white" : "text-neutral-900"}`}>{label}</span>
+      <span className={`font-semibold ${selected ? "text-white" : "text-neutral-900"}`}>
+        {label}
+      </span>
       <OptionCount count={count} selected={selected} />
     </button>
   );
