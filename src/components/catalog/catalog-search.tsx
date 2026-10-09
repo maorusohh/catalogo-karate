@@ -58,6 +58,7 @@ export function CatalogSearch({
         <input
           id="catalog-search"
           type="search"
+          role="combobox"
           value={value}
           onFocus={() => setIsOpen(true)}
           onKeyDown={(event) => {
@@ -70,9 +71,10 @@ export function CatalogSearch({
             setIsOpen(true);
           }}
           placeholder="Buscar por nombre, marca, categoría o SKU"
+          aria-autocomplete="list"
           aria-describedby="catalog-search-help"
           aria-expanded={showSuggestions}
-          aria-controls={showSuggestions ? "catalog-search-suggestions" : undefined}
+          aria-controls="catalog-search-suggestions"
           className="min-h-13 w-full rounded-2xl border border-black/12 bg-white pr-4 pl-12 text-sm text-neutral-950 transition-colors outline-none placeholder:text-neutral-500 focus:border-neutral-950"
         />
       </div>
@@ -84,6 +86,7 @@ export function CatalogSearch({
       {showSuggestions ? (
         <div
           id="catalog-search-suggestions"
+          role="listbox"
           data-testid="catalog-search-suggestions"
           aria-label="Sugerencias de productos"
           className="absolute z-30 mt-2 w-full overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[var(--ck-shadow-md)]"
@@ -96,6 +99,8 @@ export function CatalogSearch({
                 <Link
                   key={product.id}
                   href={`/producto/${product.slug}`}
+                  role="option"
+                  aria-selected="false"
                   onClick={() => setIsOpen(false)}
                   className="flex items-center gap-3 px-3 py-2.5 transition-colors hover:bg-neutral-50 focus-visible:bg-neutral-50"
                 >
