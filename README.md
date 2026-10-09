@@ -6,26 +6,31 @@ El proyecto está diseñado deliberadamente sin login, base de datos propia ni b
 
 ## Estado del proyecto
 
-La V1 funcional está avanzada y actualmente se encuentra en **release candidate**, todavía no promovido a producción.
+La **V1 técnica está publicada y estable en producción**.
 
-Producción estable actual:
+Producción:
 
 ```text
 https://catalogo-karate.pages.dev
 ```
 
-El sitio se publica en Cloudflare Pages mediante exportación estática de Next.js desde `main`. El deployment utiliza el snapshot comercial versionado en el repositorio y no necesita credenciales de Google Sheets en producción.
-
-Flujo de release:
+SHA validado y publicado:
 
 ```text
-release-candidate
-  -> production-stable
-  -> main
-  -> Cloudflare Pages
+3d2d363aa84064b345419e1ff1a36cdf231c4a41
 ```
 
-El mismo SHA validado debe promoverse sin introducir commits entre la validación final y producción. `production-previous` conserva el checkpoint estable anterior.
+Refs de release:
+
+```text
+main                -> 3d2d363aa84064b345419e1ff1a36cdf231c4a41
+production-stable   -> 3d2d363aa84064b345419e1ff1a36cdf231c4a41
+production-previous -> 33c1aecd4c58624f094ecc0cae0adddb39a93c79
+```
+
+El sitio se publica en Cloudflare Pages mediante exportación estática de Next.js desde `main`. El deployment utiliza el snapshot comercial versionado en el repositorio y no necesita credenciales de Google Sheets en producción.
+
+`release-candidate` puede quedar por delante únicamente por documentación o por futuros checkpoints todavía no promovidos. Producción debe recibir siempre el mismo SHA que haya pasado la validación correspondiente.
 
 El estado técnico vigente, los datos incorporados, las validaciones realizadas y el backlog están documentados en [`docs/CURRENT_STATE.md`](docs/CURRENT_STATE.md).
 
@@ -137,24 +142,37 @@ No incluye en esta fase:
 - base de datos propia;
 - datos privados de proveedores, costos, márgenes o credenciales.
 
-## Estado de validación del candidato
+## Validación final de V1
 
-Último estado comprobado antes del freeze final:
+Release publicado:
 
-- catálogo comercial: **44 productos totales / 41 activos**;
+- catálogo: **44 productos totales / 41 activos**;
+- marcas: **7 totales / 5 activas**;
+- categorías: **25 totales / 15 activas**;
 - variantes: **255**;
 - referencias canónicas de imagen: **109**;
-- precios: **189**;
+- precios: **189 totales / 186 en productos activos**;
 - preflight: **0 errores / 9 warnings editoriales**;
-- unit tests del último pase funcional: **38/38**;
+- unit tests: **38/38**;
 - build estático: **73/73 páginas**;
-- responsive + accesibilidad dirigido: **108/108 E2E**;
-- auditoría de imágenes: **0 bloqueadores >1 MiB**, 1 warning residual deliberado;
-- últimos ajustes visuales del catálogo: format, lint y build comprobados.
-
-Estas cifras no sustituyen la **validación integral final**, que debe ejecutarse sobre el SHA definitivo después de cerrar contenido/branding pendiente y el pulido visual global.
+- E2E completo: **171/171**;
+- auditoría de imágenes: **0 bloqueadores >1 MiB**, 1 warning residual conocido;
+- smoke público Cloudflare: **10/10 rutas críticas HTTP 200**;
+- redirects históricos comprobados: **HTTP 301**.
 
 Los warnings editoriales por características o imágenes todavía no suministradas no bloquean la integridad del runtime y no deben resolverse inventando información.
+
+## Backlog no bloqueante
+
+Queda fuera del cierre técnico de V1:
+
+- imágenes canónicas de 8 productos todavía sin activo aprobado;
+- características de la Maleta Viajera Mallems cuando el proveedor las confirme;
+- logo Adidas;
+- logo definitivo del Catálogo Karate-Do para reemplazar `KD`;
+- nueva marca cuando exista nombre y material exacto;
+- microestética/pulido visual adicional agrupado en una revisión futura;
+- dominio propio, si se adopta posteriormente.
 
 ## Deploy estático
 
