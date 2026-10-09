@@ -123,6 +123,24 @@ test("el catálogo diferencia productos totales de resultados filtrados", async 
   await expect(resultCount).not.toContainText("Productos Totales");
 });
 
+test("el catálogo inicia sin orden adicional y equipara karategi con karategui", async ({ page }) => {
+  await page.goto("/catalogo/", {
+    waitUntil: "domcontentloaded",
+  });
+
+  const sort = page.getByLabel("Ordenar por");
+  const searchbox = page.getByRole("searchbox", { name: "Buscar productos" });
+  const productCards = page.locator('article a[aria-label^="Ver "]');
+
+  await expect(sort).toHaveValue("none");
+
+  await searchbox.fill("karategi");
+  const withoutUCount = await productCards.count();
+
+  await searchbox.fill("karategui");
+  await expect(productCards).toHaveCount(withoutUCount);
+});
+
 test("la navegación principal mantiene enlaces internos válidos", async ({ page }) => {
   await page.goto("/", {
     waitUntil: "domcontentloaded",
