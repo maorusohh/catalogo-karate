@@ -8,7 +8,9 @@ type CatalogSearchProps = {
 export function CatalogSearch({ value, onChange }: CatalogSearchProps) {
   return (
     <label className="block">
-      <span className="mb-2 block text-sm font-medium text-neutral-500">Buscar productos</span>
+      <span className="mb-2 block text-sm font-medium text-neutral-500">
+        Buscar productos
+      </span>
 
       <span className="relative block">
         <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
