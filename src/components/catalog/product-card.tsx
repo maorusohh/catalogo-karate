@@ -4,8 +4,8 @@ import Link from "next/link";
 import type { ApprovalLevel, AvailabilityStatus, Product } from "@/types/catalog";
 
 const approvalLabels: Record<ApprovalLevel, string> = {
-  WKF: "WKF",
-  NATIONAL: "Aprobación nacional",
+  WKF: "Aprobación WKF",
+  NATIONAL: "Aprobación FVKD",
   NON_APPROVED: "No aprobado",
   UNSPECIFIED: "Por confirmar",
 };
@@ -81,14 +81,14 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
           </Link>
         </h2>
 
-        <p className="mt-3 line-clamp-2 text-sm leading-6 text-neutral-600">
+        <p className="mt-3 line-clamp-2 text-sm leading-6 text-neutral-600 lg:line-clamp-3">
           {product.shortDescription}
         </p>
 
         <div className="mt-auto pt-6">
           <div className="border-t border-black/7 pt-4">
-            <div className="flex items-end justify-between gap-4">
-              <div className="min-w-0">
+            <div className="flex items-stretch justify-between gap-4">
+              <div className="flex min-h-11 min-w-0 flex-col justify-center">
                 <p className="text-sm font-semibold tracking-tight text-neutral-950">
                   {primaryPrice?.label ?? "Consultar precio"}
                 </p>
@@ -101,12 +101,9 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
               <Link
                 href={`/producto/${product.slug}`}
                 aria-label={`Ver producto: ${product.name}`}
-                className="inline-flex min-h-10 shrink-0 items-center justify-center gap-1.5 rounded-full bg-neutral-950 px-3.5 text-xs font-semibold text-white transition-all duration-200 group-hover:bg-[var(--ck-red)] sm:px-4 sm:text-sm"
+                className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full bg-neutral-950 px-4 text-sm font-semibold text-white transition-all duration-200 group-hover:bg-[var(--ck-red)]"
               >
                 Ver producto
-                <span aria-hidden="true" className="text-white/70">
-                  →
-                </span>
               </Link>
             </div>
           </div>
