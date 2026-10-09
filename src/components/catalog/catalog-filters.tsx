@@ -96,14 +96,26 @@ function OptionCount({ count, selected = false }: { count: number; selected?: bo
   );
 }
 
-function NeutralFacetButton({ label, onClick }: { label: string; onClick: () => void }) {
+function NeutralFacetButton({
+  label,
+  selected,
+  onClick,
+}: {
+  label: string;
+  selected: boolean;
+  onClick: () => void;
+}) {
   return (
     <button
       type="button"
       aria-label={label}
-      title={label}
+      aria-pressed={selected}
       onClick={onClick}
-      className="flex min-h-10 w-full items-center justify-center rounded-xl border border-dashed border-black/10 bg-white px-3 text-sm font-semibold text-neutral-400 transition-colors hover:border-black/20 hover:text-neutral-700"
+      className={`flex min-h-10 w-full items-center justify-center rounded-xl border border-dashed px-3 text-sm font-semibold transition-colors ${
+        selected
+          ? "border-black/10 bg-neutral-50 text-neutral-500"
+          : "border-black/10 bg-white text-neutral-400 hover:border-black/20 hover:text-neutral-700"
+      }`}
     >
       —
     </button>
@@ -170,12 +182,11 @@ export function CatalogFilters({
       <div className="mt-4 space-y-3">
         <FilterSection title="Marcas" value={selectedBrandName}>
           <div className="space-y-2">
-            {filters.brandId !== "ALL" ? (
-              <NeutralFacetButton
-                label="Quitar filtro de marca"
-                onClick={() => onChange({ ...filters, brandId: "ALL" })}
-              />
-            ) : null}
+            <NeutralFacetButton
+              label="Sin filtro de marca"
+              selected={filters.brandId === "ALL"}
+              onClick={() => onChange({ ...filters, brandId: "ALL" })}
+            />
 
             {activeBrands.map((brand) => {
               const brandProducts = activeProducts.filter(
@@ -262,12 +273,11 @@ export function CatalogFilters({
 
         <FilterSection title="Categorías" value={selectedCategoryName}>
           <div className="space-y-2">
-            {filters.categoryId !== "ALL" ? (
-              <NeutralFacetButton
-                label="Quitar filtro de categoría"
-                onClick={() => onChange({ ...filters, categoryId: "ALL" })}
-              />
-            ) : null}
+            <NeutralFacetButton
+              label="Sin filtro de categoría"
+              selected={filters.categoryId === "ALL"}
+              onClick={() => onChange({ ...filters, categoryId: "ALL" })}
+            />
 
             {topLevelCategories.map((parent) => {
               const children = activeCategories
@@ -349,12 +359,11 @@ export function CatalogFilters({
 
         <FilterSection title="Aprobación" value={getApprovalLabel(filters.approval)}>
           <div className="grid gap-2">
-            {filters.approval !== "ALL" ? (
-              <NeutralFacetButton
-                label="Quitar filtro de aprobación"
-                onClick={() => onChange({ ...filters, approval: "ALL" })}
-              />
-            ) : null}
+            <NeutralFacetButton
+              label="Sin filtro de aprobación"
+              selected={filters.approval === "ALL"}
+              onClick={() => onChange({ ...filters, approval: "ALL" })}
+            />
 
             {approvalOptions.map((option) => {
               const selected = filters.approval === option.value;
