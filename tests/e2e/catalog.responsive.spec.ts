@@ -177,11 +177,17 @@ test("seleccionar una marca aplica el filtro en el primer clic", async ({ page }
     await compactFilters.first().click();
   }
 
-  const brandsSection = page.locator("summary:visible").filter({ hasText: /^Marcas/ }).first();
+  const brandsSection = page
+    .locator("summary:visible")
+    .filter({ hasText: /^Marcas/ })
+    .first();
   await expect(brandsSection).toBeVisible();
   await brandsSection.click();
 
-  const adidasSummary = page.locator("summary:visible").filter({ hasText: /^Adidas/ }).first();
+  const adidasSummary = page
+    .locator("summary:visible")
+    .filter({ hasText: /^Adidas/ })
+    .first();
   await expect(adidasSummary).toBeVisible();
   await adidasSummary.scrollIntoViewIfNeeded();
   await adidasSummary.click();
