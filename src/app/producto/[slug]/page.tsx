@@ -19,8 +19,6 @@ type ParsedFeature = {
   value: string;
 };
 
-export const dynamicParams = false;
-
 function parseFeature(feature: string): ParsedFeature {
   const separatorIndex = feature.indexOf(":");
 
