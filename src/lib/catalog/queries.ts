@@ -209,7 +209,7 @@ export function sortProducts(products: Product[], sort: CatalogSort): Product[] 
     default:
       return sorted.sort((a, b) => {
         if (a.featured !== b.featured) {
-          return Number(b.featureured) - Number(a.featured);
+          return Number(b.featured) - Number(a.featured);
         }
 
         return a.name.localeCompare(b.name, "es");
