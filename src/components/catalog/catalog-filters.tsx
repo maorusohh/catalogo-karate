@@ -217,7 +217,7 @@ export function CatalogFilters({
                   >
                     <span className="min-w-0 truncate">{brand.name}</span>
                     <span className="flex shrink-0 items-center gap-2">
-                      <OptionCount count={brandProducts.length} selected={brandSelected} />
+                      <OptionCount count={brandProducts.length} />
                       <ChevronIcon
                         className={`size-4 transition-transform duration-200 group-open/brand:rotate-180 ${
                           brandSelected ? "text-[#b31322]" : "text-neutral-400"
@@ -300,7 +300,7 @@ export function CatalogFilters({
                   >
                     <span>{parent.name}</span>
                     <span className="flex shrink-0 items-center gap-2">
-                      <OptionCount count={parentProductCount} selected={selectedInGroup} />
+                      <OptionCount count={parentProductCount} />
                       <ChevronIcon
                         className={`size-4 transition-transform duration-200 group-open/category:rotate-180 ${
                           selectedInGroup ? "text-[#b31322]" : "text-neutral-400"
