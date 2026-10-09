@@ -15,7 +15,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "catalog:sync": "tsx scripts/sync-catalog-from-google.ts && npx tsx scripts/validate-catalog-text.ts && npx tsx scripts/validate-catalog-images.ts && npx tsx scripts/catalog-preflight.ts && prettier --write src/data/catalog-source.google.generated.ts",
-    "build:catalog": "npm run catalog:sync && next build",
+    "build:catalog": "npm run catalog:sync && npm run build",
     "catalog:report": "tsx scripts/catalog-readiness-report.ts",
     "catalog:preflight": "tsx scripts/catalog-preflight.ts",
     "catalog:inspect-images": "tsx scripts/inspect-product-images.ts",
