@@ -88,7 +88,9 @@ export function ProductCard({ product, brandName, categoryName }: ProductCardPro
           <div className="border-t border-black/7 pt-4">
             <p className="text-sm leading-5">
               <span className="mr-2 text-xs font-medium text-neutral-500">Precio</span>
-              <span className="font-semibold tracking-tight text-neutral-950">{cardPriceLabel}</span>
+              <span className="font-semibold tracking-tight text-neutral-950">
+                {cardPriceLabel}
+              </span>
             </p>
 
             <p className="mt-1 text-xs leading-5 font-medium text-neutral-500">

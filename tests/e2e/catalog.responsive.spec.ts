@@ -123,7 +123,9 @@ test("el catálogo diferencia productos totales de resultados filtrados", async 
   await expect(resultCount).not.toContainText("Productos Totales");
 });
 
-test("el catálogo inicia sin orden adicional y equipara karategi con karategui", async ({ page }) => {
+test("el catálogo inicia sin orden adicional y equipara karategi con karategui", async ({
+  page,
+}) => {
   await page.goto("/catalogo/", {
     waitUntil: "domcontentloaded",
   });

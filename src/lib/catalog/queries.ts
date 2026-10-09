@@ -3,12 +3,7 @@ import { getCategoryTreeIds } from "@/lib/catalog/scoped";
 import type { ApprovalLevel, Category, Product } from "@/types/catalog";
 
 export type CatalogSort =
-  | "none"
-  | "featured"
-  | "name-asc"
-  | "name-desc"
-  | "price-asc"
-  | "price-desc";
+  "none" | "featured" | "name-asc" | "name-desc" | "price-asc" | "price-desc";
 
 export type CatalogFilters = {
   search: string;
