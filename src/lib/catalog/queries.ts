@@ -2,7 +2,13 @@ import { approvalPresentation } from "@/lib/catalog/approval";
 import { getCategoryTreeIds } from "@/lib/catalog/scoped";
 import type { ApprovalLevel, Category, Product } from "@/types/catalog";
 
-export type CatalogSort = "featured" | "name-asc" | "name-desc" | "price-asc" | "price-desc";
+export type CatalogSort =
+  | "none"
+  | "featured"
+  | "name-asc"
+  | "name-desc"
+  | "price-asc"
+  | "price-desc";
 
 export type CatalogFilters = {
   search: string;
@@ -13,8 +19,19 @@ export type CatalogFilters = {
 
 type CatalogReferenceMap = Record<string, string>;
 
+const MIN_ALIAS_PREFIX_LENGTH = 4;
+
 const searchAliasGroups = [
-  ["karategi", "karategis", "kimono", "kimonos", "uniforme", "uniformes"],
+  [
+    "karategi",
+    "karategis",
+    "karategui",
+    "karateguis",
+    "kimono",
+    "kimonos",
+    "uniforme",
+    "uniformes",
+  ],
   ["guantin", "guantines", "guante", "guantes"],
   ["espinillera", "espinilleras", "canillera", "canilleras"],
   ["empeinera", "empeineras", "empeine", "empeines"],
@@ -34,7 +51,15 @@ function normalize(value: string): string {
 }
 
 function getSearchCandidates(token: string): readonly string[] {
-  return searchAliasGroups.find((group) => group.includes(token as never)) ?? [token];
+  const aliasGroup = searchAliasGroups.find((group) =>
+    group.some(
+      (alias) =>
+        alias === token ||
+        (token.length >= MIN_ALIAS_PREFIX_LENGTH && alias.startsWith(token)),
+    ),
+  );
+
+  return aliasGroup ?? [token];
 }
 
 function matchesSearch(searchableText: string, normalizedSearch: string): boolean {
@@ -123,6 +148,9 @@ export function sortProducts(products: Product[], sort: CatalogSort): Product[] 
   const sorted = [...products];
 
   switch (sort) {
+    case "none":
+      return sorted;
+
     case "name-asc":
       return sorted.sort((a, b) =>
         a.name.localeCompare(b.name, "es", {
@@ -181,7 +209,7 @@ export function sortProducts(products: Product[], sort: CatalogSort): Product[] 
     default:
       return sorted.sort((a, b) => {
         if (a.featured !== b.featured) {
-          return Number(b.featured) - Number(a.featured);
+          return Number(b.featureured) - Number(a.featured);
         }
 
         return a.name.localeCompare(b.name, "es");
