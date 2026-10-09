@@ -110,12 +110,14 @@ test("el catálogo diferencia productos totales de resultados filtrados", async 
     waitUntil: "domcontentloaded",
   });
 
-  await expect(page.getByText(/\d+ productos totales/)).toBeVisible();
+  const resultCount = page.getByTestId("catalog-result-count");
+
+  await expect(resultCount).toContainText(/\d+ productos totales/);
 
   await page.getByRole("searchbox", { name: "Buscar productos" }).fill("karategi");
 
-  await expect(page.getByText(/\d+ productos encontrados/)).toBeVisible();
-  await expect(page.getByText(/\d+ productos totales/)).toHaveCount(0);
+  await expect(resultCount).toContainText(/\d+ productos encontrados/);
+  await expect(resultCount).not.toContainText("productos totales");
 });
 
 test("la navegación principal mantiene enlaces internos válidos", async ({ page }) => {
